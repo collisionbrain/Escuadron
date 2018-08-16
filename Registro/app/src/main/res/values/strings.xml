@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Registro</string>
+    <string name="strNombre">Nombre </string>
+    <string name="strApellidos">Apellidos</string>
+    <string name="strCorreo">Correo electronico</string>
+    <string name="strCelular">Celular</string>
+    <string name="strFechaNacimiento">Fecha nacimiento</string>
+    <string name="strPeso">Peso</string>
+    <string name="strEstatura">Estatura</string>
+    <string name="strPassword">Contraseña</string>
+    <string name="strPadecimiento">¿Sufre padecimiento cronico?</string>
+
+    <string name="siguiente">Siguiente</string>
+    <string name="aceptar">Aceptar</string>
+</resources>

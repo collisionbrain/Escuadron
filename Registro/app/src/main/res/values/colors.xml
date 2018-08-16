@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#fff5f5f5</color>
+    <color name="colorPrimaryDark">#fff5f5f5</color>
+    <color name="colorPrimaryAccent">#fff5f5f5</color>
+
+    <color name="light_gray">#fff5f5f5</color>
+    <color name="white_transparent">#0099FF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="blueMenu">#00CCFF</color>
+    <color name="blueBorders">#0099FF</color>
+    <color name="blueButtonsText">#6699FF</color>
+    <color name="blueButtonsTransparent">#806699FF</color>
+    <color name="red">#FF3333</color>
+    <color name="gray">#CCCCCC</color>
+    <color name="border_activity_blue">#9999FF</color>
+    <color name="dialog_background"> #CCFFFF</color>
+    <color name="border_blue_button_white">#03A9F4</color>
+</resources>
+
