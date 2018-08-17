@@ -78,12 +78,12 @@
             android:orientation="horizontal" >
 
             <EditText
-                android:id="@+id/edtPassword"
+                android:id="@+id/edtCelular"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
                 android:background="@drawable/editext_line"
-                android:hint="@string/strPassword"
+                android:hint="@string/strCelular"
                 android:textColorHint="@color/gray"
                 android:text="12345678"
                 android:singleLine="true" />
@@ -97,12 +97,21 @@
             android:layout_marginRight="20dp"
             android:orientation="horizontal"
             android:weightSum="100">
-
+            <CheckBox
+                android:id="@+id/checkWats"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="90"
+                android:textColor="@color/blueBorders"
+                android:text="¿Contartar por WhatsApp?"/>
         </LinearLayout>
 
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/llyBoton"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="20"
@@ -115,7 +124,7 @@
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:padding="25dp"
-            app:buttonText="Registrar"
+            app:buttonText="Siguiente"
             app:buttonTextSize="25sp"
             app:buttonColor="@color/blueBorders"
             />

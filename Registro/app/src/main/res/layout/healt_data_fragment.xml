@@ -34,39 +34,17 @@
             android:orientation="horizontal" >
 
             <EditText
-                android:id="@+id/edtFechaNacimento"
+                android:id="@+id/edtFechaNacimiento"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
                 android:background="@drawable/editext_line"
-                android:hint="@string/strFnacimiento"
-                android:textColorHint="@color/grayDoqi"
-                android:inputType="number"
-                android:singleLine="true"
-                android:text="06/07/1981"
-                />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="15"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal" >
-
-            <EditText
-                android:id="@+id/edtCorreo"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/gray"
-                android:background="@drawable/editext_line"
-                android:hint="@string/strCorreo"
+                android:hint="@string/strPeso"
                 android:textColorHint="@color/gray"
-                android:inputType="textEmailAddress"
+                android:inputType="number"
                 android:singleLine="true"
-                android:text="hgallardo@hotmail.com"/>
+                android:text="50 Kg"  />
+
         </RelativeLayout>
 
         <RelativeLayout
@@ -78,16 +56,48 @@
             android:orientation="horizontal" >
 
             <EditText
-                android:id="@+id/edtFechaNacimento"
+                android:id="@+id/edtPeso"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
                 android:background="@drawable/editext_line"
-                android:hint="@string/strFnacimiento"
-                android:textColorHint="@color/grayDoqi"
+                android:hint="@string/strPeso"
+                android:textColorHint="@color/gray"
                 android:inputType="number"
                 android:singleLine="true"
-                android:text="06/07/1981"/>
+                android:text="50 Kg"  />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="10"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal"
+                android:weightSum="100">
+
+                <CheckBox
+                    android:id="@+id/checkCronics"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10" />
+                <TextView
+                    android:id="@+id/txtPrivacidad"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="90"
+                    android:textColor="@color/blueBorders"
+                    android:text="¿Tienes padecimiento cronico?"/>
+            </LinearLayout>
         </RelativeLayout>
 
         <LinearLayout
