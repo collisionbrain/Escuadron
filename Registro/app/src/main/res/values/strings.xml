@@ -10,6 +10,7 @@
     <string name="strPassword">Contraseña</string>
     <string name="stPersonal">Informacion de Contacto</string>
     <string name="strFirma">Tu firma aquí</string>
+    <string name="strCode">Codigo para comprar</string>
     <string name="strPadecimiento">¿Sufre padecimiento cronico?</string>
 
     <string name="siguiente">Siguiente</string>
