@@ -34,16 +34,17 @@
             android:orientation="horizontal" >
 
             <EditText
-                android:id="@+id/edtFechaNacimiento"
+                android:id="@+id/edtFecha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
                 android:background="@drawable/editext_line"
-                android:hint="@string/strPeso"
-                android:textColorHint="@color/gray"
-                android:inputType="number"
+                android:inputType="textCapWords|textNoSuggestions"
                 android:singleLine="true"
-                android:text="50 Kg"  />
+                android:hint="@string/strFechaNacimiento"
+                android:textColorHint="@color/gray"
+                android:text="10/10/1980"
+                />
 
         </RelativeLayout>
 
@@ -63,42 +64,12 @@
                 android:background="@drawable/editext_line"
                 android:hint="@string/strPeso"
                 android:textColorHint="@color/gray"
-                android:inputType="number"
+                android:inputType="textEmailAddress"
                 android:singleLine="true"
-                android:text="50 Kg"  />
+                android:text="hgallardo@hotmail.com"/>
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="15"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal" >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="10"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:orientation="horizontal"
-                android:weightSum="100">
-
-                <CheckBox
-                    android:id="@+id/checkCronics"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="10" />
-                <TextView
-                    android:id="@+id/txtPrivacidad"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="90"
-                    android:textColor="@color/blueBorders"
-                    android:text="¿Tienes padecimiento cronico?"/>
-            </LinearLayout>
-        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -108,12 +79,21 @@
             android:layout_marginRight="20dp"
             android:orientation="horizontal"
             android:weightSum="100">
-
+            <CheckBox
+                android:id="@+id/checkCronic"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="90"
+                android:textColor="@color/blueBorders"
+                android:text="¿Tienes padecimiento cronico?"/>
         </LinearLayout>
 
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/llyBoton"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="20"
@@ -122,11 +102,11 @@
         android:gravity="center">
 
         <com.unstoppable.submitbuttonview.SubmitButton
-            android:id="@+id/btnRegistrar"
+            android:id="@+id/btnSiguienteHealt"
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:padding="25dp"
-            app:buttonText="Registrar"
+            app:buttonText="Siguiente"
             app:buttonTextSize="25sp"
             app:buttonColor="@color/blueBorders"
             />

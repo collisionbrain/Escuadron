@@ -28,18 +28,18 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="15"
+            android:layout_weight="50"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:orientation="horizontal" >
 
 
-            <com.libre.registro.ui.spinner.CustomSpinner
-                android:id="@+id/spnPadecimiento"
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/spinner"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="wrap_content"/>
             <View
-                android:layout_below="@+id/spnPadecimiento"
+                android:layout_below="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="-5dp"
@@ -47,7 +47,26 @@
 
         </RelativeLayout>
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="50"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal" >
 
+
+            <EditText
+                android:id="@+id/edtOtro"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:visibility="gone"
+                android:hint="@string/strDescribe"
+                android:inputType="text|textMultiLine"
+                android:background="@drawable/editext_line"
+                 />
+
+        </RelativeLayout>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/llyBoton"
@@ -59,11 +78,11 @@
         android:gravity="center">
 
         <com.unstoppable.submitbuttonview.SubmitButton
-            android:id="@+id/btnRegistrar"
+            android:id="@+id/btnSiguienteCronic"
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:padding="25dp"
-            app:buttonText="Registrar"
+            app:buttonText="Siguiente"
             app:buttonTextSize="25sp"
             app:buttonColor="@color/blueBorders"
             />

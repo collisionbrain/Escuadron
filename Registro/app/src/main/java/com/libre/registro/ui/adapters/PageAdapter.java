@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.libre.registro.ui.fragments.CronicSuffering;
 import com.libre.registro.ui.fragments.DigitalCodeRegister;
 import com.libre.registro.ui.fragments.HealtDataRegister;
 import com.libre.registro.ui.fragments.PersonalDataRegister;
@@ -34,15 +35,17 @@ public class PageAdapter extends FragmentPagerAdapter {
                 break;
 
             case 3:
+                fragmento =new CronicSuffering();
+                break;
+            case 4:
                 fragmento =new DigitalCodeRegister();
                 break;
-
         }
         return fragmento;
     }
     @Override
     public int getCount() {
-        return 4;
+        return 5;
     }
 
 }

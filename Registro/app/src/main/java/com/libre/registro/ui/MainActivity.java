@@ -1,5 +1,6 @@
 package com.libre.registro.ui;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -8,6 +9,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.widget.TextView;
 
+import com.google.firebase.storage.FirebaseStorage;
 import com.libre.registro.R;
 import com.libre.registro.ui.adapters.PageAdapter;
 import com.libre.registro.ui.util.NonSwipeableViewPager;
@@ -19,6 +21,11 @@ public class MainActivity extends FragmentActivity {
     private Context context;
     private TextView txtTitulo;
     public Resources resources;
+    public Dialog dialogError,dialogPrivacy;
+    public   TextView messageError;
+    private FirebaseStorage storage;
+    final long ONE_MEGABYTE = 1024 * 1024;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +38,11 @@ public class MainActivity extends FragmentActivity {
         adPaginador=new PageAdapter(getApplicationContext(),getSupportFragmentManager());
         vwPaginas.setAdapter(adPaginador);
         vwPaginas.setCurrentItem(0);
-
+        dialogError = new Dialog(context);
+        dialogPrivacy= new Dialog(context);
+        dialogPrivacy.setContentView(R.layout.dialog_privacy);
+        dialogError.setContentView(R.layout.dialog_error);
+        messageError=(TextView)dialogError .findViewById(R.id.txtMensaje);
         vwPaginas.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
 
             @Override
@@ -76,7 +87,10 @@ public class MainActivity extends FragmentActivity {
             super.onBackPressed();
         }
     }
+    public void paginaSiguiente(int paginaSiguiente){
+        vwPaginas.setCurrentItem(paginaSiguiente, true);
 
+    }
     @Override
     public void onResume() {
         super.onResume();

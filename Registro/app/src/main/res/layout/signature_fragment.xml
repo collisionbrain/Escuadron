@@ -3,6 +3,7 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     android:weightSum="100"
     android:orientation="vertical">
@@ -44,11 +45,14 @@
         android:layout_marginRight="15dp"
         android:paddingBottom="2dp"
         android:gravity="center">
-        <Button
-            android:id="@+id/btnSiguiente"
-            android:layout_width="match_parent"
+        <com.unstoppable.submitbuttonview.SubmitButton
+            android:id="@+id/btnSiguienteSignature"
+            android:layout_width="220dp"
             android:layout_height="match_parent"
-            android:text="@string/siguiente"/>
+            android:padding="25dp"
+            app:buttonText="Siguiente"
+            app:buttonTextSize="25sp"
+            app:buttonColor="@color/blueBorders"/>
 
     </LinearLayout>
 </LinearLayout>
