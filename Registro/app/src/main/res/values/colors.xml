@@ -7,7 +7,9 @@
     <color name="white_transparent">#0099FF</color>
     <color name="white">#FFFFFF</color>
     <color name="blueMenu">#00CCFF</color>
-    <color name="blueBorders">#0099FF</color>
+    <color name="blueBorders">#65e6a3</color>
+    <color name="green_toolbar">#65e6a3</color>
+    <color name="green_text">#09582f</color>
     <color name="blueButtonsText">#6699FF</color>
     <color name="blueButtonsTransparent">#806699FF</color>
     <color name="red">#FF3333</color>
@@ -15,5 +17,6 @@
     <color name="border_activity_blue">#9999FF</color>
     <color name="dialog_background"> #CCFFFF</color>
     <color name="border_blue_button_white">#03A9F4</color>
+    <color name="black">#000000</color>
 </resources>
 

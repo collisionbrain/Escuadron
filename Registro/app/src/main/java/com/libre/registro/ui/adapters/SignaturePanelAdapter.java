@@ -140,7 +140,10 @@ public class SignaturePanelAdapter extends View {
         return height;
     }
 
-    public  String setToFile(){
+    public  Bitmap getBitmap(){
+        return this.mBitmap;
+    }
+    public  String saveBitmap(){
         File file=null;
         try {
 

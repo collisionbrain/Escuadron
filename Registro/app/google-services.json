@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "250589943233",
+    "firebase_url": "https://registro-742f5.firebaseio.com",
+    "project_id": "registro-742f5",
+    "storage_bucket": "registro-742f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:250589943233:android:e8003421d4c83da2",
+        "android_client_info": {
+          "package_name": "com.libre.registro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "250589943233-7r2npi3n2vc86qnq4et619qnctsj2osc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.libre.registro",
+            "certificate_hash": "8cafbac6d30ecce75f954fa5d4e2debd03b3f189"
+          }
+        },
+        {
+          "client_id": "250589943233-fsct433628pe8703eh5k5vm59oe9jhvk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtdODeu0SlgGM69f3lGw_O6mKkkxI_GD8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "250589943233-fsct433628pe8703eh5k5vm59oe9jhvk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

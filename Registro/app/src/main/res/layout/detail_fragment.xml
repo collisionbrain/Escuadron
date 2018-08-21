@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="100"
+    android:background="@color/white"
+    android:clickable="true">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="60"
+        android:background="@drawable/bud">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:padding="15dp"
+            android:text="Descripcion del procuto"
+            android:textAllCaps="false"
+            android:textColor="@color/dialog_background"
+            android:textSize="30sp" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:orientation="horizontal"
+        android:weightSum="100">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="$ 35.00 "
+            android:textSize="80dp"
+            android:gravity="right" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:background="@drawable/green_border">
+        <RelativeLayout
+            android:id="@+id/rlyMinus"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="30"
+            android:background="@drawable/green_border"  >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="-"
+                android:textSize="110dp"
+                android:gravity="center"
+                android:textColor="@color/black"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="40" >
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textSize="90dp"
+                android:gravity="center"
+                android:textColor="@color/black"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rlyPlus"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="30"
+            android:background="@drawable/green_border">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="+"
+                android:textSize="90dp"
+                android:gravity="center"
+                android:textColor="@color/black"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

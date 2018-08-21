@@ -23,7 +23,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
     private Context context;
     private int netStatus;
     private boolean registerPersonalSuccess;
-    private CheckBox checkBox;
+    private CheckBox checkWhats;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
@@ -33,7 +33,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
         edtName=(EditText) this.view.findViewById(R.id.edtNombre);
         edtMail=(EditText) this.view.findViewById(R.id.edtCorreo);
         edtCelphone=(EditText) this.view.findViewById(R.id.edtCelular);
-        checkBox=(CheckBox) this.view.findViewById(R.id.checkWats);
+        checkWhats=(CheckBox) this.view.findViewById(R.id.checkWats);
 
         netStatus= Network.getConnectivityStatus(context);
         btnSiguiente.setOnClickListener(this);
@@ -55,6 +55,12 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
 
                 if (netStatus != 0) {
                     if(validateForm()) {
+
+                        ((MainActivity) context).newMember.name=edtName.getText().toString();
+                        ((MainActivity) context).newMember.mail=edtMail.getText().toString();
+                        ((MainActivity) context).newMember.phone=edtCelphone.getText().toString();
+                        ((MainActivity) context).newMember.whats=checkWhats.isChecked();
+
                         btnSiguiente.doResult(true);
 
 
@@ -74,7 +80,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
         @Override
         public void onResultEnd() {
             ((MainActivity) context).paginaSiguiente(1);
-            btnSiguiente.reset();;
+            btnSiguiente.reset();
         }
     };
 

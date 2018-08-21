@@ -9,6 +9,10 @@
     <string name="strEstatura">Estatura</string>
     <string name="strPassword">Contraseña</string>
     <string name="stPersonal">Informacion de Contacto</string>
+    <string name="stBiomedica">Informacion de Biomedica</string>
+    <string name="stPadecimiento">Informacion de Padecimiento</string>
+    <string name="stFirma"></string>
+    <string name="stTerminar">Listo!</string>
     <string name="strFirma">Tu firma aquí</string>
     <string name="strCode">Codigo para comprar</string>
     <string name="errEspecialidad">Elige tu padecimiento</string>
@@ -17,4 +21,7 @@
 
     <string name="siguiente">Siguiente</string>
     <string name="aceptar">Aceptar</string>
+    <string name="action_settings"></string>
+
+
 </resources>

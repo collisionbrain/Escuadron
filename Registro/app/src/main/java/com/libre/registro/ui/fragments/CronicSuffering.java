@@ -29,6 +29,7 @@ import java.util.List;
 public class CronicSuffering extends Fragment implements  View.OnClickListener {
     private View view;
     List<String> listaPadecimientos;
+    private String condition;
     private Context context;
     private SubmitButton btnSiguienteCronic;
     private Resources resources;
@@ -50,6 +51,8 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
                Log.e("###########", "Clicked " + item);
                 if(item.equals("Otro")){
                     edtOtro.setVisibility(View.VISIBLE);
+                }else{
+                    condition=item;
                 }
             }
         });
@@ -63,7 +66,8 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.btnSiguienteCronic:
-
+                ((MainActivity) context).newMember.condition=condition;
+                ((MainActivity) context).newMember.extra=edtOtro.getText().toString();
                 btnSiguienteCronic.setOnResultEndListener(finishListenerCronic);
                 btnSiguienteCronic.doResult(true);
         }

@@ -4,15 +4,35 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.Display;
+import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.gson.Gson;
+import com.google.zxing.WriterException;
 import com.libre.registro.R;
 import com.libre.registro.ui.adapters.PageAdapter;
+import com.libre.registro.ui.pojos.Member;
+import com.libre.registro.ui.util.Data;
 import com.libre.registro.ui.util.NonSwipeableViewPager;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import androidmads.library.qrgenearator.QRGContents;
+import androidmads.library.qrgenearator.QRGEncoder;
+
+import static android.content.ContentValues.TAG;
 
 public class MainActivity extends FragmentActivity {
 
@@ -25,7 +45,8 @@ public class MainActivity extends FragmentActivity {
     public   TextView messageError;
     private FirebaseStorage storage;
     final long ONE_MEGABYTE = 1024 * 1024;
-
+    public Member newMember;
+    private int smallerDimension;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +64,16 @@ public class MainActivity extends FragmentActivity {
         dialogPrivacy.setContentView(R.layout.dialog_privacy);
         dialogError.setContentView(R.layout.dialog_error);
         messageError=(TextView)dialogError .findViewById(R.id.txtMensaje);
+        newMember=new Member();
+        WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        Display display = manager.getDefaultDisplay();
+        Point point = new Point();
+        display.getSize(point);
+        int width = point.x;
+        int height = point.y;
+        smallerDimension = width < height ? width : height;
+        smallerDimension = smallerDimension * 3 / 4;
+
         vwPaginas.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
 
             @Override
@@ -57,17 +88,19 @@ public class MainActivity extends FragmentActivity {
                         txtTitulo.setText(resources.getString(R.string.stPersonal));
                         break;
                     case 1:
-                        txtTitulo.setText(resources.getString(R.string.stPersonal));
+                        txtTitulo.setText(resources.getString(R.string.stBiomedica));
                         break;
                     case 2:
-                        txtTitulo.setText(resources.getString(R.string.stPersonal));
+                        txtTitulo.setText(resources.getString(R.string.stFirma));
 
                         break;
                     case 3:
-                        txtTitulo.setText(resources.getString(R.string.strCode));
+                        txtTitulo.setText(resources.getString(R.string.strPadecimiento));
                         break;
 
-
+                    case 4:
+                        txtTitulo.setText(resources.getString(R.string.strCode));
+                        break;
                 }
             }
 
@@ -97,5 +130,32 @@ public class MainActivity extends FragmentActivity {
 
     }
 
+    public Bitmap generateCode(){
 
+        Gson gson = new Gson();
+        String inputValue = gson.toJson(newMember);
+        newMember.signature="";
+        Bitmap bitmap ;
+
+        QRGEncoder qrgEncoder = new QRGEncoder(inputValue, null, QRGContents.Type.TEXT, smallerDimension);
+        try {
+             bitmap = qrgEncoder.encodeAsBitmap();
+            Data.saveImage(bitmap);
+            return bitmap;
+        } catch (WriterException e) {
+            Log.v(TAG, e.toString());
+        }
+       return null;
+    }
+
+    public void saveToServer(){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference ref = database.getReference("server/register-data/escuadron");
+        DatabaseReference usersRef = ref.child("clientes");
+        String userID= UUID.randomUUID().toString();
+        Map<String, Member> member = new HashMap<>();
+        member.put(userID,newMember);
+        usersRef.setValue(member);
+
+    }
 }

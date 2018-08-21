@@ -16,7 +16,10 @@ import com.libre.registro.R;
 import com.libre.registro.ui.MainActivity;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 public class HealtDataRegister  extends Fragment implements  View.OnClickListener  {
     private View view;
@@ -112,6 +115,18 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
             case R.id.btnSiguienteHealt:
 
                 if(validateForm()) {
+                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        Date date = format.parse(edtFechaNacimiento.getText().toString());
+                        ((MainActivity) context).newMember.birthday=date;
+                        System.out.println(date);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    ((MainActivity) context).newMember.weigth=Integer.parseInt(edtPeso.getText().toString());
+                    ((MainActivity) context).newMember.suffering=chckCronic.isChecked();
+
                     btnSiguienteHealt.setOnResultEndListener(finishListenerHealt);
                     btnSiguienteHealt.doResult(true);
                     registerHealtSuccess=true;

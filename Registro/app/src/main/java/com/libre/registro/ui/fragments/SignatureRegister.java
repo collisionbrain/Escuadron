@@ -1,6 +1,7 @@
 package com.libre.registro.ui.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,9 +14,10 @@ import android.widget.TextView;
 import com.libre.registro.R;
 import com.libre.registro.ui.MainActivity;
 import com.libre.registro.ui.adapters.SignaturePanelAdapter;
+import com.libre.registro.ui.util.Data;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
-public class SignatureRegister extends Fragment {
+public class SignatureRegister extends Fragment implements  View.OnClickListener  {
     private View view;
     private Context context;
     private TextView txtFirma;
@@ -29,18 +31,27 @@ public class SignatureRegister extends Fragment {
         this.view = inflater.inflate(R.layout.signature_fragment, container, false);
         txtFirma= (TextView)this.view.findViewById(R.id.txtFirma);
         btnSiguienteSignature=(SubmitButton)this.view.findViewById(R.id.btnSiguienteSignature);
-        btnSiguienteSignature.setOnClickListener(siguienteListenerSignature);
+        btnSiguienteSignature.setOnClickListener(this);
+        btnSiguienteSignature.setOnResultEndListener(finishListenerSignature);
         RelativeLayout rlPanel = (RelativeLayout)this.view.findViewById(R.id.rlPanel);
         firmaPanel = new SignaturePanelAdapter(context,txtFirma);
         rlPanel.addView(firmaPanel);
         return  this.view;
     }
 
-    View.OnClickListener siguienteListenerSignature=new View.OnClickListener(){
-        @Override
-        public void onClick(View v) {
-            ((MainActivity) context).paginaSiguiente(4);
-        }
 
+    @Override
+    public void onClick(View v) {
+        btnSiguienteSignature.doResult(true);
+    }
+    SubmitButton.OnResultEndListener finishListenerSignature=new SubmitButton.OnResultEndListener() {
+        @Override
+        public void onResultEnd() {
+            Bitmap bmpSignature =firmaPanel.getBitmap();
+
+           // ((MainActivity) context).newMember.signature=Data.bitmapToBase64(bmpSignature);
+            ((MainActivity) context).paginaSiguiente(4);
+            btnSiguienteSignature.reset();
+        }
     };
 }
