@@ -35,19 +35,21 @@ public class MarketActivity extends AppCompatActivity{
 
     private Context context;
     private Fragment detailFragment=new DetailFragment();
-    private List<Product> productList;
+    public List<Product> productList;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private  RecyclerView recyclerView;
     private int count = 0;
+    private  MenuItem menuItem;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.market_activity);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        setSupportActionBar(myToolbar);
         myToolbar.setTitle("");
+        setSupportActionBar(myToolbar);
+
         fragmentManager=getFragmentManager();
         fragmentTransaction=fragmentManager.beginTransaction();
         context = this;
@@ -75,8 +77,8 @@ public class MarketActivity extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.testAction);
-        menuItem.setIcon(buildCounterDrawable(1,  R.drawable.cart));
+        menuItem = menu.findItem(R.id.testAction);
+        menuItem.setIcon(buildCounterDrawable(count,  R.drawable.cart));
 
         return true;
     }
@@ -90,8 +92,10 @@ public class MarketActivity extends AppCompatActivity{
 
         return super.onOptionsItemSelected(item);
     }
-    private void addProduct(Product product){
+    public void addProduct(Product product){
         productList.add(product);
+        count=productList.size();
+        menuItem.setIcon(buildCounterDrawable(count,  R.drawable.cart));
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -121,7 +125,6 @@ public class MarketActivity extends AppCompatActivity{
                 case 1 : holder.iv.setImageResource(R.drawable.muffin); break;
                 case 2 : holder.iv.setImageResource(R.drawable.cookies); break;
                 case 3 : holder.iv.setImageResource(R.drawable.bud); break;
-
                 case 4 : holder.iv.setImageResource(R.drawable.pomada); break;
             }
         }

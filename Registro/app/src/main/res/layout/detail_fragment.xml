@@ -6,12 +6,17 @@
     android:background="@color/white"
     android:clickable="true">
     <RelativeLayout
+        android:id="@+id/rlyPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="60"
-        android:background="@drawable/bud">
-
+        android:layout_weight="60" >
+        <ImageView
+            android:id="@+id/bgrImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bud"/>
         <TextView
+            android:id="@+id/txtDesc"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fontFamily="sans-serif"
@@ -30,9 +35,19 @@
         android:orientation="horizontal"
         android:weightSum="100">
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:text="$ 35.00 "
+            android:layout_weight="25"
+            android:text="$"
+            android:textSize="80dp"
+            android:gravity="left"
+            android:paddingLeft="20dp"/>
+        <TextView
+            android:id="@+id/txtPrice"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="75"
+            android:text="35.00 "
             android:textSize="80dp"
             android:gravity="right" />
     </LinearLayout>
@@ -44,24 +59,27 @@
         android:weightSum="100"
         android:background="@drawable/green_border">
         <RelativeLayout
-            android:id="@+id/rlyMinus"
+
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="30"
             android:background="@drawable/green_border"  >
-            <TextView
+            <Button
+                android:id="@+id/btnMinus"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="-"
                 android:textSize="110dp"
                 android:gravity="center"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:background="@drawable/button_selector"/>
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="40" >
             <TextView
+                android:id="@+id/txtCounter"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="0"
@@ -70,18 +88,20 @@
                 android:textColor="@color/black"/>
         </RelativeLayout>
         <RelativeLayout
-            android:id="@+id/rlyPlus"
+
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="30"
             android:background="@drawable/green_border">
-            <TextView
+            <Button
+                android:id="@+id/btnPlus"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="+"
                 android:textSize="90dp"
                 android:gravity="center"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                android:background="@drawable/button_selector"/>
         </RelativeLayout>
     </LinearLayout>
 
