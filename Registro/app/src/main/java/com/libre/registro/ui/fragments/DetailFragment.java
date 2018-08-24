@@ -30,6 +30,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
     private RelativeLayout rlyPanel;
     private ImageView backGround;
     private TextView txtDesc,txtPrice,txtCounter;
+    private SubmitButton addButton;
     private Product product;
     private int counter=0;
 
@@ -46,6 +47,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         txtDesc=(TextView) this.view.findViewById(R.id.txtDesc);
         txtPrice=(TextView) this.view.findViewById(R.id.txtPrice);
         txtCounter=(TextView) this.view.findViewById(R.id.txtCounter);
+        addButton=(SubmitButton) this.view.findViewById(R.id.addButton);
         btnPlus.setOnClickListener(this);
         btnMinus.setOnClickListener(this);
         Log.e("#######",""+productItem);
@@ -120,9 +122,15 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
                break;
            case  R.id.btnPlus :
                Log.e("########3","MAS");
-               ((MarketActivity)context).addProduct(product);
                counter=counter+1;
+
                txtCounter.setText(""+counter);
+               break;
+
+           case  R.id.addButton :
+               product.count=counter;
+               ((MarketActivity)context).addProduct(product);
+
                break;
        }
 

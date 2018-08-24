@@ -1,9 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion '25.0.0'
-
+    compileSdkVersion 26
+    buildToolsVersion '26.0.1'
     defaultConfig {
         minSdkVersion 15
         targetSdkVersion 21
@@ -18,8 +17,9 @@ android {
 dependencies {
 
 
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.android.support:recyclerview-v7:25.0.0'
+    compile 'com.android.support:appcompat-v7:26.0.1'
+    compile 'com.android.support:recyclerview-v7:26.0.1'
+
     compile 'com.google.firebase:firebase-core:11.8.0'
     compile 'com.google.firebase:firebase-auth:11.8.0'
     compile 'com.google.firebase:firebase-storage:11.8.0'
@@ -29,6 +29,7 @@ dependencies {
     compile 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
     compile 'com.gjiazhe:scrollparallaximageview:1.0'
     compile 'com.google.code.gson:gson:2.8.5'
+    compile 'com.github.dimorinny:floating-text-button:0.0.4'
 
 }
 

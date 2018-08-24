@@ -7,6 +7,7 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -14,9 +15,19 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 import com.google.zxing.WriterException;
 import com.libre.registro.R;
@@ -47,6 +58,9 @@ public class MainActivity extends FragmentActivity {
     final long ONE_MEGABYTE = 1024 * 1024;
     public Member newMember;
     private int smallerDimension;
+    private String userGuid;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -133,8 +147,8 @@ public class MainActivity extends FragmentActivity {
     public Bitmap generateCode(){
 
         Gson gson = new Gson();
-        String inputValue = gson.toJson(newMember);
-        newMember.signature="";
+        String inputValue = gson.toJson(userGuid);
+
         Bitmap bitmap ;
 
         QRGEncoder qrgEncoder = new QRGEncoder(inputValue, null, QRGContents.Type.TEXT, smallerDimension);
@@ -154,8 +168,37 @@ public class MainActivity extends FragmentActivity {
         DatabaseReference usersRef = ref.child("clientes");
         String userID= UUID.randomUUID().toString();
         Map<String, Member> member = new HashMap<>();
-        member.put(userID,newMember);
+        member.put(userGuid,newMember);
         usersRef.setValue(member);
 
+    }
+
+    public void registerUser(){
+        mAuth.createUserWithEmailAndPassword(newMember.mail, newMember.phone)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            userGuid=task.getResult().getUser().getUid();
+
+
+                        } else {
+                            try {
+                                throw task.getException();
+                            } catch (FirebaseAuthWeakPasswordException e) {
+
+
+                            } catch (FirebaseAuthInvalidCredentialsException e) {
+
+
+                            } catch (FirebaseAuthUserCollisionException e) {
+
+                            } catch (Exception e) {
+                                Log.e(TAG, e.getMessage());
+                            }
+                        }
+                    }
+                });
     }
 }

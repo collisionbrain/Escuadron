@@ -6,6 +6,7 @@ package com.libre.registro.ui.pojos;
 
 public class Product {
     public int id;
+    public int count;
     public String name;
     public double price;
 

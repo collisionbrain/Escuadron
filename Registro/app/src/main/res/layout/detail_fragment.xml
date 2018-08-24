@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="100"
     android:background="@color/white"
@@ -9,7 +11,7 @@
         android:id="@+id/rlyPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="60" >
+        android:layout_weight="40" >
         <ImageView
             android:id="@+id/bgrImage"
             android:layout_width="match_parent"
@@ -31,7 +33,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="20"
+        android:layout_weight="15"
         android:orientation="horizontal"
         android:weightSum="100">
         <TextView
@@ -39,7 +41,7 @@
             android:layout_height="match_parent"
             android:layout_weight="25"
             android:text="$"
-            android:textSize="80dp"
+            android:textSize="70dp"
             android:gravity="left"
             android:paddingLeft="20dp"/>
         <TextView
@@ -48,7 +50,7 @@
             android:layout_height="match_parent"
             android:layout_weight="75"
             android:text="35.00 "
-            android:textSize="80dp"
+            android:textSize="70dp"
             android:gravity="right" />
     </LinearLayout>
     <LinearLayout
@@ -56,14 +58,12 @@
         android:layout_height="0dp"
         android:layout_weight="20"
         android:orientation="horizontal"
-        android:weightSum="100"
-        android:background="@drawable/green_border">
+        android:weightSum="100">
         <RelativeLayout
 
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="30"
-            android:background="@drawable/green_border"  >
+            android:layout_weight="30" >
             <Button
                 android:id="@+id/btnMinus"
                 android:layout_width="match_parent"
@@ -85,14 +85,15 @@
                 android:text="0"
                 android:textSize="90dp"
                 android:gravity="center"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+
+                android:background="@drawable/green_border"/>
         </RelativeLayout>
         <RelativeLayout
 
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="30"
-            android:background="@drawable/green_border">
+            android:layout_weight="30" >
             <Button
                 android:id="@+id/btnPlus"
                 android:layout_width="match_parent"
@@ -104,5 +105,21 @@
                 android:background="@drawable/button_selector"/>
         </RelativeLayout>
     </LinearLayout>
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="25"
+        android:orientation="horizontal"
+        android:padding="30dp"
+        android:gravity="center">
+        <com.unstoppable.submitbuttonview.SubmitButton
+            android:id="@+id/addButton"
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:padding="25dp"
+            app:buttonText="Agregar"
+            app:buttonTextSize="25sp"
+            app:buttonColor="@color/blueBorders"
+            />
+    </LinearLayout>
 </LinearLayout>

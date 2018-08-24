@@ -7,15 +7,26 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-
 import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
 import com.gjiazhe.scrollparallaximageview.parallaxstyle.VerticalMovingStyle;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
 import com.libre.registro.R;
 import com.libre.registro.ui.fragments.DetailFragment;
+import com.libre.registro.ui.pojos.Order;
 import com.libre.registro.ui.pojos.Product;
+import com.libre.registro.ui.storage.PreferencesStorage;
+
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,7 +37,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MarketActivity extends AppCompatActivity{
@@ -41,6 +55,11 @@ public class MarketActivity extends AppCompatActivity{
     private  RecyclerView recyclerView;
     private int count = 0;
     private  MenuItem menuItem;
+    private String userGuid;
+    private DatabaseReference mDatabase;
+    private Calendar calendar ;
+    private Date now ;
+    private FloatingActionButton floatingActionButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +68,9 @@ public class MarketActivity extends AppCompatActivity{
         Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
         myToolbar.setTitle("");
         setSupportActionBar(myToolbar);
-
+        calendar = Calendar.getInstance();
+        PreferencesStorage prefs=new PreferencesStorage(context);
+        userGuid=prefs.loadData("REGISTER_USER_KEY");
         fragmentManager=getFragmentManager();
         fragmentTransaction=fragmentManager.beginTransaction();
         context = this;
@@ -57,6 +78,16 @@ public class MarketActivity extends AppCompatActivity{
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new MyAdapter());
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("users").child(userGuid);
+        floatingActionButton=(FloatingActionButton) findViewById(R.id.fab);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
     }
 
 
@@ -175,5 +206,25 @@ public class MarketActivity extends AppCompatActivity{
         view.setDrawingCacheEnabled(false);
 
         return new BitmapDrawable(getResources(), bitmap);
+    }
+
+    public void registerOrder(){
+        now = calendar.getTime();
+        Order order=new Order();
+        order.userGuid=userGuid;
+        order.dateOrder=now;
+        mDatabase.child("users").child(userGuid).setValue(order,new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+
+
+                } else {
+
+
+
+                }
+            }
+        });
     }
 }
