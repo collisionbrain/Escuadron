@@ -11,12 +11,13 @@
         android:id="@+id/rlyPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="40" >
+        android:layout_weight="45" >
         <ImageView
             android:id="@+id/bgrImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bud"/>
+            android:background="@drawable/cookies"
+            android:scaleType="fitEnd"/>
         <TextView
             android:id="@+id/txtDesc"
             android:layout_width="match_parent"
@@ -35,15 +36,18 @@
         android:layout_height="0dp"
         android:layout_weight="15"
         android:orientation="horizontal"
-        android:weightSum="100">
+        android:weightSum="100"
+        >
         <TextView
+            android:id="@+id/txtSymbol"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="25"
             android:text="$"
-            android:textSize="70dp"
+            android:textSize="60dp"
             android:gravity="left"
-            android:paddingLeft="20dp"/>
+            android:paddingLeft="20dp"
+            android:textColor="@color/green_text"/>
         <TextView
             android:id="@+id/txtPrice"
             android:layout_width="0dp"
@@ -51,7 +55,8 @@
             android:layout_weight="75"
             android:text="35.00 "
             android:textSize="70dp"
-            android:gravity="right" />
+            android:gravity="right"
+            android:textColor="@color/green_text"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -108,7 +113,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="25"
+        android:layout_weight="20"
         android:orientation="horizontal"
         android:padding="30dp"
         android:gravity="center">

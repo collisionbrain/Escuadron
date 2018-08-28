@@ -19,16 +19,17 @@
         android:label="@string/app_name"
         android:supportsRtl="true" >
 
-        <activity android:name="com.libre.registro.ui.MainActivity"
+        <activity android:name="com.libre.registro.ui.MarketActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity android:name="com.libre.registro.ui.Splash"
             android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name="com.libre.registro.ui.MarketActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
+        <activity android:name="com.libre.registro.ui.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat">
+            <intent-filter>z
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

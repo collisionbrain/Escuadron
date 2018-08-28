@@ -161,7 +161,12 @@ public class MainActivity extends FragmentActivity {
         }
        return null;
     }
+    public void launchMarket(){
+        Intent intent = new Intent(this, MarketActivity.class);
+        startActivityForResult(intent, 100);
+        finish();
 
+    }
     public void saveToServer(){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("server/register-data/escuadron");

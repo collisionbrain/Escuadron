@@ -23,7 +23,7 @@ public class Splash extends Activity {
             @Override
             public void run() {
 
-                String key=prefs.loadData(REGISTER_USER_KEY);
+                String key="fushfjdshfjsdk";//prefs.loadData(REGISTER_USER_KEY);
                 if(key==null){
                     Intent registerIntent = new Intent(Splash.this,MainActivity.class);
                     Splash.this.startActivity(registerIntent);

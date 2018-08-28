@@ -1,20 +1,20 @@
 package com.libre.registro.ui.fragments;
 
+import android.app.Fragment;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
 import com.libre.registro.R;
 import com.libre.registro.ui.MainActivity;
 import com.libre.registro.ui.MarketActivity;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
-public class DigitalCodeRegister extends Fragment implements  View.OnClickListener  {
+public class DigitalCode extends Fragment implements  View.OnClickListener  {
     private View view;
     private Context context;
     private  SubmitButton btnTermina;
@@ -23,14 +23,16 @@ public class DigitalCodeRegister extends Fragment implements  View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
-        context=getContext();
-        this.view = inflater.inflate(R.layout.digital_code_fragment,container,false);
+        context=getActivity();
+        this.view = inflater.inflate(R.layout.digital_code,container,false);
         btnTermina=this.view.findViewById(R.id.btnTerminar);
         imgCode=this.view.findViewById(R.id.imgCode);
+
         btnTermina.setOnClickListener(this);
-        //((MainActivity) context).saveToServer();
+
         return  this.view;
     }
+
     @Override
     public void onResume(){
         super.onResume();
@@ -48,12 +50,7 @@ public class DigitalCodeRegister extends Fragment implements  View.OnClickListen
         @Override
         public void onResultEnd() {
 
-            /*((MainActivity) context).registerUser();
-            code=((MainActivity) context).generateCode();
-            imgCode.setImageBitmap(code);
-            btnTermina.setVisibility(View.GONE);
-            */
-            ((MainActivity) context).launchMarket();
+            ((MarketActivity) context).closeCodeFragment();
 
         }
     };

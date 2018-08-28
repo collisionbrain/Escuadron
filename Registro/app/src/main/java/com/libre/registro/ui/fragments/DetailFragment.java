@@ -40,22 +40,30 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         context=getActivity();
         int productItem = this.getArguments().getInt("productItem");
         this.view = inflater.inflate(R.layout.detail_fragment,container,false);
-        rlyPanel=(RelativeLayout) this.view.findViewById(R.id.rlPanel);
-        btnPlus=(Button) this.view.findViewById(R.id.btnPlus);
-        btnMinus=(Button) this.view.findViewById(R.id.btnMinus);
-        backGround=(ImageView) this.view.findViewById(R.id.bgrImage);
-        txtDesc=(TextView) this.view.findViewById(R.id.txtDesc);
-        txtPrice=(TextView) this.view.findViewById(R.id.txtPrice);
-        txtCounter=(TextView) this.view.findViewById(R.id.txtCounter);
-        addButton=(SubmitButton) this.view.findViewById(R.id.addButton);
+        rlyPanel=this.view.findViewById(R.id.rlPanel);
+        btnPlus=this.view.findViewById(R.id.btnPlus);
+        btnMinus= this.view.findViewById(R.id.btnMinus);
+        backGround=this.view.findViewById(R.id.bgrImage);
+        txtDesc=this.view.findViewById(R.id.txtDesc);
+        txtPrice=this.view.findViewById(R.id.txtPrice);
+        txtCounter=this.view.findViewById(R.id.txtCounter);
+        addButton=this.view.findViewById(R.id.addButton);
         btnPlus.setOnClickListener(this);
         btnMinus.setOnClickListener(this);
+        addButton.setOnClickListener(this);
+        addButton.setOnResultEndListener(addFinishListener);
         Log.e("#######",""+productItem);
         switch (productItem){
             case 0:
-                backGround.setBackgroundResource(R.drawable.cbd);
-                txtDesc.setText("");
-                txtPrice.setText("600.00");
+
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        backGround.setBackgroundResource(R.drawable.cbd);
+                        txtDesc.setText("xxxxxxxxxxx");
+                        txtPrice.setText("600.00");
+                    }
+                });
                 product=new Product();
                 product.id=0;
                 product.name="CBD";
@@ -66,7 +74,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
                 txtDesc.setText("");
                 txtPrice.setText("25.00");
                 product=new Product();
-                product.id=0;
+                product.id=1;
                 product.name="Muffin";
                 product.price=25;
                 break;
@@ -75,7 +83,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
                 txtDesc.setText("");
                 txtPrice.setText("25.00");
                 product=new Product();
-                product.id=0;
+                product.id=2;
                 product.name="Galletas";
                 product.price=25;
                 break;
@@ -84,7 +92,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
                 txtDesc.setText("");
                 txtPrice.setText("100.00");
                 product=new Product();
-                product.id=0;
+                product.id=3;
                 product.name="Cogoyos";
                 product.price=100;
                 break;
@@ -93,12 +101,13 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
                 txtDesc.setText("");
                 txtPrice.setText("120.00");
                 product=new Product();
-                product.id=0;
+                product.id=4;
                 product.name="Pomada";
                 product.price=120;
                 break;
         }
-
+        counter=checkProductList(product.id);
+        txtCounter.setText("" + counter);
         return  this.view;
     }
     @Override
@@ -128,11 +137,33 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
                break;
 
            case  R.id.addButton :
-               product.count=counter;
-               ((MarketActivity)context).addProduct(product);
+               product.count=Integer.parseInt(txtCounter.getText().toString());
+               if(product.count>0){
+                   ((MarketActivity)context).addProduct(product);
+                   counter=0;
+               }
+               addButton.doResult(true);
 
                break;
        }
 
+    }
+
+    SubmitButton.OnResultEndListener addFinishListener=new SubmitButton.OnResultEndListener() {
+        @Override
+        public void onResultEnd() {
+            ((MarketActivity)context).onBackPressed();
+        }
+    };
+    private int checkProductList(int id){
+        int res=0;
+        for (Product product: ((MarketActivity)context).productList  ) {
+            if(product.id==id){
+                res=product.count;
+
+            }
+        }
+
+        return res;
     }
 }

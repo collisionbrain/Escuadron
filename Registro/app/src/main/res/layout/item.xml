@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="3dp"
-    android:background="#ff000000">
+    android:background="@color/gray">
 
     <com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView
         android:id="@+id/img"

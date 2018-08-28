@@ -1,9 +1,11 @@
 package com.libre.registro.ui;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -11,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
 import com.gjiazhe.scrollparallaximageview.parallaxstyle.VerticalMovingStyle;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -23,6 +24,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.UploadTask;
 import com.libre.registro.R;
 import com.libre.registro.ui.fragments.DetailFragment;
+import com.libre.registro.ui.fragments.DigitalCode;
+import com.libre.registro.ui.fragments.DigitalCodeRegister;
 import com.libre.registro.ui.pojos.Order;
 import com.libre.registro.ui.pojos.Product;
 import com.libre.registro.ui.storage.PreferencesStorage;
@@ -33,9 +36,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,48 +48,57 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class MarketActivity extends AppCompatActivity{
+import ru.dimorinny.floatingtextbutton.FloatingTextButton;
+
+public class MarketActivity extends Activity {
 
 
 
     private Context context;
     private Fragment detailFragment=new DetailFragment();
+    private Fragment digitalCode=new DigitalCode();
     public List<Product> productList;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private  RecyclerView recyclerView;
     private int count = 0;
     private  MenuItem menuItem;
-    private String userGuid;
+    private String userGuid="afsdajksmsdansjdnak";
     private DatabaseReference mDatabase;
     private Calendar calendar ;
     private Date now ;
-    private FloatingActionButton floatingActionButton;
+    private FloatingTextButton floatingActionButton;
+    private Toolbar myToolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.market_activity);
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-        myToolbar.setTitle("");
-        setSupportActionBar(myToolbar);
+      //  myToolbar =findViewById(R.id.my_toolbar);
+        //myToolbar.setTitle("");
+        //setActionBar(myToolbar);
         calendar = Calendar.getInstance();
+        context=this;
         PreferencesStorage prefs=new PreferencesStorage(context);
         userGuid=prefs.loadData("REGISTER_USER_KEY");
         fragmentManager=getFragmentManager();
         fragmentTransaction=fragmentManager.beginTransaction();
         context = this;
         productList=new ArrayList<>();
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView =findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new MyAdapter());
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("users").child(userGuid);
-        floatingActionButton=(FloatingActionButton) findViewById(R.id.fab);
+       // mDatabase.child("users").child(userGuid);
+         floatingActionButton= findViewById(R.id.action_button);
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Bundle bundle = new Bundle();
+                bundle.putInt("productItem", 10001 );
+                initFragmentCode( bundle);
             }
         });
 
@@ -95,21 +109,20 @@ public class MarketActivity extends AppCompatActivity{
     public void onBackPressed(){
 
         getFragmentManager().beginTransaction().remove(detailFragment).commit();
-
+        floatingActionButton.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-        menuItem = menu.findItem(R.id.testAction);
-        menuItem.setIcon(buildCounterDrawable(count,  R.drawable.cart));
+
+        //menuItem.setIcon(buildCounterDrawable(count,  R.drawable.cart));
 
         return true;
     }
@@ -118,6 +131,9 @@ public class MarketActivity extends AppCompatActivity{
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
+            Bundle bundle = new Bundle();
+            bundle.putInt("productItem", 10001 );
+            initFragmentCode( bundle);
             return true;
         }
 
@@ -126,7 +142,7 @@ public class MarketActivity extends AppCompatActivity{
     public void addProduct(Product product){
         productList.add(product);
         count=productList.size();
-        menuItem.setIcon(buildCounterDrawable(count,  R.drawable.cart));
+        floatingActionButton.setTitle("Comprar :" +count);
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -176,12 +192,27 @@ public class MarketActivity extends AppCompatActivity{
     }
 
     private void initFragment( Bundle bundle){
+        floatingActionButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
         detailFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.container, detailFragment, "Add detail");
         fragmentTransaction.commit();
 
     }
+    private void initFragmentCode( Bundle bundle){
+        floatingActionButton.setVisibility(View.GONE);
+        fragmentTransaction = fragmentManager.beginTransaction();
+        detailFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.container, digitalCode, "Add detail");
+        fragmentTransaction.commit();
+
+    }
+    public void  closeCodeFragment(){
+
+        getFragmentManager().beginTransaction().remove(digitalCode).commit();
+        floatingActionButton.setVisibility(View.VISIBLE);
+    }
+
     private Drawable buildCounterDrawable(int count, int backgroundImageId) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.counter_layout, null);
@@ -191,7 +222,7 @@ public class MarketActivity extends AppCompatActivity{
             View counterTextPanel = view.findViewById(R.id.counterValuePanel);
             counterTextPanel.setVisibility(View.GONE);
         } else {
-            TextView textView = (TextView) view.findViewById(R.id.count);
+            TextView textView = view.findViewById(R.id.count);
             textView.setText("" + count);
         }
 

@@ -101,7 +101,8 @@
                 android:id="@+id/checkWats"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="10" />
+                android:layout_weight="10"
+                android:shadowColor="@color/green_toolbar"/>
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
