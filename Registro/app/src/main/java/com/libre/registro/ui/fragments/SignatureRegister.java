@@ -29,11 +29,11 @@ public class SignatureRegister extends Fragment implements  View.OnClickListener
         setRetainInstance(true);
         context=getActivity();
         this.view = inflater.inflate(R.layout.signature_fragment, container, false);
-        txtFirma= (TextView)this.view.findViewById(R.id.txtFirma);
-        btnSiguienteSignature=(SubmitButton)this.view.findViewById(R.id.btnSiguienteSignature);
+        txtFirma=this.view.findViewById(R.id.txtFirma);
+        btnSiguienteSignature=this.view.findViewById(R.id.btnSiguienteSignature);
         btnSiguienteSignature.setOnClickListener(this);
         btnSiguienteSignature.setOnResultEndListener(finishListenerSignature);
-        RelativeLayout rlPanel = (RelativeLayout)this.view.findViewById(R.id.rlPanel);
+        RelativeLayout rlPanel = this.view.findViewById(R.id.rlPanel);
         firmaPanel = new SignaturePanelAdapter(context,txtFirma);
         rlPanel.addView(firmaPanel);
         return  this.view;
@@ -49,7 +49,7 @@ public class SignatureRegister extends Fragment implements  View.OnClickListener
         public void onResultEnd() {
             Bitmap bmpSignature =firmaPanel.getBitmap();
 
-           // ((MainActivity) context).newMember.signature=Data.bitmapToBase64(bmpSignature);
+            ((MainActivity) context).newMember.signature=Data.bitmapToBase64(bmpSignature);
             ((MainActivity) context).paginaSiguiente(4);
             btnSiguienteSignature.reset();
         }

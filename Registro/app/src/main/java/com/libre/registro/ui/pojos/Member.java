@@ -20,4 +20,8 @@ public class Member implements Serializable {
     public String signature;
 
 
+
+
+
+
 }

@@ -13,6 +13,7 @@ import com.libre.registro.ui.fragments.SignatureRegister;
 
 public class PageAdapter extends FragmentPagerAdapter {
     private Context contexto;
+    Fragment fragmento;
 
     public PageAdapter(Context context, FragmentManager fm) {
         super(fm);
@@ -21,7 +22,7 @@ public class PageAdapter extends FragmentPagerAdapter {
     }
     @Override
     public Fragment getItem(int position) {
-        Fragment fragmento = new Fragment();
+         fragmento = new Fragment();
         switch(position){
             case 0:
                 fragmento =new PersonalDataRegister();
@@ -48,4 +49,9 @@ public class PageAdapter extends FragmentPagerAdapter {
         return 5;
     }
 
+
+    public Fragment getItemCode() {
+
+        return fragmento;
+    }
 }

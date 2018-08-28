@@ -3,7 +3,9 @@ package com.libre.registro.ui.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,8 @@ import com.libre.registro.R;
 import com.libre.registro.ui.MainActivity;
 import com.libre.registro.ui.MarketActivity;
 import com.unstoppable.submitbuttonview.SubmitButton;
+
+import java.io.File;
 
 public class DigitalCode extends Fragment implements  View.OnClickListener  {
     private View view;
@@ -28,6 +32,14 @@ public class DigitalCode extends Fragment implements  View.OnClickListener  {
         btnTermina=this.view.findViewById(R.id.btnTerminar);
         imgCode=this.view.findViewById(R.id.imgCode);
 
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/Escuadron/");
+        File imgFile = new File (myDir, "MyCode.jpg");
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            imgCode.setImageBitmap(myBitmap);
+
+        };
         btnTermina.setOnClickListener(this);
 
         return  this.view;

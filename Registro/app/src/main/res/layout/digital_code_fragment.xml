@@ -28,8 +28,7 @@
         <ImageView
             android:id="@+id/imgCode"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/qr"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
     <LinearLayout
@@ -42,13 +41,23 @@
         android:gravity="center">
 
         <com.unstoppable.submitbuttonview.SubmitButton
+            android:id="@+id/btnRegistrar"
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:padding="25dp"
+            app:buttonText="Registrar"
+            app:buttonTextSize="25sp"
+            app:buttonColor="@color/blueBorders"
+            />
+        <com.unstoppable.submitbuttonview.SubmitButton
             android:id="@+id/btnTerminar"
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:padding="25dp"
-            app:buttonText="FInalizar"
+            app:buttonText="Finalizar"
             app:buttonTextSize="25sp"
             app:buttonColor="@color/blueBorders"
+            android:visibility="gone"
             />
     </LinearLayout>
 </LinearLayout>

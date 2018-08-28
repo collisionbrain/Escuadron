@@ -29,11 +29,11 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
         setRetainInstance(true);
         context=getContext();
         this.view = inflater.inflate(R.layout.personal_data_fragment,container,false);
-        btnSiguiente=(SubmitButton)this.view.findViewById(R.id.btnSiguiente);
-        edtName=(EditText) this.view.findViewById(R.id.edtNombre);
-        edtMail=(EditText) this.view.findViewById(R.id.edtCorreo);
-        edtCelphone=(EditText) this.view.findViewById(R.id.edtCelular);
-        checkWhats=(CheckBox) this.view.findViewById(R.id.checkWats);
+        btnSiguiente=this.view.findViewById(R.id.btnSiguiente);
+        edtName=this.view.findViewById(R.id.edtNombre);
+        edtMail=this.view.findViewById(R.id.edtCorreo);
+        edtCelphone=this.view.findViewById(R.id.edtCelular);
+        checkWhats=this.view.findViewById(R.id.checkWats);
 
         netStatus= Network.getConnectivityStatus(context);
         btnSiguiente.setOnClickListener(this);
@@ -69,7 +69,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
                 {
                     ((MainActivity) context).messageError.setText("Verifica tu conexion");
                     ((MainActivity) context).dialogError.show();
-                    //btnRegister.doResult(false);
+                    btnSiguiente.reset();
                     registerPersonalSuccess=false;
 
                 }

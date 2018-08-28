@@ -8,10 +8,12 @@ import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Display;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -32,9 +34,12 @@ import com.google.gson.Gson;
 import com.google.zxing.WriterException;
 import com.libre.registro.R;
 import com.libre.registro.ui.adapters.PageAdapter;
+import com.libre.registro.ui.fragments.DigitalCodeRegister;
 import com.libre.registro.ui.pojos.Member;
+import com.libre.registro.ui.storage.PreferencesStorage;
 import com.libre.registro.ui.util.Data;
 import com.libre.registro.ui.util.NonSwipeableViewPager;
+import com.unstoppable.submitbuttonview.SubmitButton;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -60,6 +65,7 @@ public class MainActivity extends FragmentActivity {
     private int smallerDimension;
     private String userGuid;
     private FirebaseAuth mAuth;
+    private PreferencesStorage preferencesStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,8 +74,9 @@ public class MainActivity extends FragmentActivity {
         setContentView(R.layout.main_activity);
         context = this;
         resources=getResources();
-        vwPaginas=(NonSwipeableViewPager) findViewById(R.id.id_viewpager);
-        txtTitulo=(TextView) findViewById(R.id.txtTitulo);
+        preferencesStorage=new PreferencesStorage(context);
+        vwPaginas=findViewById(R.id.id_viewpager);
+        txtTitulo=findViewById(R.id.txtTitulo);
         adPaginador=new PageAdapter(getApplicationContext(),getSupportFragmentManager());
         vwPaginas.setAdapter(adPaginador);
         vwPaginas.setCurrentItem(0);
@@ -77,7 +84,14 @@ public class MainActivity extends FragmentActivity {
         dialogPrivacy= new Dialog(context);
         dialogPrivacy.setContentView(R.layout.dialog_privacy);
         dialogError.setContentView(R.layout.dialog_error);
-        messageError=(TextView)dialogError .findViewById(R.id.txtMensaje);
+        SubmitButton closeError= dialogError.findViewById(R.id.dialogButtonOK);
+        closeError.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogError.dismiss();
+            }
+        });
+        messageError=dialogError .findViewById(R.id.txtMensaje);
         newMember=new Member();
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
@@ -87,7 +101,7 @@ public class MainActivity extends FragmentActivity {
         int height = point.y;
         smallerDimension = width < height ? width : height;
         smallerDimension = smallerDimension * 3 / 4;
-
+        mAuth = FirebaseAuth.getInstance();
         vwPaginas.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
 
             @Override
@@ -144,22 +158,21 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-    public Bitmap generateCode(){
-
-        Gson gson = new Gson();
-        String inputValue = gson.toJson(userGuid);
-
+    public void generateCode(){
         Bitmap bitmap ;
-
-        QRGEncoder qrgEncoder = new QRGEncoder(inputValue, null, QRGContents.Type.TEXT, smallerDimension);
+        QRGEncoder qrgEncoder = new QRGEncoder(userGuid, null, QRGContents.Type.TEXT, smallerDimension);
         try {
+
              bitmap = qrgEncoder.encodeAsBitmap();
-            Data.saveImage(bitmap);
-            return bitmap;
+             Data.saveImage(bitmap);
+             DigitalCodeRegister activeFragment =(DigitalCodeRegister) adPaginador.getItemCode();
+             activeFragment.setCode(bitmap);
+
         } catch (WriterException e) {
             Log.v(TAG, e.toString());
         }
-       return null;
+
+
     }
     public void launchMarket(){
         Intent intent = new Intent(this, MarketActivity.class);
@@ -167,26 +180,30 @@ public class MainActivity extends FragmentActivity {
         finish();
 
     }
-    public void saveToServer(){
+    public void saveDataUser(String userGuid){
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("server/register-data/escuadron");
+        DatabaseReference ref = database.getReference("registro");
         DatabaseReference usersRef = ref.child("clientes");
-        String userID= UUID.randomUUID().toString();
-        Map<String, Member> member = new HashMap<>();
-        member.put(userGuid,newMember);
-        usersRef.setValue(member);
-
+        usersRef.child(userGuid).setValue(newMember).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                generateCode();
+            }
+        });
     }
 
     public void registerUser(){
-        mAuth.createUserWithEmailAndPassword(newMember.mail, newMember.phone)
+        String user=newMember.mail;
+        String pass= newMember.phone;
+        mAuth.createUserWithEmailAndPassword(user,pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
 
                             userGuid=task.getResult().getUser().getUid();
-
+                            preferencesStorage.saveData("REGISTER_USER_KEY",userGuid);
+                            saveDataUser(userGuid);
 
                         } else {
                             try {

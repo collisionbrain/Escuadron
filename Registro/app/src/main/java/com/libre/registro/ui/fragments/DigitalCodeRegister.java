@@ -17,7 +17,7 @@ import com.unstoppable.submitbuttonview.SubmitButton;
 public class DigitalCodeRegister extends Fragment implements  View.OnClickListener  {
     private View view;
     private Context context;
-    private  SubmitButton btnTermina;
+    private  SubmitButton btnTerminar,btnRegistrar;
     private ImageView  imgCode;
     private Bitmap code;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
@@ -25,9 +25,11 @@ public class DigitalCodeRegister extends Fragment implements  View.OnClickListen
         setRetainInstance(true);
         context=getContext();
         this.view = inflater.inflate(R.layout.digital_code_fragment,container,false);
-        btnTermina=this.view.findViewById(R.id.btnTerminar);
+        btnTerminar=this.view.findViewById(R.id.btnTerminar);
+        btnRegistrar=this.view.findViewById(R.id.btnRegistrar);
         imgCode=this.view.findViewById(R.id.imgCode);
-        btnTermina.setOnClickListener(this);
+        btnTerminar.setOnClickListener(this);
+        btnRegistrar.setOnClickListener(this);
         //((MainActivity) context).saveToServer();
         return  this.view;
     }
@@ -39,21 +41,45 @@ public class DigitalCodeRegister extends Fragment implements  View.OnClickListen
     }
 
 
+    public void setCode(Bitmap bitmap){
+        code=bitmap;
+        btnRegistrar.doResult(true);
+    }
+
     @Override
     public void onClick(View v) {
-        btnTermina.setOnResultEndListener(finishListenerSignature);
-        btnTermina.doResult(true);
+        switch (v.getId()) {
+
+            case R.id.btnTerminar:
+                btnTerminar.doResult(true);
+                break;
+            case R.id.btnRegistrar:
+
+                btnRegistrar.setOnResultEndListener(finishListenerRegister);
+                ((MainActivity) context).registerUser();
+                break;
+        }
+
+
     }
-    SubmitButton.OnResultEndListener finishListenerSignature=new SubmitButton.OnResultEndListener() {
+
+    SubmitButton.OnResultEndListener finishListenerRegister=new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
 
-            /*((MainActivity) context).registerUser();
-            code=((MainActivity) context).generateCode();
             imgCode.setImageBitmap(code);
-            btnTermina.setVisibility(View.GONE);
-            */
-            ((MainActivity) context).launchMarket();
+            btnRegistrar.setVisibility(View.GONE);
+            btnTerminar.setVisibility(View.VISIBLE);
+            btnTerminar.setOnResultEndListener(finishListener);
+
+        }
+    };
+    SubmitButton.OnResultEndListener finishListener=new SubmitButton.OnResultEndListener() {
+        @Override
+        public void onResultEnd() {
+
+            ((MainActivity)context).launchMarket();
+
 
         }
     };
