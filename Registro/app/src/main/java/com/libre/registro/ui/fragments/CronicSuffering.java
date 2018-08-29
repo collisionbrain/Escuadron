@@ -40,10 +40,11 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
         setRetainInstance(true);
         context = getContext();
         this.view = inflater.inflate(R.layout.pcronic_data_fragment, container, false);
-        btnSiguienteCronic = (SubmitButton) this.view.findViewById(R.id.btnSiguienteCronic);
-        edtOtro= (EditText) this.view.findViewById(R.id.edtOtro);
+        btnSiguienteCronic =this.view.findViewById(R.id.btnSiguienteCronic);
+        edtOtro=this.view.findViewById(R.id.edtOtro);
         resources = getResources();
         MaterialSpinner spinner = (MaterialSpinner) this.view.findViewById(R.id.spinner);
+
         spinner.setItems("Seleciona tu padecimiento","Diabetes", "Asma", "Estres", "Neuropatias", "Artritis","Otro");
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 

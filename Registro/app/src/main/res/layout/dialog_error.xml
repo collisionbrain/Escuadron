@@ -6,8 +6,7 @@
     android:padding="10dp"
     android:layout_gravity="center"
     android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:background="@color/white">
+    android:layout_marginRight="10dp" >
     <TextView
         android:id="@+id/txtMensaje"
         android:layout_width="match_parent"
@@ -16,7 +15,7 @@
         android:textSize="20sp"
         android:gravity="center"
         android:text="Mensaje de Error"
-        android:textColor="@color/black"/>
+        android:textColor="@color/white"/>
 
 
     <com.unstoppable.submitbuttonview.SubmitButton
@@ -27,7 +26,7 @@
         android:layout_centerInParent="true"
         app:buttonText="Aceptar"
         app:buttonTextSize="25sp"
-        app:buttonColor="@color/red"
+        app:buttonColor="@color/blueBorders"
 
         />
 </RelativeLayout>

@@ -22,7 +22,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
     private EditText edtName, edtMail,edtCelphone;
     private Context context;
     private int netStatus;
-    private boolean registerPersonalSuccess;
+    private boolean registerPersonalSuccess=true;
     private CheckBox checkWhats;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
@@ -35,7 +35,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
         edtCelphone=this.view.findViewById(R.id.edtCelular);
         checkWhats=this.view.findViewById(R.id.checkWats);
 
-        netStatus= Network.getConnectivityStatus(context);
+
         btnSiguiente.setOnClickListener(this);
         btnSiguiente.setOnResultEndListener(finishListener);
         return  this.view;
@@ -48,7 +48,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
     @Override
     public void onClick(View v) {
 
-
+        netStatus= Network.getConnectivityStatus(context);
         switch (v.getId()) {
 
             case R.id.btnSiguiente:
@@ -79,32 +79,36 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
     SubmitButton.OnResultEndListener finishListener=new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
-            ((MainActivity) context).paginaSiguiente(1);
-            btnSiguiente.reset();
+
+            if(registerPersonalSuccess) {
+                ((MainActivity) context).paginaSiguiente(1);
+                btnSiguiente.reset();
+            }
         }
     };
 
     private boolean validateForm() {
         if (TextUtils.isEmpty(edtMail.getText().toString())) {
             edtMail.requestFocus();
-            btnSiguiente.doResult(false);
+            btnSiguiente.reset();
             registerPersonalSuccess=false;
             setErrorMessage("Correo no puede ir Vacio");
             return false;
         } else if (TextUtils.isEmpty(edtName.getText().toString())) {
             edtName.requestFocus();
-            btnSiguiente.doResult(false);
+            btnSiguiente.reset();
             registerPersonalSuccess=false;
             setErrorMessage("Contraseña no puede ir Vacio");
             return false;
         } else if (TextUtils.isEmpty(edtCelphone.getText().toString())) {
             edtCelphone .requestFocus();
-            btnSiguiente.doResult(false);
+            btnSiguiente.reset();
             registerPersonalSuccess=false;
             setErrorMessage("Tu Nombre no puede ir Vacio");
             return false;
         } else {
             //save to object
+            registerPersonalSuccess=true;
             return true;
         }
     }

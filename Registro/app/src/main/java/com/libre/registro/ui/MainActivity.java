@@ -85,6 +85,7 @@ public class MainActivity extends FragmentActivity {
         dialogPrivacy.setContentView(R.layout.dialog_privacy);
         dialogError.setContentView(R.layout.dialog_error);
         SubmitButton closeError= dialogError.findViewById(R.id.dialogButtonOK);
+
         closeError.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

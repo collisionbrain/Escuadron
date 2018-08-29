@@ -6,12 +6,14 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.libre.registro.R;
 import com.libre.registro.ui.MainActivity;
 import com.unstoppable.submitbuttonview.SubmitButton;
@@ -28,18 +30,29 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
     private  EditText edtFechaNacimiento,edtPeso;
     private CheckBox chckCronic;
     private  boolean registerHealtSuccess;
+    private int gender;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
         context=getContext();
         this.view = inflater.inflate(R.layout.healt_data_fragment,container,false);
-        btnSiguienteHealt=(SubmitButton)this.view.findViewById(R.id.btnSiguienteHealt);
-        edtFechaNacimiento=(EditText) this.view.findViewById(R.id.edtFecha);
-        edtPeso=(EditText) this.view.findViewById(R.id.edtPeso);
-        chckCronic=(CheckBox) this.view.findViewById(R.id.checkCronic);
+        btnSiguienteHealt=this.view.findViewById(R.id.btnSiguienteHealt);
+        edtFechaNacimiento=this.view.findViewById(R.id.edtFecha);
+        edtPeso=this.view.findViewById(R.id.edtPeso);
+        chckCronic=this.view.findViewById(R.id.checkCronic);
         edtFechaNacimiento.addTextChangedListener(txtWatcherListener);
         btnSiguienteHealt.setOnClickListener(this);
+        MaterialSpinner spinner = this.view.findViewById(R.id.spinnerGender);
 
+        spinner.setItems("Selecciona tu genero","Femenino", "Masculino", "Otro");
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                Log.e("###########", "Clicked " + item);
+                gender=position;
+
+            }
+        });
         return  this.view;
     }
     TextWatcher txtWatcherListener = new TextWatcher(){
@@ -161,6 +174,11 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
             btnSiguienteHealt.doResult(false);
             registerHealtSuccess=false;
             setErrorMessage("Indica tu peso");
+            return false;
+        }else if (gender==0) {
+            btnSiguienteHealt.doResult(false);
+            registerHealtSuccess=false;
+            setErrorMessage("Indica tu genero");
             return false;
         } else {
 

@@ -37,13 +37,14 @@
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray"/>
             <View
                 android:layout_below="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="-5dp"
-                android:background="@color/blueButtonsText"/>
+                android:background="@color/green_toolbar"/>
 
         </RelativeLayout>
 
@@ -63,6 +64,7 @@
                 android:visibility="gone"
                 android:hint="@string/strDescribe"
                 android:inputType="text|textMultiLine"
+                android:textColor="@color/gray"
                 android:background="@drawable/editext_line"
                  />
 
