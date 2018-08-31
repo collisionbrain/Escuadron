@@ -66,7 +66,9 @@ public class MainActivity extends FragmentActivity {
     private String userGuid;
     private FirebaseAuth mAuth;
     private PreferencesStorage preferencesStorage;
-
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference ref = database.getReference("registro");
+    private DatabaseReference usersRef = ref.child("clientes");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,14 +86,7 @@ public class MainActivity extends FragmentActivity {
         dialogPrivacy= new Dialog(context);
         dialogPrivacy.setContentView(R.layout.dialog_privacy);
         dialogError.setContentView(R.layout.dialog_error);
-        SubmitButton closeError= dialogError.findViewById(R.id.dialogButtonOK);
 
-        closeError.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialogError.dismiss();
-            }
-        });
         messageError=dialogError .findViewById(R.id.txtMensaje);
         newMember=new Member();
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -182,9 +177,7 @@ public class MainActivity extends FragmentActivity {
 
     }
     public void saveDataUser(String userGuid){
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference("registro");
-        DatabaseReference usersRef = ref.child("clientes");
+
         usersRef.child(userGuid).setValue(newMember).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {

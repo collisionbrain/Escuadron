@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="200dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp"
     android:layout_gravity="center"
     android:layout_marginLeft="10dp"
@@ -13,20 +12,9 @@
         android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:textSize="20sp"
-        android:gravity="center"
+        android:gravity="center_vertical|center_horizontal"
         android:text="Mensaje de Error"
         android:textColor="@color/white"/>
 
 
-    <com.unstoppable.submitbuttonview.SubmitButton
-        android:id="@+id/dialogButtonOK"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        app:buttonText="Aceptar"
-        app:buttonTextSize="25sp"
-        app:buttonColor="@color/blueBorders"
-
-        />
 </RelativeLayout>

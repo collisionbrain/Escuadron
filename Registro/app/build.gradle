@@ -29,6 +29,7 @@ dependencies {
     compile 'com.gjiazhe:scrollparallaximageview:1.0'
     compile 'com.google.code.gson:gson:2.8.5'
     compile 'com.github.dimorinny:floating-text-button:0.0.4'
+    compile 'com.etsy.android.grid:library:1.0.5'
 
 }
 

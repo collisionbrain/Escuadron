@@ -26,6 +26,7 @@ import com.libre.registro.R;
 import com.libre.registro.ui.fragments.DetailFragment;
 import com.libre.registro.ui.fragments.DigitalCode;
 import com.libre.registro.ui.fragments.DigitalCodeRegister;
+import com.libre.registro.ui.fragments.SubListFragment;
 import com.libre.registro.ui.pojos.Order;
 import com.libre.registro.ui.pojos.Product;
 import com.libre.registro.ui.storage.PreferencesStorage;
@@ -50,13 +51,14 @@ import java.util.List;
 
 import ru.dimorinny.floatingtextbutton.FloatingTextButton;
 
-public class MarketActivity extends Activity {
+public class MarketActivity extends AppCompatActivity   {
 
 
 
     private Context context;
     private Fragment detailFragment=new DetailFragment();
     private Fragment digitalCode=new DigitalCode();
+    private Fragment subListFragment=new SubListFragment();
     public List<Product> productList;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -90,8 +92,8 @@ public class MarketActivity extends Activity {
         recyclerView.setAdapter(new MyAdapter());
         mDatabase = FirebaseDatabase.getInstance().getReference();
        // mDatabase.child("users").child(userGuid);
-         floatingActionButton= findViewById(R.id.action_button);
-
+        // floatingActionButton= findViewById(R.id.action_button);
+/*
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,6 +103,7 @@ public class MarketActivity extends Activity {
                 initFragmentCode( bundle);
             }
         });
+        */
 
     }
 
@@ -158,7 +161,17 @@ public class MarketActivity extends Activity {
                     Log.e("xxxxxxxxxx",""+itemPosition);
                     Bundle bundle = new Bundle();
                     bundle.putInt("productItem", itemPosition );
-                    initFragment( bundle);
+
+                    switch (itemPosition){
+                        case 3:
+                            initFragmentSubList(bundle);
+                            break;
+                        default:
+                                initFragment( bundle);
+                                break;
+
+                    }
+
                 }
             });
             return new ViewHolder(view);
@@ -185,7 +198,7 @@ public class MarketActivity extends Activity {
             ScrollParallaxImageView iv;
             ViewHolder(final View itemView) {
                 super(itemView);
-                iv = (ScrollParallaxImageView) itemView.findViewById(R.id.img);
+                iv = itemView.findViewById(R.id.img);
 
             }
         }
@@ -204,6 +217,14 @@ public class MarketActivity extends Activity {
         fragmentTransaction = fragmentManager.beginTransaction();
         detailFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.container, digitalCode, "Add detail");
+        fragmentTransaction.commit();
+
+    }
+    private void initFragmentSubList( Bundle bundle){
+        floatingActionButton.setVisibility(View.GONE);
+        fragmentTransaction = fragmentManager.beginTransaction();
+        detailFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.container, subListFragment, "Add detail");
         fragmentTransaction.commit();
 
     }

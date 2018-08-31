@@ -2,10 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp"
     android:layout_gravity="center"
-    android:layout_marginTop="10dp"
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
     android:weightSum="100"
@@ -14,23 +12,22 @@
         android:id="@+id/txtMensaje"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="20"
+        android:layout_weight="10"
         android:textSize="18sp"
         android:gravity="center"
-        android:text="Terminos y Condiciones"/>
+        android:text="Aviso de Privacidad Simplificado del Registro de usuarios"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="60"
-        android:text="Lorem ipsum dolor sit amet consectetur adipiscing elit dis, tristique venenatis velit imperdiet molestie per ut felis nunc, tincidunt sem pellentesque magna arcu placerat primis. Sagittis netus augue vulputate curae est nullam cursus vestibulum dictum dui, ridiculus velit sapien vehicula interdum proin tristique lectus blandit, montes taciti posuere facilisis erat habitant leo sociosqu sem. Placerat dis ullamcorper accumsan fusce feugiat nec dapibus iaculis, diam pellentesque sagittis mollis odio ac mauris, magna id ut risus erat a in."/>
+        android:layout_weight="70"
+        android:text="El Colectivo 'Escuadron Canabico', es el responsable del tratamiento de los datos personales que nos proporcione.
 
-    <com.unstoppable.submitbuttonview.SubmitButton
-        android:id="@+id/btnAceptar"
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        app:buttonText="Acepto"
-        app:buttonTextSize="25sp"
-        app:buttonColor="@color/blueBorders" />
+Sus datos personales serán utilizados para mantener el control de el registro y ventas de quienes se registran al protocolo de investigacion y este tratamiento forma parte de las medidas de seguridad adoptadas, por lo que, se comunica que no se efectuarán tratamientos adicionales.
+
+Se informa que no realizarán transferencias que requieran su consentimiento, salvo aquellas que sean necesarias para atender requerimientos de información de una autoridad competente, debidamente fundados y motivados.
+
+Usted podrá consultar el aviso de privacidad integral en: http:// , así como en el las instalaciones del Colectivo.
+"/>
+
 
 </LinearLayout>
