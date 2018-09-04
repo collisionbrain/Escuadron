@@ -1,4 +1,5 @@
 package com.libre.registro.ui;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -6,7 +7,9 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -40,6 +43,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -69,16 +73,13 @@ public class MarketActivity extends AppCompatActivity   {
     private DatabaseReference mDatabase;
     private Calendar calendar ;
     private Date now ;
-    private FloatingTextButton floatingActionButton;
-    private Toolbar myToolbar;
+    private Button floatingActionButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.market_activity);
-      //  myToolbar =findViewById(R.id.my_toolbar);
-        //myToolbar.setTitle("");
-        //setActionBar(myToolbar);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#fff5f5f5")));
         calendar = Calendar.getInstance();
         context=this;
         PreferencesStorage prefs=new PreferencesStorage(context);
@@ -92,8 +93,8 @@ public class MarketActivity extends AppCompatActivity   {
         recyclerView.setAdapter(new MyAdapter());
         mDatabase = FirebaseDatabase.getInstance().getReference();
        // mDatabase.child("users").child(userGuid);
-        // floatingActionButton= findViewById(R.id.action_button);
-/*
+        floatingActionButton= findViewById(R.id.action_button);
+
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +104,7 @@ public class MarketActivity extends AppCompatActivity   {
                 initFragmentCode( bundle);
             }
         });
-        */
+
 
     }
 
@@ -111,8 +112,17 @@ public class MarketActivity extends AppCompatActivity   {
     @Override
     public void onBackPressed(){
 
-        getFragmentManager().beginTransaction().remove(detailFragment).commit();
-        floatingActionButton.setVisibility(View.VISIBLE);
+        if(subListFragment.isVisible()){
+            getFragmentManager().beginTransaction().remove(subListFragment).commit();
+            floatingActionButton.setVisibility(View.VISIBLE);
+        }
+        if(detailFragment.isVisible()){
+            getFragmentManager().beginTransaction().remove(detailFragment).commit();
+            floatingActionButton.setVisibility(View.VISIBLE);
+        }
+        if(!detailFragment.isVisible() && !subListFragment.isVisible()){
+           finish();
+        }
     }
 
     @Override
@@ -124,9 +134,6 @@ public class MarketActivity extends AppCompatActivity   {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
-
-        //menuItem.setIcon(buildCounterDrawable(count,  R.drawable.cart));
-
         return true;
     }
     @Override
@@ -145,7 +152,13 @@ public class MarketActivity extends AppCompatActivity   {
     public void addProduct(Product product){
         productList.add(product);
         count=productList.size();
-        floatingActionButton.setTitle("Comprar :" +count);
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                floatingActionButton.setText("Comprar :" +count);
+            }
+        });
+
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -191,7 +204,7 @@ public class MarketActivity extends AppCompatActivity   {
 
         @Override
         public int getItemCount() {
-            return 8;
+            return 5;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {

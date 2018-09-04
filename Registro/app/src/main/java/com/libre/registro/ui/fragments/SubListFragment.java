@@ -37,8 +37,7 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
         View footer = layoutInflater.inflate(R.layout.list_item_header_footer, null);
         TextView txtHeaderTitle = header.findViewById(R.id.txt_title);
         TextView txtFooterTitle =  footer.findViewById(R.id.txt_title);
-        txtHeaderTitle.setText("THE HEADER!");
-        txtFooterTitle.setText("THE FOOTER!");
+        txtHeaderTitle.setText("Flores del dia");
 
         staggeredGridView.addHeaderView(header);
         staggeredGridView.addFooterView(footer);

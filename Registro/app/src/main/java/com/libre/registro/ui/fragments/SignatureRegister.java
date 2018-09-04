@@ -54,4 +54,6 @@ public class SignatureRegister extends Fragment implements  View.OnClickListener
             btnSiguienteSignature.reset();
         }
     };
+
+
 }

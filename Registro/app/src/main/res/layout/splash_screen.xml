@@ -10,23 +10,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="60">
+        android:layout_weight="100"
+        android:background="@color/white">
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:src="@drawable/logo"
+            android:padding="50dp"
 
             android:scaleType="fitCenter"/>
     </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="40"
-        android:gravity="center">
-    </RelativeLayout>
-
-
-
 
 
 </LinearLayout>

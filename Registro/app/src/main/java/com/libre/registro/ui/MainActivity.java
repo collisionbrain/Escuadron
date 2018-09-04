@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -26,6 +28,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -67,8 +70,7 @@ public class MainActivity extends FragmentActivity {
     private FirebaseAuth mAuth;
     private PreferencesStorage preferencesStorage;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference ref = database.getReference("registro");
-    private DatabaseReference usersRef = ref.child("clientes");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -177,11 +179,18 @@ public class MainActivity extends FragmentActivity {
 
     }
     public void saveDataUser(String userGuid){
-
-        usersRef.child(userGuid).setValue(newMember).addOnCompleteListener(new OnCompleteListener<Void>() {
+        DatabaseReference ref = database.getReference("registro");
+        DatabaseReference usersRef = ref.child("clientes");
+        usersRef.child(userGuid).setValue(newMember,new DatabaseReference.CompletionListener() {
             @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                generateCode();
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError != null) {
+                    System.out.println("Data could not be saved " + databaseError.getMessage());
+                    preferencesStorage.saveDataObjet("OBJET_TO_REGITER",newMember);
+                } else {
+                    System.out.println("Data saved successfully.");
+                    generateCode();
+                }
             }
         });
     }
@@ -203,18 +212,24 @@ public class MainActivity extends FragmentActivity {
                             try {
                                 throw task.getException();
                             } catch (FirebaseAuthWeakPasswordException e) {
-
+                                showError("Tu Contraseña debil");
 
                             } catch (FirebaseAuthInvalidCredentialsException e) {
-
+                                showError("Existe un error con el correo electronico");
 
                             } catch (FirebaseAuthUserCollisionException e) {
-
+                                showError("Correo electronico ya fue registrado");
                             } catch (Exception e) {
                                 Log.e(TAG, e.getMessage());
                             }
                         }
                     }
                 });
+    }
+
+    public void showError(String message){
+        ViewDialog alert = new ViewDialog();
+        alert.showDialog(MainActivity.this, message);
+
     }
 }

@@ -12,8 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
-
-import com.jaredrummler.materialspinner.MaterialSpinner;
+import android.widget.RadioButton;
 import com.libre.registro.R;
 import com.libre.registro.ui.MainActivity;
 import com.unstoppable.submitbuttonview.SubmitButton;
@@ -31,6 +30,7 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
     private CheckBox chckCronic;
     private  boolean registerHealtSuccess;
     private int gender;
+    private RadioButton radioButtonM,radioButtonF;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
@@ -42,17 +42,8 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
         chckCronic=this.view.findViewById(R.id.checkCronic);
         edtFechaNacimiento.addTextChangedListener(txtWatcherListener);
         btnSiguienteHealt.setOnClickListener(this);
-        MaterialSpinner spinner = this.view.findViewById(R.id.spinnerGender);
-
-        spinner.setItems("Selecciona tu genero","Femenino", "Masculino", "Otro");
-        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                Log.e("###########", "Clicked " + item);
-                gender=position;
-
-            }
-        });
+        radioButtonM=this.view.findViewById(R.id.rdMas);
+        radioButtonF=this.view.findViewById(R.id.rdFem);
         return  this.view;
     }
     TextWatcher txtWatcherListener = new TextWatcher(){
@@ -140,6 +131,14 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
                     ((MainActivity) context).newMember.weigth=Integer.parseInt(edtPeso.getText().toString());
                     ((MainActivity) context).newMember.suffering=chckCronic.isChecked();
 
+                    if(radioButtonF.isChecked()){
+                        gender=2;
+                    }
+                    if(radioButtonM.isChecked()){
+                        gender=1;
+                    }
+                    ((MainActivity) context).newMember.gender=gender;
+
                     btnSiguienteHealt.setOnResultEndListener(finishListenerHealt);
                     btnSiguienteHealt.doResult(true);
                     registerHealtSuccess=true;
@@ -165,20 +164,20 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
     private boolean validateForm() {
         if (TextUtils.isEmpty(edtFechaNacimiento.getText().toString())) {
             edtFechaNacimiento.requestFocus();
-            btnSiguienteHealt.doResult(false);
+            btnSiguienteHealt.reset();
             registerHealtSuccess=false;
-            setErrorMessage("Indica tu Fecha de Nacimiento");
+            setErrorMessageForm("Indica tu Fecha de Nacimiento");
             return false;
         } else if (TextUtils.isEmpty(edtPeso.getText().toString())) {
             edtPeso.requestFocus();
-            btnSiguienteHealt.doResult(false);
+            btnSiguienteHealt.reset();
             registerHealtSuccess=false;
-            setErrorMessage("Indica tu peso");
+            setErrorMessageForm("Indica tu Peso");
             return false;
-        }else if (gender==0) {
-            btnSiguienteHealt.doResult(false);
+        }else if (!radioButtonM.isChecked() && !radioButtonF.isChecked()) {
+            btnSiguienteHealt.reset();
             registerHealtSuccess=false;
-            setErrorMessage("Indica tu genero");
+            setErrorMessageForm("Indica tu Género");
             return false;
         } else {
 
@@ -186,8 +185,7 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
             return true;
         }
     }
-    public void setErrorMessage(String message){
-        ((MainActivity) context).messageError.setText(message);
-        ((MainActivity) context).dialogError.show();
+    public void setErrorMessageForm(String message){
+        ((MainActivity) context).showError(message);
     }
 }

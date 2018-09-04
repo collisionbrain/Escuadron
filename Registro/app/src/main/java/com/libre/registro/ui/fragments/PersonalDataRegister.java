@@ -52,8 +52,6 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
         switch (v.getId()) {
 
             case R.id.btnSiguiente:
-
-                if (netStatus != 0) {
                     if(validateForm()) {
 
                         ((MainActivity) context).newMember.name=edtName.getText().toString();
@@ -65,14 +63,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
 
 
                     }
-                }else
-                {
-                    ((MainActivity) context).messageError.setText("Verifica tu conexion");
-                    ((MainActivity) context).dialogError.show();
-                    btnSiguiente.reset();
-                    registerPersonalSuccess=false;
 
-                }
 
         }
     }
@@ -92,19 +83,19 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
             edtMail.requestFocus();
             btnSiguiente.reset();
             registerPersonalSuccess=false;
-            setErrorMessage("Correo no puede ir Vacio");
+            setErrorMessageForm("Ingresa un Correo electronico");
             return false;
         } else if (TextUtils.isEmpty(edtName.getText().toString())) {
             edtName.requestFocus();
             btnSiguiente.reset();
             registerPersonalSuccess=false;
-            setErrorMessage("Contraseña no puede ir Vacio");
+            setErrorMessageForm("Ingresa un Nombre completo");
             return false;
         } else if (TextUtils.isEmpty(edtCelphone.getText().toString())) {
             edtCelphone .requestFocus();
             btnSiguiente.reset();
             registerPersonalSuccess=false;
-            setErrorMessage("Tu Nombre no puede ir Vacio");
+            setErrorMessageForm("Ingresa un Telefono de contacto");
             return false;
         } else {
             //save to object
@@ -112,8 +103,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
             return true;
         }
     }
-    public void setErrorMessage(String message){
-        ((MainActivity) context).messageError.setText(message);
-        ((MainActivity) context).dialogError.show();
+    public void setErrorMessageForm(String message){
+        ((MainActivity) context).showError(message);
     }
 }

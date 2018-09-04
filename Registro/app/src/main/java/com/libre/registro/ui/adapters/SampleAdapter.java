@@ -26,7 +26,7 @@ public class SampleAdapter extends ArrayAdapter<String> {
 
     static class ViewHolder {
         DynamicHeightTextView txtLineOne;
-        Button btnGo;
+        Button btnPlus,btnMinus;
     }
 
     private final LayoutInflater mLayoutInflater;
@@ -40,11 +40,11 @@ public class SampleAdapter extends ArrayAdapter<String> {
         mLayoutInflater = LayoutInflater.from(context);
         mRandom = new Random();
         mBackgroundColors = new ArrayList<Integer>();
-        mBackgroundColors.add(R.color.gray);
-        mBackgroundColors.add(R.color.gray);
-        mBackgroundColors.add(R.color.gray);
-        mBackgroundColors.add(R.color.gray);
-        mBackgroundColors.add(R.color.gray);
+        mBackgroundColors.add(R.color.green_toolbar);
+        mBackgroundColors.add(R.color.green_toolbar);
+        mBackgroundColors.add(R.color.green_toolbar);
+        mBackgroundColors.add(R.color.green_toolbar);
+        mBackgroundColors.add(R.color.green_toolbar);
     }
 
     @Override
@@ -55,7 +55,7 @@ public class SampleAdapter extends ArrayAdapter<String> {
             convertView = mLayoutInflater.inflate(R.layout.list_item_sample, parent, false);
             vh = new ViewHolder();
             vh.txtLineOne =  convertView.findViewById(R.id.txt_line1);
-            vh.btnGo = convertView.findViewById(R.id.btn_go);
+            vh.btnPlus = convertView.findViewById(R.id.btn_plus);
 
             convertView.setTag(vh);
         }
@@ -74,11 +74,10 @@ public class SampleAdapter extends ArrayAdapter<String> {
         vh.txtLineOne.setHeightRatio(positionHeight);
         vh.txtLineOne.setText(getItem(position) + position);
 
-        vh.btnGo.setOnClickListener(new View.OnClickListener() {
+        vh.btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Toast.makeText(getContext(), "Button Clicked Position " +
-                        position, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "PENDIENTE " , Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -66,7 +66,7 @@
                 android:textColorHint="@color/gray"
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
-                android:text="hgallardo@hotmail.com"/>
+                android:text="hgallardo_dv@hotmail.com"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -85,7 +85,8 @@
                 android:background="@drawable/editext_line"
                 android:hint="@string/strCelular"
                 android:textColorHint="@color/gray"
-                android:text="12345678"
+                android:maxLength="15"
+                android:text="125557678"
                 android:singleLine="true" />
         </RelativeLayout>
 
@@ -102,7 +103,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="10"
-                android:button="@color/black"/>
+                android:theme="@style/MycheckBoxStyle" />
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"

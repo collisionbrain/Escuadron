@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Window;
 
 import com.libre.registro.R;
 import com.libre.registro.ui.storage.PreferencesStorage;
@@ -17,6 +18,7 @@ public class Splash extends Activity {
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.splash_screen);
+       // requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.prefs=new PreferencesStorage(this);
         prefs.saveData(ID_CAMERA_PREFERENCE,"0");
         new Handler().postDelayed(new Runnable(){
@@ -34,7 +36,7 @@ public class Splash extends Activity {
                     Splash.this.finish();
                 }
             }
-        }, 3000);
+        }, 2000);
 
     }
 

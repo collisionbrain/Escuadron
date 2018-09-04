@@ -3,6 +3,11 @@ package com.libre.registro.ui.storage;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import com.libre.registro.ui.util.Data;
+
+import java.io.Serializable;
+
 public class PreferencesStorage {
 
     private SharedPreferences preferences;
@@ -23,9 +28,15 @@ public class PreferencesStorage {
 
 
 
+    public void saveDataObjet(String key,  Serializable data){
+        SharedPreferences.Editor editor = this.preferences.edit();
+        editor.putString(key, Data.objectToString(data));
+        editor.commit();
+    }
 
-
-
+    public Serializable loadDatObjet(String key){
+        return Data.stringToObject(this.preferences.getString(key, null));
+    }
 
 
 

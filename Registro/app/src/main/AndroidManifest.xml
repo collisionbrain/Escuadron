@@ -27,7 +27,8 @@
         <activity android:name="com.libre.registro.ui.Splash"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"
+                    android:theme="@style/Theme.AppCompat"/>
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
