@@ -52,6 +52,8 @@ import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
 
 import static android.content.ContentValues.TAG;
+import static com.libre.registro.ui.util.Constants.JSON_FILE;
+import static com.libre.registro.ui.util.Constants.URL_REMOTE;
 
 public class MainActivity extends FragmentActivity {
 
@@ -71,6 +73,7 @@ public class MainActivity extends FragmentActivity {
     private PreferencesStorage preferencesStorage;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +91,7 @@ public class MainActivity extends FragmentActivity {
         dialogPrivacy= new Dialog(context);
         dialogPrivacy.setContentView(R.layout.dialog_privacy);
         dialogError.setContentView(R.layout.dialog_error);
-
+        storage=FirebaseStorage.getInstance();
         messageError=dialogError .findViewById(R.id.txtMensaje);
         newMember=new Member();
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -178,6 +181,22 @@ public class MainActivity extends FragmentActivity {
         finish();
 
     }
+    public void downloadDB(){
+        StorageReference fileRef = storage.getReferenceFromUrl(URL_REMOTE).child(JSON_FILE);
+        if (fileRef != null) {
+            fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    generateCode();
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+
+                }
+            });
+        }
+    }
     public void saveDataUser(String userGuid){
         DatabaseReference ref = database.getReference("registro");
         DatabaseReference usersRef = ref.child("clientes");
@@ -188,8 +207,7 @@ public class MainActivity extends FragmentActivity {
                     System.out.println("Data could not be saved " + databaseError.getMessage());
                     preferencesStorage.saveDataObjet("OBJET_TO_REGITER",newMember);
                 } else {
-                    System.out.println("Data saved successfully.");
-                    generateCode();
+                     downloadDB();
                 }
             }
         });

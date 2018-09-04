@@ -92,9 +92,7 @@ public class MarketActivity extends AppCompatActivity   {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new MyAdapter());
         mDatabase = FirebaseDatabase.getInstance().getReference();
-       // mDatabase.child("users").child(userGuid);
         floatingActionButton= findViewById(R.id.action_button);
-
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -176,7 +174,7 @@ public class MarketActivity extends AppCompatActivity   {
                     bundle.putInt("productItem", itemPosition );
 
                     switch (itemPosition){
-                        case 3:
+                        case 0:
                             initFragmentSubList(bundle);
                             break;
                         default:
@@ -194,10 +192,10 @@ public class MarketActivity extends AppCompatActivity   {
         public void onBindViewHolder(ViewHolder holder, int position) {
             holder.iv.setParallaxStyles(verticalMovingStyle);
             switch (position % 5) {
-                case 0 : holder.iv.setImageResource(R.drawable.cbd); break;
+                case 0 : holder.iv.setImageResource(R.drawable.bud); break;
                 case 1 : holder.iv.setImageResource(R.drawable.muffin); break;
                 case 2 : holder.iv.setImageResource(R.drawable.cookies); break;
-                case 3 : holder.iv.setImageResource(R.drawable.bud); break;
+                case 3 : holder.iv.setImageResource(R.drawable.cbd); break;
                 case 4 : holder.iv.setImageResource(R.drawable.pomada); break;
             }
         }
@@ -247,31 +245,6 @@ public class MarketActivity extends AppCompatActivity   {
         floatingActionButton.setVisibility(View.VISIBLE);
     }
 
-    private Drawable buildCounterDrawable(int count, int backgroundImageId) {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.counter_layout, null);
-        view.setBackgroundResource(backgroundImageId);
-
-        if (count == 0) {
-            View counterTextPanel = view.findViewById(R.id.counterValuePanel);
-            counterTextPanel.setVisibility(View.GONE);
-        } else {
-            TextView textView = view.findViewById(R.id.count);
-            textView.setText("" + count);
-        }
-
-        view.measure(
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
-
-        view.setDrawingCacheEnabled(true);
-        view.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        Bitmap bitmap = Bitmap.createBitmap(view.getDrawingCache());
-        view.setDrawingCacheEnabled(false);
-
-        return new BitmapDrawable(getResources(), bitmap);
-    }
 
     public void registerOrder(){
         now = calendar.getTime();

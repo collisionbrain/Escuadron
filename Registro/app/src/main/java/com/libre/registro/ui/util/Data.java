@@ -1,5 +1,6 @@
 package com.libre.registro.ui.util;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -10,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
@@ -109,5 +111,20 @@ public class Data {
             b[i] = (byte)(Integer.parseInt(s2, 16) & 0xff);
         }
         return b;
+    }
+    public String loadJSONFromAsset(Activity activity) {
+        String json = null;
+        try {
+            InputStream is = activity.getAssets().open("db.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
     }
 }
