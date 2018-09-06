@@ -19,6 +19,15 @@
     <string name="strPadecimiento">¿Sufre algun padecimiento cronico?</string>
     <string name="strDescribe">Describe tu padecimiento</string>
 
+    <string name="strCalle">Calle</string>
+    <string name="strNumeroExt">Número Exterior</string>
+    <string name="strNumeroInt">Número Interior</string>
+    <string name="strCpostal">Código Postal</string>
+    <string name="strColonia">Colonia</string>
+    <string name="strMunicipio">Alcaldía  ó Municipio</string>
+    <string name="strEstado">Estado</string>
+
+
     <string name="siguiente">Siguiente</string>
     <string name="aceptar">Aceptar</string>
     <string name="action_settings">Codigo de pago</string>

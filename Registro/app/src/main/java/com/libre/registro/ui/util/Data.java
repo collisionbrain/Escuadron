@@ -5,17 +5,29 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Base64;
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.Random;
+
+import static com.libre.registro.ui.util.Constants.JSON_FILE;
+import static com.libre.registro.ui.util.Constants.JSON_PATH;
 
 /**
  * Created by hugo on 18/08/18.
@@ -36,6 +48,18 @@ public class Data {
         }
 
         return base64;
+    }
+    public static Bitmap base64ToBitmap(String bs64) {
+
+        Bitmap bitmap=null ;
+        try {
+            byte[] decodedString = Base64.decode(bs64, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return bitmap;
     }
     public static void saveImage(Bitmap finalBitmap) {
 
@@ -112,19 +136,50 @@ public class Data {
         }
         return b;
     }
-    public String loadJSONFromAsset(Activity activity) {
-        String json = null;
+    public static JSONArray loadJSONFileObjet(String object) {
+        JSONArray data=null;
         try {
-            InputStream is = activity.getAssets().open("db.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            return null;
+            File yourFile = new File(Environment.getExternalStorageDirectory(), "Escuadron/DB/db.json");
+            FileInputStream stream = new FileInputStream(yourFile);
+            String jsonStr = null;
+            try {
+                FileChannel fc = stream.getChannel();
+                MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
+                jsonStr = Charset.defaultCharset().decode(bb).toString();
+
+                JSONObject jsonObj = new JSONObject(jsonStr);
+                data  = jsonObj.getJSONArray(object);
+
+                Log.e("###",data.get(0).toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                stream.close();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+
         }
-        return json;
+        return data;
     }
+    public static void saveJSONFile( byte[] data ){
+
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/Escuadron/DB/");
+        myDir.mkdirs();
+        File file = new File(root + "/Escuadron/DB/db.json");
+        FileOutputStream fos;
+
+        try {
+            fos = new FileOutputStream(file);
+            fos.write(data);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException e) {
+            // handle exception
+        } catch (IOException e) {
+            // handle exception
+        }
+    }
+
 }

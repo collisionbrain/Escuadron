@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.etsy.android.grid.util.DynamicHeightTextView;
 import com.libre.registro.R;
+import com.libre.registro.ui.MarketActivity;
 
 /***
  * ADAPTER
@@ -32,6 +33,7 @@ public class SampleAdapter extends ArrayAdapter<String> {
     private final LayoutInflater mLayoutInflater;
     private final Random mRandom;
     private final ArrayList<Integer> mBackgroundColors;
+    private Context context;
 
     private static final SparseArray<Double> sPositionHeightRatios = new SparseArray<Double>();
 
@@ -39,6 +41,7 @@ public class SampleAdapter extends ArrayAdapter<String> {
         super(context, textViewResourceId);
         mLayoutInflater = LayoutInflater.from(context);
         mRandom = new Random();
+        this.context=context;
         mBackgroundColors = new ArrayList<Integer>();
         mBackgroundColors.add(R.color.green_toolbar);
         mBackgroundColors.add(R.color.green_toolbar);
@@ -55,6 +58,7 @@ public class SampleAdapter extends ArrayAdapter<String> {
             convertView = mLayoutInflater.inflate(R.layout.list_item_sample, parent, false);
             vh = new ViewHolder();
             vh.txtLineOne =  convertView.findViewById(R.id.txt_line1);
+            vh.txtLineOne.setBackground(context.getDrawable(R.drawable.bud));
             vh.btnPlus = convertView.findViewById(R.id.btn_plus);
 
             convertView.setTag(vh);
@@ -77,7 +81,8 @@ public class SampleAdapter extends ArrayAdapter<String> {
         vh.btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                Toast.makeText(getContext(), "PENDIENTE " , Toast.LENGTH_SHORT).show();
+
+                ((MarketActivity)context).startDetailFragment(position);
             }
         });
 

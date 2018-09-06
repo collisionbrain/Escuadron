@@ -1,21 +1,21 @@
 package com.libre.registro.ui;
 
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Point;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.Display;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -37,16 +37,14 @@ import com.google.gson.Gson;
 import com.google.zxing.WriterException;
 import com.libre.registro.R;
 import com.libre.registro.ui.adapters.PageAdapter;
+import com.libre.registro.ui.fragments.CredentialFragment;
 import com.libre.registro.ui.fragments.DigitalCodeRegister;
 import com.libre.registro.ui.pojos.Member;
 import com.libre.registro.ui.storage.PreferencesStorage;
 import com.libre.registro.ui.util.Data;
 import com.libre.registro.ui.util.NonSwipeableViewPager;
-import com.unstoppable.submitbuttonview.SubmitButton;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.io.File;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -54,6 +52,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 import static android.content.ContentValues.TAG;
 import static com.libre.registro.ui.util.Constants.JSON_FILE;
 import static com.libre.registro.ui.util.Constants.URL_REMOTE;
+import static com.libre.registro.ui.util.Data.saveJSONFile;
 
 public class MainActivity extends FragmentActivity {
 
@@ -72,6 +71,7 @@ public class MainActivity extends FragmentActivity {
     private FirebaseAuth mAuth;
     private PreferencesStorage preferencesStorage;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private Uri imageUri;
 
 
     @Override
@@ -137,6 +137,42 @@ public class MainActivity extends FragmentActivity {
     }
     public void onActivityResult(int requestCode, int resultCode,   Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 200:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = imageUri;
+                    getContentResolver().notifyChange(selectedImage, null);
+                    ContentResolver cr = getContentResolver();
+                    Bitmap bitmap;
+                    try {
+                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
+                        CredentialFragment credentialFragment=(CredentialFragment)adPaginador.getItemCurrentFragment();
+                        credentialFragment.setFrontImage(bitmap);
+
+                    } catch (Exception e) {
+
+                        Log.e("Camera", e.toString());
+                    }
+                }
+                break;
+            case 300:
+                if (resultCode == RESULT_OK) {
+                    Uri selectedImage = imageUri;
+                    getContentResolver().notifyChange(selectedImage, null);
+                    ContentResolver cr = getContentResolver();
+                    Bitmap bitmap;
+                    try {
+                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
+                        CredentialFragment credentialFragment=(CredentialFragment)adPaginador.getItemCurrentFragment();
+                        credentialFragment.setBackImage(bitmap);
+
+                    } catch (Exception e) {
+
+                        Log.e("Camera", e.toString());
+                    }
+                }
+                break;
+        }
          }
 
     @Override
@@ -187,6 +223,7 @@ public class MainActivity extends FragmentActivity {
             fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
+                    saveJSONFile(bytes);
                     generateCode();
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -197,6 +234,7 @@ public class MainActivity extends FragmentActivity {
             });
         }
     }
+
     public void saveDataUser(String userGuid){
         DatabaseReference ref = database.getReference("registro");
         DatabaseReference usersRef = ref.child("clientes");
@@ -248,6 +286,34 @@ public class MainActivity extends FragmentActivity {
     public void showError(String message){
         ViewDialog alert = new ViewDialog();
         alert.showDialog(MainActivity.this, message);
+
+    }
+    public void showPrivacy(){
+        ViewDialog alert = new ViewDialog();
+        alert.showDialogPrivacy(MainActivity.this);
+
+    }
+    public void startLogin(){
+        Intent intent=new Intent(this,LoginActivity.class);
+        this.startActivity(intent);
+    }
+    public void takePicture(int type){
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        File photo;
+        switch (type){
+            case 0:
+                photo = new File(Environment.getExternalStorageDirectory(),  "CredentialFront.jpg");
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+                imageUri = Uri.fromFile(photo);
+                this.startActivityForResult(intent, 200);
+                break;
+            case 1:
+                photo = new File(Environment.getExternalStorageDirectory(),  "CredentialBack.jpg");
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+                imageUri = Uri.fromFile(photo);
+                this.startActivityForResult(intent, 300);
+                break;
+        }
 
     }
 }

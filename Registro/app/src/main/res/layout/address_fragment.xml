@@ -6,152 +6,155 @@
     android:orientation="vertical"
     android:weightSum="100"
     android:background="@color/white">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:weightSum="100"
-        android:gravity="center" >
 
-    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="70"
+        android:layout_weight="80"
         android:orientation="vertical"
         android:weightSum="100"
         android:gravity="center">
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="15"
+            android:layout_weight="12"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:orientation="horizontal" >
-
             <EditText
-                android:id="@+id/edtNombre"
+                android:id="@+id/edtCalle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
                 android:background="@drawable/editext_line"
                 android:inputType="textCapCharacters|textNoSuggestions"
                 android:singleLine="true"
-                android:hint="@string/strNombre"
+                android:hint="@string/strCalle"
                 android:textColorHint="@color/gray"
-                android:text="Hugo Miguel Gallardo Arvizu"
                 />
-
         </RelativeLayout>
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="15"
+            android:layout_weight="12"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:orientation="horizontal" >
-
             <EditText
-                android:id="@+id/edtCorreo"
+                android:id="@+id/edtNumExt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
                 android:background="@drawable/editext_line"
-                android:hint="@string/strCorreo"
-                android:textColorHint="@color/gray"
-                android:inputType="textEmailAddress"
+                android:inputType="textCapCharacters|textNoSuggestions"
                 android:singleLine="true"
-                android:text="hgallardo_dv@hotmail.com"/>
+                android:hint="@string/strNumeroExt"
+                android:textColorHint="@color/gray"
+                />
         </RelativeLayout>
-
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="15"
+            android:layout_weight="12"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:orientation="horizontal" >
-
             <EditText
-                android:id="@+id/edtCelular"
+                android:id="@+id/edtNumInt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
                 android:background="@drawable/editext_line"
-                android:hint="@string/strCelular"
+                android:inputType="textCapCharacters|textNoSuggestions"
+                android:singleLine="true"
+                android:hint="@string/strNumeroInt"
                 android:textColorHint="@color/gray"
-                android:maxLength="13"
-                android:text="125557678"
-                android:inputType="number"
-                android:singleLine="true" />
+                />
         </RelativeLayout>
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="15"
+            android:layout_weight="12"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:orientation="horizontal"
-            android:weightSum="100">
-            <CheckBox
-                android:id="@+id/checkWats"
-                android:layout_width="0dp"
+            android:orientation="horizontal" >
+            <EditText
+                android:id="@+id/edtCpostal"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
-                android:theme="@style/MycheckBoxStyle" />
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="90"
-                android:textColor="@color/blueBorders"
-                android:text="¿Contartar por WhatsApp?"/>
-        </LinearLayout>
-
-
-        <LinearLayout
+                android:textColor="@color/gray"
+                android:background="@drawable/editext_line"
+                android:inputType="number"
+                android:singleLine="true"
+                android:hint="@string/strCpostal"
+                android:textColorHint="@color/gray"
+                />
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="10"
+            android:layout_weight="12"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:orientation="horizontal"
-            android:weightSum="100">
-            <TextView
-                android:id="@+id/txtTengoCuenta"
-                android:layout_width="0dp"
+            android:orientation="horizontal" >
+            <EditText
+                android:id="@+id/edtCol"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="90"
-                android:textStyle="bold|italic"
-                android:textColor="@color/blueBorders"
-                android:text="Ya tengo cuenta"/>
-
-        </LinearLayout>
-        <LinearLayout
+                android:textColor="@color/gray"
+                android:background="@drawable/editext_line"
+                android:inputType="textCapCharacters|textNoSuggestions"
+                android:singleLine="true"
+                android:maxLength="5"
+                android:hint="@string/strColonia"
+                android:textColorHint="@color/gray"
+                />
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="15"
+            android:layout_weight="12"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:orientation="horizontal"
-            android:weightSum="100">
-            <TextView
-                android:id="@+id/txtAviso"
-                android:layout_width="0dp"
+            android:orientation="horizontal" >
+            <EditText
+                android:id="@+id/edtMun"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="90"
-                android:textStyle="bold|italic"
-                android:textColor="@color/blueBorders"
-                android:text="Leer Aviso de Privacidad"/>
-
-        </LinearLayout>
+                android:textColor="@color/gray"
+                android:background="@drawable/editext_line"
+                android:inputType="textCapCharacters"
+                android:singleLine="true"
+                android:maxLength="5"
+                android:hint="@string/strMunicipio"
+                android:textColorHint="@color/gray"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="12"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal" >
+            <EditText
+                android:id="@+id/edtEst"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray"
+                android:background="@drawable/editext_line"
+                android:inputType="textCapCharacters"
+                android:singleLine="true"
+                android:maxLength="5"
+                android:hint="@string/strEstado"
+                android:textColorHint="@color/gray"
+                />
+        </RelativeLayout>
     </LinearLayout>
+
     <LinearLayout
+        android:id="@+id/llyBoton"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="20"
@@ -160,7 +163,7 @@
         android:gravity="center">
 
         <com.unstoppable.submitbuttonview.SubmitButton
-            android:id="@+id/btnSiguiente"
+            android:id="@+id/btnSiguienteAddress"
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:padding="25dp"

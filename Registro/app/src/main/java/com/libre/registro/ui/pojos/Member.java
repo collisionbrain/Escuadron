@@ -12,6 +12,8 @@ public class Member implements Serializable {
     public String mail;
     public String phone;
     public boolean whats;
+    public boolean privacy;
+    public Address address;
     public int gender;
     public Date birthday ;
     public int weigth ;

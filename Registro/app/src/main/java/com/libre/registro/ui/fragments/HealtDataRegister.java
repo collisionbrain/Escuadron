@@ -151,10 +151,10 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
         @Override
         public void onResultEnd() {
             if(chckCronic.isChecked() ){
-                ((MainActivity) context).paginaSiguiente(3);
+                ((MainActivity) context).paginaSiguiente(4);
             }else{
 
-                ((MainActivity) context).paginaSiguiente(2);
+                ((MainActivity) context).paginaSiguiente(3);
             }
 
             btnSiguienteHealt.reset();

@@ -110,12 +110,13 @@ public class MarketActivity extends AppCompatActivity   {
     @Override
     public void onBackPressed(){
 
-        if(subListFragment.isVisible()){
-            getFragmentManager().beginTransaction().remove(subListFragment).commit();
-            floatingActionButton.setVisibility(View.VISIBLE);
-        }
+
         if(detailFragment.isVisible()){
             getFragmentManager().beginTransaction().remove(detailFragment).commit();
+            floatingActionButton.setVisibility(View.VISIBLE);
+        }
+        if(subListFragment.isVisible() && !detailFragment.isVisible()){
+            getFragmentManager().beginTransaction().remove(subListFragment).commit();
             floatingActionButton.setVisibility(View.VISIBLE);
         }
         if(!detailFragment.isVisible() && !subListFragment.isVisible()){
@@ -165,26 +166,7 @@ public class MarketActivity extends AppCompatActivity   {
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater inflater = LayoutInflater.from(parent.getContext());
             View view = inflater.inflate(R.layout.item, parent, false);
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int itemPosition = recyclerView.indexOfChild(v);
-                    Log.e("xxxxxxxxxx",""+itemPosition);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("productItem", itemPosition );
 
-                    switch (itemPosition){
-                        case 0:
-                            initFragmentSubList(bundle);
-                            break;
-                        default:
-                                initFragment( bundle);
-                                break;
-
-                    }
-
-                }
-            });
             return new ViewHolder(view);
         }
 
@@ -192,7 +174,11 @@ public class MarketActivity extends AppCompatActivity   {
         public void onBindViewHolder(ViewHolder holder, int position) {
             holder.iv.setParallaxStyles(verticalMovingStyle);
             switch (position % 5) {
-                case 0 : holder.iv.setImageResource(R.drawable.bud); break;
+                case 0 :
+                    holder.iv.setImageResource(R.drawable.bud);
+
+
+                break;
                 case 1 : holder.iv.setImageResource(R.drawable.muffin); break;
                 case 2 : holder.iv.setImageResource(R.drawable.cookies); break;
                 case 3 : holder.iv.setImageResource(R.drawable.cbd); break;
@@ -205,17 +191,28 @@ public class MarketActivity extends AppCompatActivity   {
             return 5;
         }
 
-        class ViewHolder extends RecyclerView.ViewHolder {
+        class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
             ScrollParallaxImageView iv;
             ViewHolder(final View itemView) {
                 super(itemView);
                 iv = itemView.findViewById(R.id.img);
+                iv.setOnClickListener(this);
+            }
+
+            @Override
+            public void onClick(View v) {
+
+                int itemPosition=getLayoutPosition();
+                Log.e("#######",""+ itemPosition);
+                Bundle bundle = new Bundle();
+                bundle.putInt("productRootItem", itemPosition );
+                initFragmentSubList(bundle);
 
             }
         }
     }
 
-    private void initFragment( Bundle bundle){
+    private void initFragmentDetail( Bundle bundle){
         floatingActionButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
         detailFragment.setArguments(bundle);
@@ -234,10 +231,15 @@ public class MarketActivity extends AppCompatActivity   {
     private void initFragmentSubList( Bundle bundle){
         floatingActionButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
-        detailFragment.setArguments(bundle);
+        subListFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.container, subListFragment, "Add detail");
         fragmentTransaction.commit();
 
+    }
+    public void startDetailFragment(int pos){
+        Bundle bundle = new Bundle();
+        bundle.putInt("productItem", pos );
+        this.initFragmentDetail(bundle);
     }
     public void  closeCodeFragment(){
 

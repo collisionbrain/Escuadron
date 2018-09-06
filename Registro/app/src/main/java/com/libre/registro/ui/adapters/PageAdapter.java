@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.libre.registro.ui.fragments.AddressDataRegister;
+import com.libre.registro.ui.fragments.CredentialFragment;
 import com.libre.registro.ui.fragments.CronicSuffering;
 import com.libre.registro.ui.fragments.DigitalCodeRegister;
 import com.libre.registro.ui.fragments.HealtDataRegister;
@@ -28,17 +30,21 @@ public class PageAdapter extends FragmentPagerAdapter {
                 fragmento =new PersonalDataRegister();
                 break;
             case 1:
-                fragmento =new HealtDataRegister();
+                fragmento =new AddressDataRegister();
                 break;
-
             case 2:
                 fragmento =new SignatureRegister();
                 break;
-
             case 3:
-                fragmento =new CronicSuffering();
+                fragmento =new CredentialFragment();
                 break;
             case 4:
+                fragmento =new HealtDataRegister();
+                break;
+            case 5:
+                fragmento =new CronicSuffering();
+                break;
+            case 6:
                 fragmento =new DigitalCodeRegister();
                 break;
         }
@@ -54,4 +60,9 @@ public class PageAdapter extends FragmentPagerAdapter {
 
         return fragmento;
     }
+    public Fragment getItemCurrentFragment() {
+
+        return fragmento;
+    }
+
 }

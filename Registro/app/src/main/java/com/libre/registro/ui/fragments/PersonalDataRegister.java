@@ -24,6 +24,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
     private int netStatus;
     private boolean registerPersonalSuccess=true;
     private CheckBox checkWhats;
+    private TextView txtAviso,txtCuenta;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
@@ -34,8 +35,10 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
         edtMail=this.view.findViewById(R.id.edtCorreo);
         edtCelphone=this.view.findViewById(R.id.edtCelular);
         checkWhats=this.view.findViewById(R.id.checkWats);
-
-
+        txtAviso=this.view.findViewById(R.id.txtAviso);
+        txtCuenta=this.view.findViewById(R.id.txtTengoCuenta);
+        txtAviso.setOnClickListener(this);
+        txtCuenta.setOnClickListener(this);
         btnSiguiente.setOnClickListener(this);
         btnSiguiente.setOnResultEndListener(finishListener);
         return  this.view;
@@ -63,8 +66,14 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
 
 
                     }
+                    break;
+            case R.id.txtAviso:
+                ((MainActivity) context).showPrivacy();
+                break;
 
-
+            case R.id.txtTengoCuenta:
+                ((MainActivity) context).startLogin();
+                break;
         }
     }
     SubmitButton.OnResultEndListener finishListener=new SubmitButton.OnResultEndListener() {
