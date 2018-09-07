@@ -1,4 +1,4 @@
-package com.libre.registro.ui.util;
+package com.libre.escuadronpromotor.ui.util;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
@@ -26,8 +26,8 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.util.Random;
 
-import static com.libre.registro.ui.util.Constants.JSON_FILE;
-import static com.libre.registro.ui.util.Constants.JSON_PATH;
+import static com.libre.escuadronpromotor.ui.util.Constants.JSON_FILE;
+import static com.libre.escuadronpromotor.ui.util.Constants.JSON_PATH;
 
 /**
  * Created by hugo on 18/08/18.
@@ -181,6 +181,5 @@ public class Data {
             // handle exception
         }
     }
-
 
 }

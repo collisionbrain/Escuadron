@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.libre.registro">
+    package="com.libre.escuadronpromotor">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -10,7 +10,6 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-sdk
         android:minSdkVersion="21"
         android:targetSdkVersion="23" />
@@ -20,12 +19,12 @@
         android:label="@string/app_name"
         android:supportsRtl="true" >
 
-        <activity android:name="com.libre.registro.ui.MarketActivity"
+        <activity android:name="com.libre.escuadronpromotor.ui.ListUsersActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat">
         </activity>
 
-        <activity android:name="com.libre.registro.ui.Splash"
+        <activity android:name="com.libre.escuadronpromotor.ui.Splash"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"
@@ -34,12 +33,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.libre.registro.ui.MainActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat">
-
-        </activity>
-        <activity android:name="com.libre.registro.ui.LoginActivity"
+        <activity android:name="com.libre.escuadronpromotor.ui.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat">
 

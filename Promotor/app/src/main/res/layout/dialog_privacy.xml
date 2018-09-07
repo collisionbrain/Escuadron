@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:layout_gravity="center"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp"
+    android:weightSum="100"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/txtMensaje"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:text="Aviso de Privacidad Simplificado del Registro de usuarios"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="70"
+        android:text="El Colectivo 'Escuadron Canabico', es el responsable del tratamiento de los datos personales que nos proporcione.
+
+Sus datos personales serán utilizados para mantener el control de el registro y ventas de quienes se registran al protocolo de investigacion y este tratamiento forma parte de las medidas de seguridad adoptadas, por lo que, se comunica que no se efectuarán tratamientos adicionales.
+
+Se informa que no realizarán transferencias que requieran su consentimiento, salvo aquellas que sean necesarias para atender requerimientos de información de una autoridad competente, debidamente fundados y motivados.
+
+Usted podrá consultar el aviso de privacidad integral en: http:// , así como en el las instalaciones del Colectivo.
+"/>
+
+
+</LinearLayout>

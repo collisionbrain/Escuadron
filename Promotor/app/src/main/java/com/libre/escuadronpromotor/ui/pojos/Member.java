@@ -1,4 +1,4 @@
-package com.libre.registro.ui.pojos;
+package com.libre.escuadronpromotor.ui.pojos;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -8,7 +8,6 @@ import java.util.Date;
  */
 
 public class Member implements Serializable {
-    public String device;
     public String name;
     public String mail;
     public String phone;

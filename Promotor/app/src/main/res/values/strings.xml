@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Escuadron Promotor</string>
+    <string name="strNombre">Nombre </string>
+    <string name="strApellidos">Apellidos</string>
+    <string name="strCorreo">Correo electronico</string>
+    <string name="strCelular">Celular</string>
+    <string name="strFechaNacimiento">Fecha nacimiento</string>
+    <string name="strPeso">Peso</string>
+    <string name="strEstatura">Estatura</string>
+    <string name="strPassword">Contraseña</string>
+    <string name="stPersonal">Información de Contacto</string>
+    <string name="stBiomedica">información Médica</string>
+    <string name="stPadecimiento">Información Médica</string>
+    <string name="stFirma"></string>
+    <string name="stTerminar">Listo!</string>
+    <string name="strFirma">Tu firma aquí</string>
+    <string name="strCode">Código para comprar</string>
+    <string name="errEspecialidad">Elige tu padecimiento</string>
+    <string name="strPadecimiento">¿Sufre algun padecimiento cronico?</string>
+    <string name="strDescribe">Describe tu padecimiento</string>
+
+    <string name="strCalle">Calle</string>
+    <string name="strNumeroExt">Número Exterior</string>
+    <string name="strNumeroInt">Número Interior</string>
+    <string name="strCpostal">Código Postal</string>
+    <string name="strColonia">Colonia</string>
+    <string name="strMunicipio">Alcaldía  ó Municipio</string>
+    <string name="strEstado">Estado</string>
+
+
+    <string name="siguiente">Siguiente</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="action_settings">Codigo de pago</string>
+
+
+</resources>

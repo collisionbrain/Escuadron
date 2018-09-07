@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="100"
+    android:background="@color/white"
+    android:clickable="true">
+    <RelativeLayout
+        android:id="@+id/rlyPanel"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="45" >
+        <ImageView
+            android:id="@+id/bgrImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/cookies"
+            android:scaleType="fitEnd"/>
+        <TextView
+            android:id="@+id/txtDesc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:padding="15dp"
+            android:text="Descripcion del procuto"
+            android:textAllCaps="false"
+            android:textColor="@color/dialog_background"
+            android:textSize="30sp" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="15"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        >
+        <TextView
+            android:id="@+id/txtSymbol"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="25"
+            android:text="$"
+            android:textSize="60dp"
+            android:gravity="left"
+            android:paddingLeft="20dp"
+            android:textColor="@color/green_text"/>
+        <TextView
+            android:id="@+id/txtPrice"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="75"
+            android:text="35.00 "
+            android:textSize="70dp"
+            android:gravity="right"
+            android:textColor="@color/green_text"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:orientation="horizontal"
+        android:weightSum="100">
+        <RelativeLayout
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="30" >
+            <Button
+                android:id="@+id/btnMinus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="-"
+                android:textSize="110dp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:background="@drawable/button_selector"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="40" >
+            <TextView
+                android:id="@+id/txtCounter"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="0"
+                android:textSize="90dp"
+                android:gravity="center"
+                android:textColor="@color/black"
+
+                android:background="@drawable/green_border"/>
+        </RelativeLayout>
+        <RelativeLayout
+
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="30" >
+            <Button
+                android:id="@+id/btnPlus"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="+"
+                android:textSize="90dp"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:background="@drawable/button_selector"/>
+        </RelativeLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:orientation="horizontal"
+        android:padding="30dp"
+        android:gravity="center">
+        <com.unstoppable.submitbuttonview.SubmitButton
+            android:id="@+id/addButton"
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:padding="25dp"
+            app:buttonText="Agregar"
+            app:buttonTextSize="25sp"
+            app:buttonColor="@color/blueBorders"
+            />
+    </LinearLayout>
+</LinearLayout>

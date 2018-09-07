@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:weightSum="100"
+    android:background="@color/white">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:weightSum="100"
+        android:gravity="center" >
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="60"
+        android:orientation="vertical"
+        android:weightSum="100"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/edtFecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray"
+                android:background="@drawable/editext_line"
+                android:inputType="textCapWords|textNoSuggestions"
+                android:singleLine="true"
+                android:hint="@string/strFechaNacimiento"
+                android:textColorHint="@color/gray"
+                android:text="10/10/1980"
+                />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal" >
+
+            <EditText
+                android:id="@+id/edtPeso"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/gray"
+                android:background="@drawable/editext_line"
+                android:hint="@string/strPeso"
+                android:textColorHint="@color/gray"
+                android:inputType="number"
+                android:singleLine="true"
+                android:maxLength="3"
+                android:text="37"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="15"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal" >
+
+           <RadioGroup
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:orientation="horizontal"
+               android:weightSum="90">
+               <RadioButton
+                   android:id="@+id/rdMas"
+                   android:layout_width="0dp"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="30"
+                   android:text="Masculino"
+                   android:textSize="16sp"
+                   android:textColor="@color/gray"
+                   android:theme="@style/MyRadioButtonStyle"/>
+               <RadioButton
+                   android:id="@+id/rdFem"
+                   android:layout_width="0dp"
+                   android:layout_height="wrap_content"
+                   android:layout_weight="30"
+                   android:text="Femenino"
+                   android:textSize="16sp"
+                   android:textColor="@color/gray"
+                   android:theme="@style/MyRadioButtonStyle"/>
+
+           </RadioGroup>
+
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal"
+            android:weightSum="100">
+            <CheckBox
+                android:id="@+id/checkCronic"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:theme="@style/MycheckBoxStyle" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="90"
+                android:textColor="@color/blueBorders"
+                android:text="¿Tienes padecimiento cronico?"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:orientation="horizontal"
+        android:padding="30dp"
+        android:gravity="center">
+
+        <com.unstoppable.submitbuttonview.SubmitButton
+            android:id="@+id/btnSiguienteHealt"
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:padding="25dp"
+            app:buttonText="Siguiente"
+            app:buttonTextSize="25sp"
+            app:buttonColor="@color/blueBorders"
+            />
+    </LinearLayout>
+</LinearLayout>

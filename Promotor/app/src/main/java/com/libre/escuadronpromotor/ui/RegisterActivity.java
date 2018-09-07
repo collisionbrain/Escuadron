@@ -1,4 +1,4 @@
-package com.libre.registro.ui;
+package com.libre.escuadronpromotor.ui;
 
 import android.app.Dialog;
 import android.content.ContentResolver;
@@ -14,15 +14,12 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -33,29 +30,19 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
-import com.google.zxing.WriterException;
-import com.libre.registro.R;
-import com.libre.registro.ui.adapters.PageAdapter;
-import com.libre.registro.ui.fragments.CredentialFragment;
-import com.libre.registro.ui.fragments.DigitalCodeRegister;
-import com.libre.registro.ui.pojos.Member;
-import com.libre.registro.ui.storage.PreferencesStorage;
-import com.libre.registro.ui.util.Data;
-import com.libre.registro.ui.util.NonSwipeableViewPager;
+import com.libre.escuadronpromotor.R;
+import com.libre.escuadronpromotor.ui.adapters.PageAdapter;
+import com.libre.escuadronpromotor.ui.fragments.CredentialFragment;
+import com.libre.escuadronpromotor.ui.pojos.Member;
+import com.libre.escuadronpromotor.ui.storage.PreferencesStorage;
+import com.libre.escuadronpromotor.ui.util.NonSwipeableViewPager;
 
 import java.io.File;
 
-import androidmads.library.qrgenearator.QRGContents;
-import androidmads.library.qrgenearator.QRGEncoder;
 
 import static android.content.ContentValues.TAG;
-import static com.libre.registro.ui.util.Constants.JSON_FILE;
-import static com.libre.registro.ui.util.Constants.URL_REMOTE;
-import static com.libre.registro.ui.util.Data.saveJSONFile;
 
-public class MainActivity extends FragmentActivity {
+public class RegisterActivity extends FragmentActivity {
 
     private NonSwipeableViewPager vwPaginas;
     private PageAdapter adPaginador;
@@ -64,8 +51,8 @@ public class MainActivity extends FragmentActivity {
     public Resources resources;
     public Dialog dialogError,dialogPrivacy;
     public   TextView messageError;
-    private FirebaseStorage storage;
     final long ONE_MEGABYTE = 1024 * 1024;
+    private FirebaseStorage storage;
     public Member newMember;
     private int smallerDimension;
     private String userGuid;
@@ -95,8 +82,6 @@ public class MainActivity extends FragmentActivity {
         storage=FirebaseStorage.getInstance();
         messageError=dialogError .findViewById(R.id.txtMensaje);
         newMember=new Member();
-        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        newMember.device=telephonyManager.getDeviceId();
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
         Point point = new Point();
@@ -198,45 +183,6 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-    public void generateCode(){
-        Bitmap bitmap ;
-        QRGEncoder qrgEncoder = new QRGEncoder(userGuid, null, QRGContents.Type.TEXT, smallerDimension);
-        try {
-
-             bitmap = qrgEncoder.encodeAsBitmap();
-             Data.saveImage(bitmap);
-             DigitalCodeRegister activeFragment =(DigitalCodeRegister) adPaginador.getItemCode();
-             activeFragment.setCode(bitmap);
-
-        } catch (WriterException e) {
-            Log.v(TAG, e.toString());
-        }
-
-
-    }
-    public void launchMarket(){
-        Intent intent = new Intent(this, MarketActivity.class);
-        startActivityForResult(intent, 100);
-        finish();
-
-    }
-    public void downloadDB(){
-        StorageReference fileRef = storage.getReferenceFromUrl(URL_REMOTE).child(JSON_FILE);
-        if (fileRef != null) {
-            fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                @Override
-                public void onSuccess(byte[] bytes) {
-                    saveJSONFile(bytes);
-                    generateCode();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception exception) {
-
-                }
-            });
-        }
-    }
 
     public void saveDataUser(String userGuid){
         DatabaseReference ref = database.getReference("registro");
@@ -248,7 +194,7 @@ public class MainActivity extends FragmentActivity {
                     System.out.println("Data could not be saved " + databaseError.getMessage());
                     preferencesStorage.saveDataObjet("OBJET_TO_REGITER",newMember);
                 } else {
-                     downloadDB();
+
                 }
             }
         });
@@ -288,18 +234,15 @@ public class MainActivity extends FragmentActivity {
 
     public void showError(String message){
         ViewDialog alert = new ViewDialog();
-        alert.showDialog(MainActivity.this, message);
+        alert.showDialog(RegisterActivity.this, message);
 
     }
     public void showPrivacy(){
         ViewDialog alert = new ViewDialog();
-        alert.showDialogPrivacy(MainActivity.this);
+        alert.showDialogPrivacy(RegisterActivity.this);
 
     }
-    public void startLogin(){
-        Intent intent=new Intent(this,LoginActivity.class);
-        this.startActivity(intent);
-    }
+
     public void takePicture(int type){
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         File photo;

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1003329927060",
+    "firebase_url": "https://escuadron-promotor.firebaseio.com",
+    "project_id": "escuadron-promotor",
+    "storage_bucket": "escuadron-promotor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003329927060:android:420b418af43899ef",
+        "android_client_info": {
+          "package_name": "com.libre.escuadronpromotor"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1003329927060-2tgvj1m661ueq6s2qncq0uinehjcspb9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.libre.escuadronpromotor",
+            "certificate_hash": "8cafbac6d30ecce75f954fa5d4e2debd03b3f189"
+          }
+        },
+        {
+          "client_id": "1003329927060-2mccsboea98b0ats7eomn20krb53c6d9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8Vf7waoKuaJyJO-tBdKFdO2-1bVhvUXg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1003329927060-2mccsboea98b0ats7eomn20krb53c6d9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

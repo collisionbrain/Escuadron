@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:weightSum="100"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="90">
+        <RelativeLayout
+            android:id="@+id/rlPanel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/txtFirma"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:textSize="20sp"
+            android:textColor="@color/gray"
+            android:fontFamily="sans-serif-medium"
+            android:text="@string/strFirma"/>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/llyBoton"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:paddingBottom="2dp"
+        android:gravity="center">
+        <com.unstoppable.submitbuttonview.SubmitButton
+            android:id="@+id/btnSiguienteSignature"
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:padding="25dp"
+            app:buttonText="Siguiente"
+            app:buttonTextSize="25sp"
+            app:buttonColor="@color/blueBorders"/>
+
+    </LinearLayout>
+</LinearLayout>
