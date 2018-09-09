@@ -36,9 +36,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
         edtCelphone=this.view.findViewById(R.id.edtCelular);
         checkWhats=this.view.findViewById(R.id.checkWats);
         txtAviso=this.view.findViewById(R.id.txtAviso);
-        txtCuenta=this.view.findViewById(R.id.txtTengoCuenta);
         txtAviso.setOnClickListener(this);
-        txtCuenta.setOnClickListener(this);
         btnSiguiente.setOnClickListener(this);
         btnSiguiente.setOnResultEndListener(finishListener);
         return  this.view;
@@ -71,9 +69,6 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
                 ((RegisterActivity) context).showPrivacy();
                 break;
 
-            case R.id.txtTengoCuenta:
-
-                break;
         }
     }
     SubmitButton.OnResultEndListener finishListener=new SubmitButton.OnResultEndListener() {

@@ -36,6 +36,8 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
         imageViewFront=this.view.findViewById(R.id.imgFrontId);
         imageViewBack=this.view.findViewById(R.id.imgBackId);
         btnSiguienteCamera.setOnClickListener(this);
+        imageViewFront.setOnClickListener(this);
+        imageViewBack.setOnClickListener(this);
 
 
         return this.view;
@@ -51,9 +53,9 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
             case R.id.imgBackId:
                 ((RegisterActivity) context).takePicture(1);
                 break;
-            case R.id.btnSiguienteCronic:
-                ((RegisterActivity) context).newMember.condition=condition;
+            case R.id.btnSiguienteCamera:
                 btnSiguienteCamera.setOnResultEndListener(finishListenerCamera);
+
                 btnSiguienteCamera.doResult(true);
                 break;
         }
@@ -63,17 +65,18 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
     SubmitButton.OnResultEndListener finishListenerCamera = new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
-            ((RegisterActivity) context).paginaSiguiente(2);
-
+            ((RegisterActivity) context).paginaSiguiente(5);
             btnSiguienteCamera.reset();
         }
     };
 
     public void setFrontImage(Bitmap bitmap){
+
         imageViewFront.setImageBitmap(bitmap);
     }
 
     public void setBackImage(Bitmap bitmap){
+
         imageViewBack.setImageBitmap(bitmap);
     }
 }

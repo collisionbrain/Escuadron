@@ -8,6 +8,7 @@ import java.util.Date;
  */
 
 public class Member implements Serializable {
+    public String imei;
     public String name;
     public String mail;
     public String phone;
@@ -15,12 +16,14 @@ public class Member implements Serializable {
     public boolean privacy;
     public Address address;
     public int gender;
-    public Date birthday ;
+    public String birthday ;
     public int weigth ;
     public boolean suffering;
     public String condition;
     public String extra;
     public String signature;
+    public String b64FrontId;
+    public String b64BackId;
 
 
 

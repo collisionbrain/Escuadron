@@ -15,7 +15,7 @@ import com.libre.escuadronpromotor.ui.fragments.SignatureRegister;
 public class PageAdapter extends FragmentPagerAdapter {
     private Context contexto;
     Fragment fragmento;
-
+    Fragment fragmentoCredencial;
     public PageAdapter(Context context, FragmentManager fm) {
         super(fm);
         contexto=context;
@@ -32,30 +32,35 @@ public class PageAdapter extends FragmentPagerAdapter {
                 fragmento =new AddressDataRegister();
                 break;
             case 2:
-                fragmento =new SignatureRegister();
-                break;
-            case 3:
-                fragmento =new CredentialFragment();
-                break;
-            case 4:
                 fragmento =new HealtDataRegister();
                 break;
-            case 5:
+            case 3:
                 fragmento =new CronicSuffering();
                 break;
+            case 4:
+                fragmentoCredencial= new CredentialFragment();
+                fragmento =fragmentoCredencial;
+                break;
+            case 5:
+                fragmento =new SignatureRegister();
+                break;
+
 
         }
         return fragmento;
     }
     @Override
     public int getCount() {
-        return 5;
+        return 6;
     }
 
 
     public Fragment getItemCurrentFragment() {
 
         return fragmento;
+    }
+    public Fragment getCredentialFragment(){
+        return fragmentoCredencial;
     }
 
 }

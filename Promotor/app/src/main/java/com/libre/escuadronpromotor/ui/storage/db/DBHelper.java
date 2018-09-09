@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.libre.escuadronpromotor.ui.pojos.Address;
 import com.libre.escuadronpromotor.ui.pojos.Member;
 
 import java.util.ArrayList;
@@ -14,63 +16,137 @@ import java.util.List;
  * Created by ProBook on 19/04/2016.
  */
 public class DBHelper   extends SQLiteOpenHelper {
-    public static final String nombreDB = "registroDB.db";
 
-    public DBHelper(Context context)
-    {
-        super(context, nombreDB, null, 1);
+    // Database Version
+    private static final int DATABASE_VERSION = 1;
+
+    // Database Name
+    private static final String DATABASE_NAME = "notes_db";
+
+
+    public DBHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        TablesManager tablesManager=new TablesManager(db);
-        tablesManager.createTables();
+
+        // create notes table
+        db.execSQL("CREATE TABLE IF NOT EXISTS  Miembros(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "imei TEXT, " +
+                "name TEXT, " +
+                "mail TEXT, " +
+                "phone TEXT, " +
+                "whats TEXT, " +
+                "privacy TEXT, " +
+                "gender TEXT, " +
+                "birthday TEXT, " +
+                "weigth TEXT, " +
+                "suffering TEXT, " +
+                "condition TEXT, " +
+                "extra TEXT, " +
+                "signature TEXT, " +
+                "street TEXT, " +
+                "numExt TEXT, " +
+                "numInt TEXT, " +
+                "postal TEXT, " +
+                "col TEXT, " +
+                "mun TEXT, " +
+                "est TEXT, " +
+                "idfront TEXT, " +
+                "idback TEXT)");
     }
+
+    // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop older table if existed
+        db.execSQL("DROP TABLE IF EXISTS " + "Miembros");
 
+        // Create tables again
         onCreate(db);
     }
-
-
-    public long insertMiembros(Member member){
+    public long insertMember(Member member) {
+        // get writable database as we want to write data
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues vCampus = new ContentValues();
-        vCampus.put("IdCampus", member.name);
 
-        long res=db.insert("Campus", null, vCampus);
+        ContentValues vMember = new ContentValues();
+
+        vMember.put("imei", member.imei);
+        vMember.put("name", member.name);
+        vMember.put("mail", member.mail);
+        vMember.put("phone", member.phone);
+        vMember.put("whats", member.whats);
+        vMember.put("privacy", member.privacy);
+        vMember.put("gender", member.gender);
+        vMember.put("birthday", member.birthday);
+        vMember.put("suffering", member.suffering);
+        vMember.put("condition", member.condition);
+        vMember.put("extra", member.extra);
+        vMember.put("signature", member.signature);
+        vMember.put("street", member.address.street);
+        vMember.put("numExt", member.address.numExt);
+        vMember.put("numInt", member.address.numInt);
+        vMember.put("postal", member.address.postal);
+        vMember.put("col", member.address.col);
+        vMember.put("mun", member.address.mun);
+        vMember.put("est", member.address.est);
+        vMember.put("idfront", member.b64FrontId);
+        vMember.put("idback", member.b64BackId);
+
+        long id = db.insert("Miembros", null, vMember);
         db.close();
-        return res;
+        return id;
     }
+    public List<Member> getAllMembers() {
+        List<Member> notes = new ArrayList<>();
 
+        // Select All Query
+        String selectQuery = "SELECT  * FROM Miembros ";
 
-    public int countItems(String tabla){
         SQLiteDatabase db = this.getWritableDatabase();
-        String QRY="SELECT * FROM "+tabla;
-        Cursor cursor= db.rawQuery(QRY,null);
+        Cursor cursor = db.rawQuery(selectQuery, null);
 
-        int val=cursor.getCount();
-        db.close();
-        return val;
-    }
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
 
-    public List<String> getAll(){
-        List<String> listaEscuelas = new ArrayList<String>();
-        listaEscuelas.add("Selecciona tu escuela");
-        SQLiteDatabase db = this.getWritableDatabase();
-        String QRY="SELECT  Escuela FROM Escuelas";
-        Cursor crEscuelas= db.rawQuery(QRY, null);
+                Member member = new Member();
+                member.name=cursor.getString(cursor.getColumnIndex("name"));
+                member.mail=cursor.getString(cursor.getColumnIndex("mail"));
+                member.phone=cursor.getString(cursor.getColumnIndex("phone"));
+                member.whats=Boolean.getBoolean(cursor.getString(cursor.getColumnIndex("whats")));
+                member.privacy=Boolean.getBoolean(cursor.getString(cursor.getColumnIndex("privacy")));
+                Address address=new Address();
+                address.street=cursor.getString(cursor.getColumnIndex("street"));
+                address.numExt=cursor.getString(cursor.getColumnIndex("numExt"));
+                address.numInt=cursor.getString(cursor.getColumnIndex("numInt"));
+                address.postal=cursor.getString(cursor.getColumnIndex("postal"));
+                address.col=cursor.getString(cursor.getColumnIndex("col"));
+                address.mun=cursor.getString(cursor.getColumnIndex("mun"));
+                address.est=cursor.getString(cursor.getColumnIndex("est"));
+                member.address=address;
+                member.gender=cursor.getInt(cursor.getColumnIndex("gender"));
+                member.birthday=cursor.getString(cursor.getColumnIndex("birthday"));
+                member.weigth=cursor.getInt(cursor.getColumnIndex("weigth"));
+                member.gender=cursor.getInt(cursor.getColumnIndex("gender"));
+                member.suffering=Boolean.getBoolean(cursor.getString(cursor.getColumnIndex("suffering")));
+                member.condition=cursor.getString(cursor.getColumnIndex("condition"));
+                member.extra=cursor.getString(cursor.getColumnIndex("extra"));
+                member.signature=cursor.getString(cursor.getColumnIndex("signature"));
+                member.b64FrontId=cursor.getString(cursor.getColumnIndex("idfront"));
+                member.b64BackId=cursor.getString(cursor.getColumnIndex("idback"));
 
-        if (crEscuelas != null) {
-            if (crEscuelas.moveToFirst()) {
-                do{
-
-                    listaEscuelas.add(crEscuelas.getString(0));
-
-                }while(crEscuelas.moveToNext());
-            }
+                notes.add(member);
+            } while (cursor.moveToNext());
         }
-        crEscuelas.close();
-        return listaEscuelas;
+
+        // close db connection
+        db.close();
+
+        // return notes list
+        return notes;
     }
 }

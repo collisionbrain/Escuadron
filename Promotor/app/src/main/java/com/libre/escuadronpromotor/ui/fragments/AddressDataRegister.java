@@ -121,7 +121,7 @@ public class AddressDataRegister extends Fragment implements  View.OnClickListen
     SubmitButton.OnResultEndListener finishListenerAddress = new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
-            ((RegisterActivity) context).paginaSiguiente(3);
+            ((RegisterActivity) context).paginaSiguiente(2);
             btnSiguienteAddress.reset();
         }
     };

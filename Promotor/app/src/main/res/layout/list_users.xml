@@ -8,51 +8,59 @@
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" >
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <LinearLayout
+
+        <com.michaldrabik.tapbarmenulib.TapBarMenu
+            android:id="@+id/tapBarMenu"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:paddingBottom="25dp"
-            android:weightSum="100"
-            android:orientation="horizontal">
-            <RelativeLayout
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="24dp"
+            >
+
+            <ImageView
+                android:id="@+id/imgUpload"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="50"
-                android:gravity="center_horizontal">
-                <Button
-                    android:id="@+id/action_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                     android:text="Nuevo"
-                    android:background="@drawable/button_rounded_selector"
-                    android:textColor="@color/white"
-                    android:theme="@style/Widget.AppCompat.Button.Colored"
-                    />
-            </RelativeLayout>
-            <RelativeLayout
+                android:layout_weight="1"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/upload"
+                />
+
+            <Space
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                />
+
+            <ImageView
+                android:id="@+id/imgAdd"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="50"
-                android:gravity="center_horizontal">
-                <Button
-                    android:id="@+id/sync_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Subir"
-                    android:background="@drawable/button_rounded_selector"
-                    android:textColor="@color/white"
-                    android:theme="@style/Widget.AppCompat.Button.Colored"
-                    />
-            </RelativeLayout>
+                android:layout_weight="1"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/add"
+                />
+            <Space
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                />
 
-        </LinearLayout>
-
+            <ImageView
+                android:id="@+id/imgScan"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/scan"
+                />
+        </com.michaldrabik.tapbarmenulib.TapBarMenu>
     </FrameLayout>
 
 </LinearLayout>

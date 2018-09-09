@@ -35,6 +35,8 @@ import com.libre.escuadronpromotor.ui.adapters.PageAdapter;
 import com.libre.escuadronpromotor.ui.fragments.CredentialFragment;
 import com.libre.escuadronpromotor.ui.pojos.Member;
 import com.libre.escuadronpromotor.ui.storage.PreferencesStorage;
+import com.libre.escuadronpromotor.ui.storage.db.DBHelper;
+import com.libre.escuadronpromotor.ui.util.Data;
 import com.libre.escuadronpromotor.ui.util.NonSwipeableViewPager;
 
 import java.io.File;
@@ -55,19 +57,16 @@ public class RegisterActivity extends FragmentActivity {
     private FirebaseStorage storage;
     public Member newMember;
     private int smallerDimension;
-    private String userGuid;
-    private FirebaseAuth mAuth;
     private PreferencesStorage preferencesStorage;
-    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private Uri imageUri;
-
-
+    private DBHelper db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.main_activity);
         context = this;
+        db=new DBHelper(context);
         resources=getResources();
         preferencesStorage=new PreferencesStorage(context);
         vwPaginas=findViewById(R.id.id_viewpager);
@@ -82,6 +81,8 @@ public class RegisterActivity extends FragmentActivity {
         storage=FirebaseStorage.getInstance();
         messageError=dialogError .findViewById(R.id.txtMensaje);
         newMember=new Member();
+
+
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
         Point point = new Point();
@@ -90,7 +91,6 @@ public class RegisterActivity extends FragmentActivity {
         int height = point.y;
         smallerDimension = width < height ? width : height;
         smallerDimension = smallerDimension * 3 / 4;
-        mAuth = FirebaseAuth.getInstance();
         vwPaginas.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
 
             @Override
@@ -105,10 +105,10 @@ public class RegisterActivity extends FragmentActivity {
                         txtTitulo.setText(resources.getString(R.string.stPersonal));
                         break;
                     case 1:
-                        txtTitulo.setText(resources.getString(R.string.stBiomedica));
+                        txtTitulo.setText(resources.getString(R.string.stPersonal));
                         break;
                     case 2:
-                        txtTitulo.setText(resources.getString(R.string.stFirma));
+                        txtTitulo.setText(resources.getString(R.string.stBiomedica));
 
                         break;
                     case 3:
@@ -116,7 +116,10 @@ public class RegisterActivity extends FragmentActivity {
                         break;
 
                     case 4:
-                        txtTitulo.setText(resources.getString(R.string.strCode));
+                        txtTitulo.setText(resources.getString(R.string.strIdentidad));
+                        break;
+                    case 5:
+                        txtTitulo.setText(resources.getString(R.string.strFirma));
                         break;
                 }
             }
@@ -125,6 +128,8 @@ public class RegisterActivity extends FragmentActivity {
     }
     public void onActivityResult(int requestCode, int resultCode,   Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        CredentialFragment credentialFragment=(CredentialFragment)adPaginador.getCredentialFragment();
+
         switch (requestCode) {
             case 200:
                 if (resultCode == RESULT_OK) {
@@ -134,7 +139,7 @@ public class RegisterActivity extends FragmentActivity {
                     Bitmap bitmap;
                     try {
                         bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
-                        CredentialFragment credentialFragment=(CredentialFragment)adPaginador.getItemCurrentFragment();
+                        newMember.b64FrontId= Data.bitmapToBase64(bitmap);
                         credentialFragment.setFrontImage(bitmap);
 
                     } catch (Exception e) {
@@ -151,7 +156,7 @@ public class RegisterActivity extends FragmentActivity {
                     Bitmap bitmap;
                     try {
                         bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
-                        CredentialFragment credentialFragment=(CredentialFragment)adPaginador.getItemCurrentFragment();
+                        newMember.b64BackId= Data.bitmapToBase64(bitmap);
                         credentialFragment.setBackImage(bitmap);
 
                     } catch (Exception e) {
@@ -184,54 +189,6 @@ public class RegisterActivity extends FragmentActivity {
     }
 
 
-    public void saveDataUser(String userGuid){
-        DatabaseReference ref = database.getReference("registro");
-        DatabaseReference usersRef = ref.child("clientes");
-        usersRef.child(userGuid).setValue(newMember,new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if (databaseError != null) {
-                    System.out.println("Data could not be saved " + databaseError.getMessage());
-                    preferencesStorage.saveDataObjet("OBJET_TO_REGITER",newMember);
-                } else {
-
-                }
-            }
-        });
-    }
-
-    public void registerUser(){
-        String user=newMember.mail;
-        String pass= newMember.phone;
-        mAuth.createUserWithEmailAndPassword(user,pass)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-
-                            userGuid=task.getResult().getUser().getUid();
-                            preferencesStorage.saveData("REGISTER_USER_KEY",userGuid);
-                            saveDataUser(userGuid);
-
-                        } else {
-                            try {
-                                throw task.getException();
-                            } catch (FirebaseAuthWeakPasswordException e) {
-                                showError("Tu Contraseña debil");
-
-                            } catch (FirebaseAuthInvalidCredentialsException e) {
-                                showError("Existe un error con el correo electronico");
-
-                            } catch (FirebaseAuthUserCollisionException e) {
-                                showError("Correo electronico ya fue registrado");
-                            } catch (Exception e) {
-                                Log.e(TAG, e.getMessage());
-                            }
-                        }
-                    }
-                });
-    }
-
     public void showError(String message){
         ViewDialog alert = new ViewDialog();
         alert.showDialog(RegisterActivity.this, message);
@@ -248,18 +205,27 @@ public class RegisterActivity extends FragmentActivity {
         File photo;
         switch (type){
             case 0:
-                photo = new File(Environment.getExternalStorageDirectory(),  "CredentialFront.jpg");
+                photo = new File(Environment.getExternalStorageDirectory(),  "/Escuadron/CredentialFront.jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                 imageUri = Uri.fromFile(photo);
                 this.startActivityForResult(intent, 200);
                 break;
             case 1:
-                photo = new File(Environment.getExternalStorageDirectory(),  "CredentialBack.jpg");
+                photo = new File(Environment.getExternalStorageDirectory(),  "/Escuadron/CredentialBack.jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                 imageUri = Uri.fromFile(photo);
                 this.startActivityForResult(intent, 300);
                 break;
         }
 
+    }
+
+    public void saveRegiter(){
+        Intent intent = getIntent();
+
+        long id=db.insertMember(newMember);
+        intent.putExtra("Member", id);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

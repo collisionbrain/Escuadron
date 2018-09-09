@@ -118,15 +118,7 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
             case R.id.btnSiguienteHealt:
 
                 if(validateForm()) {
-                    SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-                    try {
-                        Date date = format.parse(edtFechaNacimiento.getText().toString());
-                        ((RegisterActivity) context).newMember.birthday=date;
-                        System.out.println(date);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
+                    ((RegisterActivity) context).newMember.birthday=edtFechaNacimiento.getText().toString();
                     ((RegisterActivity) context).newMember.weigth=Integer.parseInt(edtPeso.getText().toString());
                     ((RegisterActivity) context).newMember.suffering=chckCronic.isChecked();
 
@@ -149,12 +141,7 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
     SubmitButton.OnResultEndListener finishListenerHealt=new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
-            if(chckCronic.isChecked() ){
-                ((RegisterActivity) context).paginaSiguiente(4);
-            }else{
-
-                ((RegisterActivity) context).paginaSiguiente(3);
-            }
+            ((RegisterActivity) context).paginaSiguiente(3);
 
             btnSiguienteHealt.reset();
         }

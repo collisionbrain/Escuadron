@@ -3,12 +3,35 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="3dp"
-    android:background="@color/white">
-
-    <com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView
-        android:id="@+id/img"
+    android:background="@color/white"
+    android:weightSum="100"
+    android:orientation="vertical">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="50">
+    <TextView
+        android:id="@+id/client_name"
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:src="@drawable/cbd"
-        android:scaleType="centerCrop"/>
+        android:layout_height="wrap_content"
+        android:textColor="@color/green_text"
+        android:text="NOMBRE"/>
+
+
+</RelativeLayout>
+<RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="50">
+        <TextView
+            android:id="@+id/client_mail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/green_text"
+            android:text="MAIL"
+            />
+    </RelativeLayout>
+
+
+
 </LinearLayout>

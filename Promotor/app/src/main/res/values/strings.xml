@@ -18,6 +18,7 @@
     <string name="errEspecialidad">Elige tu padecimiento</string>
     <string name="strPadecimiento">¿Sufre algun padecimiento cronico?</string>
     <string name="strDescribe">Describe tu padecimiento</string>
+    <string name="strIdentidad">Documentos</string>
 
     <string name="strCalle">Calle</string>
     <string name="strNumeroExt">Número Exterior</string>

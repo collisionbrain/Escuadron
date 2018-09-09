@@ -32,6 +32,7 @@
                 android:singleLine="true"
                 android:hint="@string/strCalle"
                 android:textColorHint="@color/gray"
+                android:text="Laureano Estudillo"
                 />
         </RelativeLayout>
         <RelativeLayout
@@ -51,6 +52,7 @@
                 android:singleLine="true"
                 android:hint="@string/strNumeroExt"
                 android:textColorHint="@color/gray"
+                android:text="39B"
                 />
         </RelativeLayout>
         <RelativeLayout
@@ -70,6 +72,7 @@
                 android:singleLine="true"
                 android:hint="@string/strNumeroInt"
                 android:textColorHint="@color/gray"
+                android:text="39b bis"
                 />
         </RelativeLayout>
         <RelativeLayout
@@ -89,6 +92,7 @@
                 android:singleLine="true"
                 android:hint="@string/strCpostal"
                 android:textColorHint="@color/gray"
+                android:text="09140"
                 />
         </RelativeLayout>
         <RelativeLayout
@@ -106,9 +110,10 @@
                 android:background="@drawable/editext_line"
                 android:inputType="textCapCharacters|textNoSuggestions"
                 android:singleLine="true"
-                android:maxLength="5"
+                android:maxLength="50"
                 android:hint="@string/strColonia"
                 android:textColorHint="@color/gray"
+                android:text="AMpliacion Santa Martha"
                 />
         </RelativeLayout>
         <RelativeLayout
@@ -126,9 +131,10 @@
                 android:background="@drawable/editext_line"
                 android:inputType="textCapCharacters"
                 android:singleLine="true"
-                android:maxLength="5"
+                android:maxLength="50"
                 android:hint="@string/strMunicipio"
                 android:textColorHint="@color/gray"
+                android:text="Iztapalapa"
                 />
         </RelativeLayout>
         <RelativeLayout
@@ -146,9 +152,10 @@
                 android:background="@drawable/editext_line"
                 android:inputType="textCapCharacters"
                 android:singleLine="true"
-                android:maxLength="5"
+                android:maxLength="50"
                 android:hint="@string/strEstado"
                 android:textColorHint="@color/gray"
+                android:text="CDMX"
                 />
         </RelativeLayout>
     </LinearLayout>
