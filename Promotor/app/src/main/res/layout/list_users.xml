@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white">
 
     <FrameLayout
         android:id="@+id/container"
@@ -20,7 +21,8 @@
             android:layout_height="56dp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="24dp"
-            >
+            app:tbm_backgroundColor="@color/green_toolbar"
+             >
 
             <ImageView
                 android:id="@+id/imgUpload"
@@ -31,7 +33,14 @@
                 android:paddingBottom="10dp"
                 android:src="@drawable/upload"
                 />
-
+            <Space
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                />
+            <Space
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                />
             <Space
                 android:layout_width="56dp"
                 android:layout_height="match_parent"
@@ -46,10 +55,7 @@
                 android:paddingBottom="10dp"
                 android:src="@drawable/add"
                 />
-            <Space
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
-                />
+
 
             <ImageView
                 android:id="@+id/imgScan"

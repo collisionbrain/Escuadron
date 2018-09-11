@@ -2,6 +2,7 @@ package com.libre.escuadronpromotor.ui;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -24,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.libre.escuadronpromotor.R;
 import com.libre.escuadronpromotor.ui.adapters.NewClientAdapter;
 import com.libre.escuadronpromotor.ui.fragments.DialogUploadFragment;
+import com.libre.escuadronpromotor.ui.fragments.OrderFragment;
 import com.libre.escuadronpromotor.ui.pojos.Member;
 import com.libre.escuadronpromotor.ui.pojos.Product;
 import com.libre.escuadronpromotor.ui.storage.PreferencesStorage;
@@ -36,6 +38,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -43,7 +46,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import static android.content.ContentValues.TAG;
 
 public class ListUsersActivity extends AppCompatActivity {
@@ -57,7 +59,6 @@ public class ListUsersActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private Calendar calendar ;
     private Date now ;
-    private Button floatingActionButton,floatingSyncButton;
     private DBHelper db;
     private List<Member> newMembers=new ArrayList<>();
     private NewClientAdapter newClientAdapter;
@@ -68,14 +69,19 @@ public class ListUsersActivity extends AppCompatActivity {
     private FragmentTransaction ft;
     private Fragment prev;
     private DialogFragment dialogFragment = new DialogUploadFragment();
+    private OrderFragment orderFragment = new OrderFragment();
     private TapBarMenu tapBarMenu;
     private ImageView imageViewAdd,imageViewUp,imageViewScan;
+
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
         setContentView(R.layout.list_users);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#fff5f5f5")));
+
         calendar = Calendar.getInstance();
         context=this;
         db=new DBHelper(context);
@@ -90,6 +96,10 @@ public class ListUsersActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         ft = getFragmentManager().beginTransaction();
+
+        fragmentManager=getFragmentManager();
+        fragmentTransaction=fragmentManager.beginTransaction();
+
         prev = getFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
             ft.remove(prev);
@@ -149,14 +159,20 @@ public class ListUsersActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        if (requestCode == 500) {
-            // Make sure the request was successful
-            if (resultCode == RESULT_OK) {
 
+        if (requestCode == 500) {
+            if (resultCode == RESULT_OK) {
                 newMembers= db.getAllMembers();
                 newClientAdapter = new NewClientAdapter(this, newMembers);
                 recyclerView.setAdapter(newClientAdapter);
+            }
+        }
+        if (requestCode == 600) {
+            if (resultCode == RESULT_OK) {
+                String id_user= data.getStringExtra("id");
+                Bundle bundle=new Bundle();
+                bundle.putString("id",id_user);
+                initFragmentOrder(bundle);
             }
         }
     }
@@ -165,7 +181,7 @@ public class ListUsersActivity extends AppCompatActivity {
     public void registerUser(Member newMember){
         String user=newMember.mail;
         String pass= newMember.phone;
-        Member member=newMember;
+        final Member memberi=newMember;
         mAuth.createUserWithEmailAndPassword(user,pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -173,7 +189,7 @@ public class ListUsersActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
 
                             String guid=task.getResult().getUser().getUid();
-                            saveDataUser(guid,member);
+                            saveDataUser(guid,memberi);
 
                         } else {
                             try {
@@ -197,14 +213,16 @@ public class ListUsersActivity extends AppCompatActivity {
     public void saveDataUser(String userGuid,Member newMember){
         DatabaseReference ref = database.getReference("registro");
         DatabaseReference usersRef = ref.child("clientes");
+        final String emailToDelete=newMember.mail;
         usersRef.child(userGuid).setValue(newMember,new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                if (databaseError != null) {
-                    System.out.println("Data could not be saved " + databaseError.getMessage());
+                if (databaseError == null) {
 
-                } else {
-
+                    db.deleteMemberRegister(emailToDelete);
+                    newMembers= db.getAllMembers();
+                    newClientAdapter = new NewClientAdapter(context, newMembers);
+                    recyclerView.setAdapter(newClientAdapter);
                 }
             }
         });
@@ -219,12 +237,13 @@ public class ListUsersActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Thread.sleep(500);
-                newMembers= db.getAllMembers();
+                Thread.sleep(50000);
+               /* newMembers= db.getAllMembers();
                 for (Member mem:newMembers) {
                     registerUser(mem);
 
                 }
+                */
             }catch (InterruptedException ex){
                 ex.getStackTrace();
             }
@@ -240,9 +259,16 @@ public class ListUsersActivity extends AppCompatActivity {
     }
 
     public void scanCode(){
+
         Intent intent = new Intent(getApplicationContext(),ScannerActivity.class);
-        intent.setAction("com.google.zxing.client.android.SCAN");
-        intent.putExtra("SAVE_HISTORY", false);
-        startActivityForResult(intent, 0);
+        startActivityForResult(intent, 600);
+    }
+    private void initFragmentOrder( Bundle bundle){
+
+        fragmentTransaction = fragmentManager.beginTransaction();
+        orderFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.container, orderFragment, "Add detail");
+        fragmentTransaction.commit();
+
     }
 }

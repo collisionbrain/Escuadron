@@ -22,7 +22,10 @@ public class DialogUploadFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.dialog_upload, container, false);
-
+        int style , theme;
+        style = DialogFragment.STYLE_NO_TITLE;
+        theme = android.R.style.Theme_Holo_Light;
+        setStyle(style, theme);
         return v;
     }
 }

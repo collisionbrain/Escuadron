@@ -5,6 +5,7 @@ package com.libre.escuadronpromotor.ui;
  */
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -31,7 +32,7 @@ public class  ScannerActivity extends Activity implements ZXingScannerView.Resul
         super.onCreate(state);
         setContentView(R.layout.activity_scanner);
 
-        ViewGroup contentFrame = (ViewGroup) findViewById(R.id.content_frame);
+        ViewGroup contentFrame = findViewById(R.id.content_frame);
         mScannerView = new ZXingScannerView(this) {
             @Override
             protected IViewFinder createViewFinderView(Context context) {
@@ -56,24 +57,17 @@ public class  ScannerActivity extends Activity implements ZXingScannerView.Resul
 
     @Override
     public void handleResult(Result rawResult) {
-        Toast.makeText(this, "Contents = " + rawResult.getText() +
-                ", Format = " + rawResult.getBarcodeFormat().toString(), Toast.LENGTH_SHORT).show();
+        Intent result=new Intent();
+        result.putExtra("id", rawResult.getText());
+        setResult(RESULT_OK, result);
+        finish();
 
-        // Note:
-        // * Wait 2 seconds to resume the preview.
-        // * On older devices continuously stopping and resuming camera preview can result in freezing the app.
-        // * I don't know why this is the case but I don't have the time to figure out.
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mScannerView.resumeCameraPreview(ScannerActivity.this);
-            }
-        }, 2000);
+
+
     }
 
     private static class CustomViewFinderView extends ViewFinderView {
-        public static final String TRADE_MARK_TEXT = "ZXing";
+        public static final String TRADE_MARK_TEXT = "";
         public static final int TRADE_MARK_TEXT_SIZE_SP = 40;
         public final Paint PAINT = new Paint();
 

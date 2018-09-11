@@ -28,6 +28,9 @@
     <string name="strEstado">Estado</string>
 
 
+    <string name="strIdentidad">Documentos</string>
+
+
     <string name="siguiente">Siguiente</string>
     <string name="aceptar">Aceptar</string>
     <string name="action_settings">Codigo de pago</string>

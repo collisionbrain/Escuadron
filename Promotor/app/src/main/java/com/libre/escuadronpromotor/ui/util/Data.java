@@ -40,7 +40,7 @@ public class Data {
         try {
 
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 80, baos);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
             byte[] imageBytes = baos.toByteArray();
             base64 = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
         } catch (Exception e) {

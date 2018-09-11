@@ -101,7 +101,7 @@ public class DBHelper   extends SQLiteOpenHelper {
         return id;
     }
     public List<Member> getAllMembers() {
-        List<Member> notes = new ArrayList<>();
+        List<Member> memberList = new ArrayList<>();
 
         // Select All Query
         String selectQuery = "SELECT  * FROM Miembros ";
@@ -110,43 +110,49 @@ public class DBHelper   extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         // looping through all rows and adding to list
-        if (cursor.moveToFirst()) {
-            do {
+        int c=cursor.getCount() ;
+        if (cursor.getCount() > 0){
+            if (cursor.moveToFirst()) {
+                do {
 
-                Member member = new Member();
-                member.name=cursor.getString(cursor.getColumnIndex("name"));
-                member.mail=cursor.getString(cursor.getColumnIndex("mail"));
-                member.phone=cursor.getString(cursor.getColumnIndex("phone"));
-                member.whats=Boolean.getBoolean(cursor.getString(cursor.getColumnIndex("whats")));
-                member.privacy=Boolean.getBoolean(cursor.getString(cursor.getColumnIndex("privacy")));
-                Address address=new Address();
-                address.street=cursor.getString(cursor.getColumnIndex("street"));
-                address.numExt=cursor.getString(cursor.getColumnIndex("numExt"));
-                address.numInt=cursor.getString(cursor.getColumnIndex("numInt"));
-                address.postal=cursor.getString(cursor.getColumnIndex("postal"));
-                address.col=cursor.getString(cursor.getColumnIndex("col"));
-                address.mun=cursor.getString(cursor.getColumnIndex("mun"));
-                address.est=cursor.getString(cursor.getColumnIndex("est"));
-                member.address=address;
-                member.gender=cursor.getInt(cursor.getColumnIndex("gender"));
-                member.birthday=cursor.getString(cursor.getColumnIndex("birthday"));
-                member.weigth=cursor.getInt(cursor.getColumnIndex("weigth"));
-                member.gender=cursor.getInt(cursor.getColumnIndex("gender"));
-                member.suffering=Boolean.getBoolean(cursor.getString(cursor.getColumnIndex("suffering")));
-                member.condition=cursor.getString(cursor.getColumnIndex("condition"));
-                member.extra=cursor.getString(cursor.getColumnIndex("extra"));
-                member.signature=cursor.getString(cursor.getColumnIndex("signature"));
-                member.b64FrontId=cursor.getString(cursor.getColumnIndex("idfront"));
-                member.b64BackId=cursor.getString(cursor.getColumnIndex("idback"));
+                    Member member = new Member();
+                    member.imei = cursor.getString(cursor.getColumnIndex("imei"));
+                    member.name = cursor.getString(cursor.getColumnIndex("name"));
+                    member.mail = cursor.getString(cursor.getColumnIndex("mail"));
+                    member.phone = cursor.getString(cursor.getColumnIndex("phone"));
+                    member.whats = Boolean.getBoolean(cursor.getString(cursor.getColumnIndex("whats")));
+                    member.privacy = Boolean.getBoolean(cursor.getString(cursor.getColumnIndex("privacy")));
+                    Address address = new Address();
+                    address.street = cursor.getString(cursor.getColumnIndex("street"));
+                    address.numExt = cursor.getString(cursor.getColumnIndex("numExt"));
+                    address.numInt = cursor.getString(cursor.getColumnIndex("numInt"));
+                    address.postal = cursor.getString(cursor.getColumnIndex("postal"));
+                    address.col = cursor.getString(cursor.getColumnIndex("col"));
+                    address.mun = cursor.getString(cursor.getColumnIndex("mun"));
+                    address.est = cursor.getString(cursor.getColumnIndex("est"));
+                    member.address = address;
+                    member.gender = cursor.getInt(cursor.getColumnIndex("gender"));
+                    member.birthday = cursor.getString(cursor.getColumnIndex("birthday"));
+                    member.weigth = cursor.getInt(cursor.getColumnIndex("weigth"));
+                    member.gender = cursor.getInt(cursor.getColumnIndex("gender"));
+                    member.suffering = Boolean.getBoolean(cursor.getString(cursor.getColumnIndex("suffering")));
+                    member.condition = cursor.getString(cursor.getColumnIndex("condition"));
+                    member.extra = cursor.getString(cursor.getColumnIndex("extra"));
+                    member.signature = cursor.getString(cursor.getColumnIndex("signature"));
+                    member.b64FrontId = cursor.getString(cursor.getColumnIndex("idfront"));
+                    member.b64BackId = cursor.getString(cursor.getColumnIndex("idback"));
 
-                notes.add(member);
-            } while (cursor.moveToNext());
-        }
-
-        // close db connection
+                    memberList.add(member);
+                } while (cursor.moveToNext());
+            }
+    }
         db.close();
+        return memberList;
+    }
 
-        // return notes list
-        return notes;
+    public void deleteMemberRegister(String email){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("Miembros","mail=?",new String[]{email});
+        db.close();
     }
 }
