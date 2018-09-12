@@ -123,7 +123,7 @@
             android:orientation="horizontal"
             android:weightSum="100">
             <TextView
-                android:id="@+id/txtTengoCuenta"
+                android:id="@+id/txtCuenta"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="90"
