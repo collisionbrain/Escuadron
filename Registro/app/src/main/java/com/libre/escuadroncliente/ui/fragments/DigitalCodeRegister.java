@@ -77,7 +77,6 @@ public class DigitalCodeRegister extends Fragment implements  View.OnClickListen
     SubmitButton.OnResultEndListener finishListener=new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
-
             ((RegisterActivity)context).launchMarket();
 
 

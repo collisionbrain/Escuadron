@@ -65,7 +65,7 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
     SubmitButton.OnResultEndListener finishListenerCamera = new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
-            ((RegisterActivity) context).paginaSiguiente(6);
+            ((RegisterActivity) context).paginaSiguiente(5);
             btnSiguienteCamera.reset();
         }
     };

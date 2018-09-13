@@ -137,6 +137,10 @@ public class RegisterActivity extends FragmentActivity {
                         break;
                     case 5:
                         txtTitulo.setText(resources.getString(R.string.strFirma));
+                        break;
+                    case 6:
+                        txtTitulo.setText(resources.getString(R.string.stTerminar));
+                        break;
                 }
             }
 
@@ -190,7 +194,7 @@ public class RegisterActivity extends FragmentActivity {
         }
     }
     public void paginaSiguiente(int paginaSiguiente){
-        vwPaginas.setCurrentItem(paginaSiguiente, true);
+         vwPaginas.setCurrentItem(paginaSiguiente, true);
 
     }
     @Override
@@ -222,6 +226,7 @@ public class RegisterActivity extends FragmentActivity {
 
     }
     public void downloadDB(){
+
         StorageReference fileRef = storage.getReferenceFromUrl(URL_REMOTE).child(JSON_FILE);
         if (fileRef != null) {
             fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
@@ -248,6 +253,7 @@ public class RegisterActivity extends FragmentActivity {
                 if (databaseError != null) {
                     System.out.println("Data could not be saved " + databaseError.getMessage());
                     preferencesStorage.saveDataObjet("OBJET_TO_REGITER",newMember);
+
                 } else {
                      downloadDB();
                 }
