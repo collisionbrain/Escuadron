@@ -176,19 +176,20 @@ public class MarketActivity extends AppCompatActivity   {
             switch (position % 5) {
                 case 0 :
                     holder.iv.setImageResource(R.drawable.bud);
-
-
                 break;
-                case 1 : holder.iv.setImageResource(R.drawable.muffin); break;
-                case 2 : holder.iv.setImageResource(R.drawable.cookies); break;
-                case 3 : holder.iv.setImageResource(R.drawable.cbd); break;
-                case 4 : holder.iv.setImageResource(R.drawable.pomada); break;
+
+                case 1 : holder.iv.setImageResource(R.drawable.cookies);
+                    break;
+                case 2 : holder.iv.setImageResource(R.drawable.cbd);
+                    break;
+                case 3 : holder.iv.setImageResource(R.drawable.pomada);
+                    break;
             }
         }
 
         @Override
         public int getItemCount() {
-            return 5;
+            return 4;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

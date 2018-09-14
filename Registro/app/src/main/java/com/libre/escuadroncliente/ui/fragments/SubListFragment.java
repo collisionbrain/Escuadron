@@ -34,6 +34,7 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
     private  TextView txtHeaderTitle;
     private JSONArray data;
     private String title;
+    private  View header,footer;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
@@ -43,9 +44,9 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
         productRootItem =  getArguments().getInt("productRootItem");
 
         final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-        View header = layoutInflater.inflate(R.layout.list_item_header_footer, null);
-        View footer = layoutInflater.inflate(R.layout.list_item_header_footer, null);
-        mAdapter=null;
+         header = layoutInflater.inflate(R.layout.list_item_header_footer, null);
+         footer = layoutInflater.inflate(R.layout.list_item_header_footer, null);
+         mAdapter=null;
          txtHeaderTitle = header.findViewById(R.id.txt_title);
          title=getTitle(productRootItem);
         data=Data.loadJSONFileObjet(title);
@@ -55,24 +56,21 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
             public void run() {
 
                 txtHeaderTitle.setText(title);
+                staggeredGridView.addHeaderView(header);
+                staggeredGridView.addFooterView(footer);
+                mAdapter = new SampleAdapter(getActivity(), R.id.txt_line1);
+                mData = SampleData.generateSampleData(data);
 
+
+                for (String data : mData) {
+                    mAdapter.add(data);
+                }
+
+                staggeredGridView.setAdapter(mAdapter);
             }
         });
-        staggeredGridView.addHeaderView(header);
-        staggeredGridView.addFooterView(footer);
-        if (mAdapter == null) {
-            mAdapter = new SampleAdapter(getActivity(), R.id.txt_line1);
-        }
 
-        if (mData == null) {
-            mData = SampleData.generateSampleData(data);
-        }
 
-        for (String data : mData) {
-            mAdapter.add(data);
-        }
-
-        staggeredGridView.setAdapter(mAdapter);
         staggeredGridView.setOnScrollListener(this);
         staggeredGridView.setOnItemClickListener(this);
         return  this.view;
@@ -89,14 +87,12 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
                 result= "Reposteria";
                 break;
             case 2:
-                result= "Ungüentos";
+                result= "Extractos";
                 break;
             case 3:
                 result= "Ungüentos";
                 break;
-            case 4:
-                result= "Extractos";
-                break;
+
         }
 
         return result;

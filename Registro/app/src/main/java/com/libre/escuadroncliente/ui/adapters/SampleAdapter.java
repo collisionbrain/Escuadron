@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -58,10 +59,12 @@ public class SampleAdapter extends ArrayAdapter<String> {
             convertView = mLayoutInflater.inflate(R.layout.list_item_sample, parent, false);
             vh = new ViewHolder();
             vh.txtLineOne =  convertView.findViewById(R.id.txt_line1);
-            vh.txtLineOne.setBackground(context.getDrawable(R.drawable.bud));
+            vh.txtLineOne.setBackgroundColor(Color.parseColor("#a0fcc9"));
+                    //.setBackground(context.getDrawable(R.drawable.bud));
             vh.btnPlus = convertView.findViewById(R.id.btn_plus);
 
             convertView.setTag(vh);
+
         }
         else {
             vh = (ViewHolder) convertView.getTag();

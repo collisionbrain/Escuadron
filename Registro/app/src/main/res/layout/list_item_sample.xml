@@ -11,7 +11,10 @@
         android:id="@+id/txt_line1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"/>
+        android:textSize="21sp"
+        android:gravity="center"
+        android:textColor="@color/green_text"
+        android:text="xxxxxxx"/>
 
     <Button
         android:id="@+id/btn_plus"

@@ -8,7 +8,7 @@ import java.util.List;
 
 public class SampleData {
 
-    public static final int SAMPLE_DATA_ITEM_COUNT = 5;
+    public static final int SAMPLE_DATA_ITEM_COUNT = 4;
 
     public static ArrayList<String> generateSampleData(JSONArray jsonData) {
         final ArrayList<String> data = new ArrayList<String>(SAMPLE_DATA_ITEM_COUNT);
