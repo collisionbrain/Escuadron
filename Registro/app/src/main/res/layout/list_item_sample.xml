@@ -6,12 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants">
-
+<TextView
+    android:id="@+id/txtId"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+   />
     <com.etsy.android.grid.util.DynamicHeightTextView
         android:id="@+id/txt_line1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"/>
+        android:textSize="21sp"
+        android:gravity="center"
+        android:textColor="@color/green_text"
+        android:text="xxxxxxx"/>
 
     <Button
         android:id="@+id/btn_plus"

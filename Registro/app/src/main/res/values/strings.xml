@@ -33,7 +33,9 @@
 
     <string name="siguiente">Siguiente</string>
     <string name="aceptar">Aceptar</string>
-    <string name="action_settings">Codigo de pago</string>
+    <string name="action_settings">Código de pago</string>
+    <string name="detail">Detalle de compra</string>
+    <string name="total"></string>
 
 
 </resources>

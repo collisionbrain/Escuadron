@@ -4,14 +4,19 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,10 +34,12 @@ import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.fragments.DetailFragment;
 import com.libre.escuadroncliente.ui.fragments.DigitalCode;
 import com.libre.escuadroncliente.ui.fragments.DigitalCodeRegister;
+import com.libre.escuadroncliente.ui.fragments.PayFragment;
 import com.libre.escuadroncliente.ui.fragments.SubListFragment;
 import com.libre.escuadroncliente.ui.pojos.Order;
 import com.libre.escuadroncliente.ui.pojos.Product;
 import com.libre.escuadroncliente.ui.storage.PreferencesStorage;
+import com.libre.escuadroncliente.ui.util.Data;
 
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -47,6 +54,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -63,6 +71,7 @@ public class MarketActivity extends AppCompatActivity   {
     private Fragment detailFragment=new DetailFragment();
     private Fragment digitalCode=new DigitalCode();
     private Fragment subListFragment=new SubListFragment();
+    private Fragment payFragment=new PayFragment();
     public List<Product> productList;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -73,7 +82,11 @@ public class MarketActivity extends AppCompatActivity   {
     private DatabaseReference mDatabase;
     private Calendar calendar ;
     private Date now ;
-    private Button floatingActionButton;
+    private Button floatingActionButton,floatingPayButton;
+    private Menu menu;
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private Uri imageUri;
+    public Order order;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,13 +106,19 @@ public class MarketActivity extends AppCompatActivity   {
         recyclerView.setAdapter(new MyAdapter());
         mDatabase = FirebaseDatabase.getInstance().getReference();
         floatingActionButton= findViewById(R.id.action_button);
+        floatingPayButton= findViewById(R.id.action_pay);
+        floatingPayButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("product", null );
+               initPayFragment(bundle);
+            }
+        });
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Bundle bundle = new Bundle();
-                bundle.putInt("productItem", 10001 );
-                initFragmentCode( bundle);
+                registerOrder();
             }
         });
 
@@ -113,6 +132,10 @@ public class MarketActivity extends AppCompatActivity   {
 
         if(detailFragment.isVisible()){
             getFragmentManager().beginTransaction().remove(detailFragment).commit();
+            floatingActionButton.setVisibility(View.VISIBLE);
+        }
+        if(payFragment.isVisible()){
+            getFragmentManager().beginTransaction().remove(payFragment).commit();
             floatingActionButton.setVisibility(View.VISIBLE);
         }
         if(subListFragment.isVisible() && !detailFragment.isVisible()){
@@ -131,8 +154,10 @@ public class MarketActivity extends AppCompatActivity   {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main_menu, menu);
+        this.menu=menu;
         return true;
     }
     @Override
@@ -145,18 +170,37 @@ public class MarketActivity extends AppCompatActivity   {
             initFragmentCode( bundle);
             return true;
         }
+        if (id == R.id.detalle_compra) {
+            Bundle bundle = new Bundle();
+            int total=totalProducto();
+            bundle.putInt("total", total );
+            initFragmentCode( bundle);
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
     public void addProduct(Product product){
+        product.image=null;
         productList.add(product);
-        count=productList.size();
+        count=totalProducto();
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                floatingActionButton.setText("Comprar :" +count);
+                MenuItem item=menu.getItem(2);
+                String text=count + " Productos en lista";
+                item.setTitle(text);
+
             }
         });
+
+    }
+    public void takePhotoTicket(){
+        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+        File photo = new File(Environment.getExternalStorageDirectory(),  "Ticket.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+        imageUri = Uri.fromFile(photo);
+        startActivityForResult(intent, 200);
 
     }
 
@@ -176,19 +220,49 @@ public class MarketActivity extends AppCompatActivity   {
             switch (position % 5) {
                 case 0 :
                     holder.iv.setImageResource(R.drawable.bud);
-
-
                 break;
-                case 1 : holder.iv.setImageResource(R.drawable.muffin); break;
-                case 2 : holder.iv.setImageResource(R.drawable.cookies); break;
-                case 3 : holder.iv.setImageResource(R.drawable.cbd); break;
-                case 4 : holder.iv.setImageResource(R.drawable.pomada); break;
+                case 1 : holder.iv.setImageResource(R.drawable.cookies);
+                    break;
+                case 2 : holder.iv.setImageResource(R.drawable.cbd);
+                    break;
+                case 3 : holder.iv.setImageResource(R.drawable.pomada);
+                    break;
             }
         }
 
+
+        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+            this.onActivityResult(requestCode, resultCode, data);
+            Bitmap bitmap;
+            Uri selectedImage = imageUri;
+            getContentResolver().notifyChange(selectedImage, null);
+            ContentResolver cr = getContentResolver();
+            PayFragment payFragment=(PayFragment) fragmentManager.findFragmentByTag("PAY");
+            switch (requestCode) {
+                case 200:
+                    if (resultCode == RESULT_OK) {
+                        try {
+                            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
+                            order.ticket= Data.bitmapToBase64(bitmap);
+                            payFragment.setFrontImage(bitmap);
+                            floatingActionButton.setVisibility(View.GONE);
+                            floatingPayButton.setVisibility(View.VISIBLE);
+
+                        } catch (Exception e) {
+
+                            Log.e("Camera", e.toString());
+                        }
+                    }
+                    break;
+
+            }
+        }
+
+
+
         @Override
         public int getItemCount() {
-            return 5;
+            return 4;
         }
 
         class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -212,6 +286,15 @@ public class MarketActivity extends AppCompatActivity   {
         }
     }
 
+
+    private void initPayFragment( Bundle bundle){
+        floatingActionButton.setVisibility(View.GONE);
+        fragmentTransaction = fragmentManager.beginTransaction();
+        payFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.container, payFragment, "PAY");
+        fragmentTransaction.commit();
+
+    }
     private void initFragmentDetail( Bundle bundle){
         floatingActionButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
@@ -236,9 +319,9 @@ public class MarketActivity extends AppCompatActivity   {
         fragmentTransaction.commit();
 
     }
-    public void startDetailFragment(int pos){
+    public void startDetailFragment(Product product){
         Bundle bundle = new Bundle();
-        bundle.putInt("productItem", pos );
+        bundle.putSerializable("product", product );
         this.initFragmentDetail(bundle);
     }
     public void  closeCodeFragment(){
@@ -248,23 +331,49 @@ public class MarketActivity extends AppCompatActivity   {
     }
 
 
+    public int totalProducto(){
+        int total=0;
+        for (Product product:productList  ) {
+            total=product.count+total;
+        }
+        return total;
+    }
+    public int toPayProducto(){
+        int totalPay=0;
+        for (Product product:productList  ) {
+            int price=Integer.parseInt(product.price);
+            totalPay=totalPay+price;
+        }
+        return totalPay;
+    }
+
     public void registerOrder(){
+
+        DatabaseReference ref = database.getReference("registro");
+        DatabaseReference usersRef = ref.child("pedidos");
         now = calendar.getTime();
-        Order order=new Order();
+        order=new Order();
         order.userGuid=userGuid;
-        order.dateOrder=now;
-        mDatabase.child("users").child(userGuid).setValue(order,new DatabaseReference.CompletionListener() {
+        order.dateOrder=now.toString();
+        order.pay=false;
+        order.total=toPayProducto();
+        order.productList=productList;
+        usersRef.child(userGuid).setValue(order,new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError != null) {
-
+                    System.out.println("Data could not be saved " + databaseError.getMessage());
 
                 } else {
 
 
-
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("product", null );
+                    initPayFragment( bundle);
                 }
             }
         });
+
+
     }
 }

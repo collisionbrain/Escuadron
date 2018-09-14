@@ -1,4 +1,6 @@
 package com.libre.escuadroncliente.ui.adapters;
+import com.libre.escuadroncliente.ui.pojos.Product;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,18 +10,26 @@ import java.util.List;
 
 public class SampleData {
 
-    public static final int SAMPLE_DATA_ITEM_COUNT = 5;
+    public static final int SAMPLE_DATA_ITEM_COUNT = 4;
 
-    public static ArrayList<String> generateSampleData(JSONArray jsonData) {
-        final ArrayList<String> data = new ArrayList<String>(SAMPLE_DATA_ITEM_COUNT);
+    public static ArrayList<Product> generateSampleData(JSONArray jsonData) {
+        final ArrayList<Product> data = new ArrayList<Product>(SAMPLE_DATA_ITEM_COUNT);
         try{
             int x=jsonData.length();
-            for (int i = 0; i < x; i++) {
-                JSONObject productObject=jsonData.getJSONObject(0);
-                data.add(productObject.getString("desc"));
+            for (int i = 0; i <=x-1; i++) {
+                JSONObject productObject=jsonData.getJSONObject(i);
+
+                Product product=new Product();
+                product.id=productObject.getString("id");
+                product.name=productObject.getString("desc");
+                product.price=productObject.getString("precio");
+                product.image=productObject.getString("image");
+                data.add(product);
             }
 
-        }catch (JSONException ex){}
+        }catch (JSONException ex){
+            ex.getStackTrace();
+        }
 
 
         return data;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -16,18 +17,19 @@ import android.widget.Toast;
 import com.etsy.android.grid.util.DynamicHeightTextView;
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.MarketActivity;
+import com.libre.escuadroncliente.ui.pojos.Product;
 
 /***
  * ADAPTER
  */
 
-public class SampleAdapter extends ArrayAdapter<String> {
+public class SampleAdapter extends ArrayAdapter<Product> {
 
     private static final String TAG = "SampleAdapter";
 
     static class ViewHolder {
-        DynamicHeightTextView txtLineOne;
-        Button btnPlus,btnMinus;
+        DynamicHeightTextView txtLineOne,txtId;
+        Button btnPlus;
     }
 
     private final LayoutInflater mLayoutInflater;
@@ -54,14 +56,17 @@ public class SampleAdapter extends ArrayAdapter<String> {
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
         ViewHolder vh;
+        final Product product;
+
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(R.layout.list_item_sample, parent, false);
             vh = new ViewHolder();
             vh.txtLineOne =  convertView.findViewById(R.id.txt_line1);
-            vh.txtLineOne.setBackground(context.getDrawable(R.drawable.bud));
+            vh.txtLineOne.setBackgroundColor(Color.parseColor("#a0fcc9"));
             vh.btnPlus = convertView.findViewById(R.id.btn_plus);
 
             convertView.setTag(vh);
+
         }
         else {
             vh = (ViewHolder) convertView.getTag();
@@ -74,15 +79,15 @@ public class SampleAdapter extends ArrayAdapter<String> {
         convertView.setBackgroundResource(mBackgroundColors.get(backgroundIndex));
 
         Log.d(TAG, "getView position:" + position + " h:" + positionHeight);
-
         vh.txtLineOne.setHeightRatio(positionHeight);
-        vh.txtLineOne.setText(getItem(position) + position);
-
+        product=getItem(position);
+        vh.txtLineOne.setText(product.name);
         vh.btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
 
-                ((MarketActivity)context).startDetailFragment(position);
+
+                ((MarketActivity)context).startDetailFragment(product);
             }
         });
 

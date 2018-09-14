@@ -2,6 +2,8 @@ package com.libre.escuadroncliente.ui.fragments;
 
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.MarketActivity;
 import com.libre.escuadroncliente.ui.pojos.Product;
+import com.libre.escuadroncliente.ui.util.Data;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
 /**
@@ -37,7 +40,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
         context=getActivity();
-        int productItem = this.getArguments().getInt("productItem");
+        product = (Product)this.getArguments().getSerializable("product");
         this.view = inflater.inflate(R.layout.detail_fragment,container,false);
         rlyPanel=this.view.findViewById(R.id.rlPanel);
         btnPlus=this.view.findViewById(R.id.btnPlus);
@@ -51,60 +54,13 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         btnMinus.setOnClickListener(this);
         addButton.setOnClickListener(this);
         addButton.setOnResultEndListener(addFinishListener);
-        Log.e("#######",""+productItem);
-        switch (productItem){
-            case 0:
+        Log.e("#######",""+product.name);
 
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        backGround.setBackgroundResource(R.drawable.cbd);
-                        txtDesc.setText("xxxxxxxxxxx");
-                        txtPrice.setText("600.00");
-                    }
-                });
-                product=new Product();
-                product.id=0;
-                product.name="CBD";
-                product.price=600;
-                break;
-            case 1:
-                backGround.setBackgroundResource(R.drawable.muffin);
-                txtDesc.setText("");
-                txtPrice.setText("25.00");
-                product=new Product();
-                product.id=1;
-                product.name="Muffin";
-                product.price=25;
-                break;
-            case 2:
-                backGround.setBackgroundResource(R.drawable.cookies);
-                txtDesc.setText("");
-                txtPrice.setText("25.00");
-                product=new Product();
-                product.id=2;
-                product.name="Galletas";
-                product.price=25;
-                break;
-            case 3:
-                backGround.setBackgroundResource(R.drawable.bud);
-                txtDesc.setText("");
-                txtPrice.setText("100.00");
-                product=new Product();
-                product.id=3;
-                product.name="Cogoyos";
-                product.price=100;
-                break;
-            case 4:
-                backGround.setBackgroundResource(R.drawable.pomada);
-                txtDesc.setText("");
-                txtPrice.setText("120.00");
-                product=new Product();
-                product.id=4;
-                product.name="Pomada";
-                product.price=120;
-                break;
-        }
+        Bitmap bitmap=Data.base64ToBitmap(product.image);
+        Drawable background = new BitmapDrawable(getResources(), bitmap);
+        backGround.setBackground(background);
+        txtDesc.setText(product.name);
+        txtPrice.setText(product.price);
         counter=checkProductList(product.id);
         txtCounter.setText("" + counter);
         return  this.view;
@@ -129,9 +85,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
                }
                break;
            case  R.id.btnPlus :
-               Log.e("########3","MAS");
                counter=counter+1;
-
                txtCounter.setText(""+counter);
                break;
 
@@ -154,10 +108,10 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
             ((MarketActivity)context).onBackPressed();
         }
     };
-    private int checkProductList(int id){
+    private int checkProductList(String id){
         int res=0;
         for (Product product: ((MarketActivity)context).productList  ) {
-            if(product.id==id){
+            if(product.id.equals(id)){
                 res=product.count;
 
             }

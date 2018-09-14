@@ -1,10 +1,12 @@
 package com.libre.escuadroncliente.ui.pojos;
 
-import java.util.Date;
 import java.util.List;
 
 public class Order {
     public String userGuid;
-    public Date  dateOrder;
+    public String  dateOrder;
+    public double  total;
+    public boolean pay;
+    public String ticket;
     public List<Product> productList;
 }

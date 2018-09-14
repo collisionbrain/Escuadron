@@ -23,12 +23,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:text="Comprar"
+                android:text="COMPRAR"
                 android:background="@drawable/button_rounded_selector"
                 android:textColor="@color/white"
-
                 android:theme="@style/Widget.AppCompat.Button.Colored"
                  />
+            <Button
+                android:id="@+id/action_pay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="SUBIR TICKET"
+                android:background="@drawable/button_rounded_selector"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                android:theme="@style/Widget.AppCompat.Button.Colored"
+                />
         </RelativeLayout>
 
     </FrameLayout>

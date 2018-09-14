@@ -17,4 +17,9 @@
         <item name="android:colorControlNormal">@color/gray</item>
         <item name="android:colorControlActivated">@color/green_toolbar</item>
     </style>
+    <style name="AppTheme.ActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="android:colorBackground">@color/green_toolbar</item>
+
+    </style>
 </resources>

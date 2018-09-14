@@ -3,6 +3,7 @@ package com.libre.escuadroncliente.ui.fragments;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.google.gson.JsonObject;
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.adapters.SampleAdapter;
 import com.libre.escuadroncliente.ui.adapters.SampleData;
+import com.libre.escuadroncliente.ui.pojos.Product;
 import com.libre.escuadroncliente.ui.util.Data;
 
 import org.json.JSONArray;
@@ -29,11 +31,12 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
     private int counter=0;
     private StaggeredGridView staggeredGridView;
     private SampleAdapter mAdapter;
-    private ArrayList<String> mData;
+    private ArrayList<Product> mData;
     private int productRootItem;
     private  TextView txtHeaderTitle;
     private JSONArray data;
     private String title;
+    private  View header,footer;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
@@ -43,9 +46,9 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
         productRootItem =  getArguments().getInt("productRootItem");
 
         final LayoutInflater layoutInflater = getActivity().getLayoutInflater();
-        View header = layoutInflater.inflate(R.layout.list_item_header_footer, null);
-        View footer = layoutInflater.inflate(R.layout.list_item_header_footer, null);
-        mAdapter=null;
+         header = layoutInflater.inflate(R.layout.list_item_header_footer, null);
+         footer = layoutInflater.inflate(R.layout.list_item_header_footer, null);
+         mAdapter=null;
          txtHeaderTitle = header.findViewById(R.id.txt_title);
          title=getTitle(productRootItem);
         data=Data.loadJSONFileObjet(title);
@@ -55,24 +58,22 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
             public void run() {
 
                 txtHeaderTitle.setText(title);
+                staggeredGridView.addHeaderView(header);
+                staggeredGridView.addFooterView(footer);
+                mAdapter = new SampleAdapter(getActivity(), R.id.txt_line1);
+                mData = SampleData.generateSampleData(data);
 
+
+                for (Product data : mData) {
+
+                    mAdapter.add(data);
+                }
+
+                staggeredGridView.setAdapter(mAdapter);
             }
         });
-        staggeredGridView.addHeaderView(header);
-        staggeredGridView.addFooterView(footer);
-        if (mAdapter == null) {
-            mAdapter = new SampleAdapter(getActivity(), R.id.txt_line1);
-        }
 
-        if (mData == null) {
-            mData = SampleData.generateSampleData(data);
-        }
 
-        for (String data : mData) {
-            mAdapter.add(data);
-        }
-
-        staggeredGridView.setAdapter(mAdapter);
         staggeredGridView.setOnScrollListener(this);
         staggeredGridView.setOnItemClickListener(this);
         return  this.view;
@@ -89,14 +90,12 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
                 result= "Reposteria";
                 break;
             case 2:
-                result= "Ungüentos";
+                result= "Extractos";
                 break;
             case 3:
                 result= "Ungüentos";
                 break;
-            case 4:
-                result= "Extractos";
-                break;
+
         }
 
         return result;
@@ -114,6 +113,9 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Log.e("###########","position : "+position);
+        Log.e("###########","id : "+id);
 
     }
 }
