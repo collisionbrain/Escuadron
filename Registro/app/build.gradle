@@ -30,6 +30,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.5'
     compile 'com.github.dimorinny:floating-text-button:0.0.4'
     compile 'com.etsy.android.grid:library:1.0.5'
+    compile 'com.github.michaldrabik:tapbarmenu:1.0.5'
+    compile 'com.google.android.gms:play-services-maps:11.8.0'
+
+
 
 }
 

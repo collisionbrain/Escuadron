@@ -13,34 +13,69 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center"
-            android:paddingBottom="25dp">
-            <Button
-                android:id="@+id/action_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="COMPRAR"
-                android:background="@drawable/button_rounded_selector"
-                android:textColor="@color/white"
-                android:theme="@style/Widget.AppCompat.Button.Colored"
-                 />
-            <Button
-                android:id="@+id/action_pay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="SUBIR TICKET"
-                android:background="@drawable/button_rounded_selector"
-                android:textColor="@color/white"
-                android:visibility="gone"
-                android:theme="@style/Widget.AppCompat.Button.Colored"
-                />
-        </RelativeLayout>
+        <com.michaldrabik.tapbarmenulib.TapBarMenu
+            android:id="@+id/tapBarMenu"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="24dp"
+            app:tbm_backgroundColor="@color/green_toolbar" >
 
+
+            <ImageView
+                android:id="@+id/imgPhoto"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:src="@drawable/ticket"
+
+                />
+
+            <ImageView
+                android:id="@+id/imgMap"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:src="@drawable/map"
+                android:visibility="gone"
+                />
+            <Space
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                />
+            <Space
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                />
+            <Space
+                android:layout_width="56dp"
+                android:layout_height="match_parent"
+                />
+
+            <ImageView
+                android:id="@+id/imgUpload"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:src="@drawable/upload"
+                />
+
+            <ImageView
+                android:id="@+id/imgCode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:src="@drawable/scan"
+                />
+        </com.michaldrabik.tapbarmenulib.TapBarMenu>
     </FrameLayout>
 
 </LinearLayout>

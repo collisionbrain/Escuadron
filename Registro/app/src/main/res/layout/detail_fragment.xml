@@ -14,10 +14,10 @@
         android:layout_weight="45" >
         <ImageView
             android:id="@+id/bgrImage"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@drawable/cookies"
-            android:scaleType="fitEnd"/>
+            android:scaleType="fitCenter"/>
         <TextView
             android:id="@+id/txtDesc"
             android:layout_width="match_parent"
@@ -25,11 +25,22 @@
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
             android:padding="15dp"
-            android:text="Descripcion del procuto"
+            android:text="Descripcion del producto"
+            android:textAllCaps="false"
+            android:textColor="@color/green_text"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/txtDetail"
+            android:layout_below="@+id/txtDesc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:padding="15dp"
+            android:text="Descripcion del xxxx"
             android:textAllCaps="false"
             android:textColor="@color/dialog_background"
             android:textSize="30sp" />
-
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"

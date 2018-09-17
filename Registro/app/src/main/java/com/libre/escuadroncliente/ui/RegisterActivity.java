@@ -160,7 +160,8 @@ public class RegisterActivity extends FragmentActivity {
 
                     try {
                         bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
-                       credentialFragment.setFrontImage(bitmap);
+                        newMember.b64FrontId=Data.bitmapToBase64(bitmap);
+                       credentialFragment.setFrontImage();
 
                     } catch (Exception e) {
 
@@ -172,7 +173,21 @@ public class RegisterActivity extends FragmentActivity {
                 if (resultCode == RESULT_OK) {
                     try {
                         bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
-                        credentialFragment.setBackImage(bitmap);
+                        newMember.b64BackId=Data.bitmapToBase64(bitmap);
+                        credentialFragment.setBackImage();
+
+                    } catch (Exception e) {
+
+                        Log.e("Camera", e.toString());
+                    }
+                }
+                break;
+            case 400:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
+                        newMember.b64Recipe=Data.bitmapToBase64(bitmap);
+                        credentialFragment.setRecipemage();
 
                     } catch (Exception e) {
 
@@ -324,6 +339,12 @@ public class RegisterActivity extends FragmentActivity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                 imageUri = Uri.fromFile(photo);
                 this.startActivityForResult(intent, 300);
+                break;
+            case 2:
+                photo = new File(Environment.getExternalStorageDirectory(),  "Receta.jpg");
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+                imageUri = Uri.fromFile(photo);
+                this.startActivityForResult(intent, 400);
                 break;
         }
 

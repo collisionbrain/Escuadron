@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,11 +15,13 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
@@ -40,8 +43,8 @@ import com.libre.escuadroncliente.ui.pojos.Order;
 import com.libre.escuadroncliente.ui.pojos.Product;
 import com.libre.escuadroncliente.ui.storage.PreferencesStorage;
 import com.libre.escuadroncliente.ui.util.Data;
+import com.michaldrabik.tapbarmenulib.TapBarMenu;
 
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,6 +54,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toolbar;
 
@@ -63,7 +68,7 @@ import java.util.List;
 
 import ru.dimorinny.floatingtextbutton.FloatingTextButton;
 
-public class MarketActivity extends AppCompatActivity   {
+public class MarketActivity extends  Activity {
 
 
 
@@ -82,18 +87,18 @@ public class MarketActivity extends AppCompatActivity   {
     private DatabaseReference mDatabase;
     private Calendar calendar ;
     private Date now ;
-    private Button floatingActionButton,floatingPayButton;
-    private Menu menu;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private Uri imageUri;
     public Order order;
+    private TapBarMenu tapBarMenu;
+    private ImageView imgPhoto,imgMap,imgUpload,imgCode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.market_activity);
-        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#fff5f5f5")));
-        calendar = Calendar.getInstance();
+         calendar = Calendar.getInstance();
         context=this;
         PreferencesStorage prefs=new PreferencesStorage(context);
         userGuid=prefs.loadData("REGISTER_USER_KEY");
@@ -105,24 +110,55 @@ public class MarketActivity extends AppCompatActivity   {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new MyAdapter());
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        floatingActionButton= findViewById(R.id.action_button);
-        floatingPayButton= findViewById(R.id.action_pay);
-        floatingPayButton.setOnClickListener(new View.OnClickListener() {
+        imgPhoto= findViewById(R.id.imgPhoto);
+        imgUpload= findViewById(R.id.imgUpload);
+        imgCode= findViewById(R.id.imgCode);
+        imgMap= findViewById(R.id.imgMap);
+        tapBarMenu=findViewById(R.id.tapBarMenu);
+        tapBarMenu.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                tapBarMenu.toggle();
+            }
+        });
+        imgPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("product", null );
-               initPayFragment(bundle);
+                initTicketPhotoFragment(bundle);
             }
         });
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+        imgMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                registerOrder();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("product", null );
+                initMapFragment(bundle);
+            }
+        });
+        imgUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if(order.total!=0) {
+                    new RegisterOrderTask().execute();
+                }else{
+                    showError("Lista de Productos vacia");
+                }
+
+            }
+        });
+        imgCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("productItem", 10001 );
+                initFragmentCode( bundle);
             }
         });
 
-
+        order=new Order();
+        order.id=1;
     }
 
 
@@ -132,17 +168,17 @@ public class MarketActivity extends AppCompatActivity   {
 
         if(detailFragment.isVisible()){
             getFragmentManager().beginTransaction().remove(detailFragment).commit();
-            floatingActionButton.setVisibility(View.VISIBLE);
+
         }
         if(payFragment.isVisible()){
             getFragmentManager().beginTransaction().remove(payFragment).commit();
-            floatingActionButton.setVisibility(View.VISIBLE);
+
         }
         if(subListFragment.isVisible() && !detailFragment.isVisible()){
             getFragmentManager().beginTransaction().remove(subListFragment).commit();
-            floatingActionButton.setVisibility(View.VISIBLE);
+
         }
-        if(!detailFragment.isVisible() && !subListFragment.isVisible()){
+        if(!detailFragment.isVisible() && !subListFragment.isVisible()&& !payFragment.isVisible()){
            finish();
         }
     }
@@ -152,56 +188,51 @@ public class MarketActivity extends AppCompatActivity   {
         super.onResume();
     }
 
+
+
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Bitmap bitmap;
+        Uri selectedImage = imageUri;
+        getContentResolver().notifyChange(selectedImage, null);
+        ContentResolver cr = getContentResolver();
 
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main_menu, menu);
-        this.menu=menu;
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+        switch (requestCode) {
+            case 200:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
+                        order.ticket= Data.bitmapToBase64(bitmap);
+                        PayFragment payFragment=(PayFragment) fragmentManager.findFragmentByTag("PAY");
+                        payFragment.setFrontImage();
 
-        if (id == R.id.action_settings) {
-            Bundle bundle = new Bundle();
-            bundle.putInt("productItem", 10001 );
-            initFragmentCode( bundle);
-            return true;
+
+                    } catch (Exception e) {
+
+                        Log.e("Camera", e.toString());
+                    }
+                }
+                break;
+
         }
-        if (id == R.id.detalle_compra) {
-            Bundle bundle = new Bundle();
-            int total=totalProducto();
-            bundle.putInt("total", total );
-            initFragmentCode( bundle);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
+
+
     public void addProduct(Product product){
         product.image=null;
         productList.add(product);
         count=totalProducto();
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                MenuItem item=menu.getItem(2);
-                String text=count + " Productos en lista";
-                item.setTitle(text);
 
-            }
-        });
 
     }
     public void takePhotoTicket(){
+
         Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
         File photo = new File(Environment.getExternalStorageDirectory(),  "Ticket.jpg");
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
         imageUri = Uri.fromFile(photo);
         startActivityForResult(intent, 200);
-
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -231,32 +262,6 @@ public class MarketActivity extends AppCompatActivity   {
         }
 
 
-        protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-            this.onActivityResult(requestCode, resultCode, data);
-            Bitmap bitmap;
-            Uri selectedImage = imageUri;
-            getContentResolver().notifyChange(selectedImage, null);
-            ContentResolver cr = getContentResolver();
-            PayFragment payFragment=(PayFragment) fragmentManager.findFragmentByTag("PAY");
-            switch (requestCode) {
-                case 200:
-                    if (resultCode == RESULT_OK) {
-                        try {
-                            bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
-                            order.ticket= Data.bitmapToBase64(bitmap);
-                            payFragment.setFrontImage(bitmap);
-                            floatingActionButton.setVisibility(View.GONE);
-                            floatingPayButton.setVisibility(View.VISIBLE);
-
-                        } catch (Exception e) {
-
-                            Log.e("Camera", e.toString());
-                        }
-                    }
-                    break;
-
-            }
-        }
 
 
 
@@ -287,16 +292,25 @@ public class MarketActivity extends AppCompatActivity   {
     }
 
 
-    private void initPayFragment( Bundle bundle){
-        floatingActionButton.setVisibility(View.GONE);
+    private void initTicketPhotoFragment( Bundle bundle){
+        //  floatingPayButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
         payFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.container, payFragment, "PAY");
         fragmentTransaction.commit();
 
     }
+    private void initMapFragment( Bundle bundle){
+        //  floatingPayButton.setVisibility(View.GONE);
+        fragmentTransaction = fragmentManager.beginTransaction();
+        payFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.container, payFragment, "MAP");
+        fragmentTransaction.commit();
+
+    }
+
     private void initFragmentDetail( Bundle bundle){
-        floatingActionButton.setVisibility(View.GONE);
+        //floatingPayButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
         detailFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.container, detailFragment, "Add detail");
@@ -304,7 +318,7 @@ public class MarketActivity extends AppCompatActivity   {
 
     }
     private void initFragmentCode( Bundle bundle){
-        floatingActionButton.setVisibility(View.GONE);
+        // floatingPayButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
         detailFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.container, digitalCode, "Add detail");
@@ -312,7 +326,7 @@ public class MarketActivity extends AppCompatActivity   {
 
     }
     private void initFragmentSubList( Bundle bundle){
-        floatingActionButton.setVisibility(View.GONE);
+        //  floatingPayButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
         subListFragment.setArguments(bundle);
         fragmentTransaction.add(R.id.container, subListFragment, "Add detail");
@@ -327,7 +341,7 @@ public class MarketActivity extends AppCompatActivity   {
     public void  closeCodeFragment(){
 
         getFragmentManager().beginTransaction().remove(digitalCode).commit();
-        floatingActionButton.setVisibility(View.VISIBLE);
+
     }
 
 
@@ -352,7 +366,7 @@ public class MarketActivity extends AppCompatActivity   {
         DatabaseReference ref = database.getReference("registro");
         DatabaseReference usersRef = ref.child("pedidos");
         now = calendar.getTime();
-        order=new Order();
+
         order.userGuid=userGuid;
         order.dateOrder=now.toString();
         order.pay=false;
@@ -366,14 +380,47 @@ public class MarketActivity extends AppCompatActivity   {
 
                 } else {
 
-
-                    Bundle bundle = new Bundle();
-                    bundle.putSerializable("product", null );
-                    initPayFragment( bundle);
+                    System.out.println("xxxxxxx");
+                    order=null;
+                    order=new Order();
                 }
             }
         });
 
+
+    }
+    private class RegisterOrderTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog dialog;
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(context, R.style.MyDialogTheme);
+            dialog.setMessage("Guardando pedido.");
+            dialog.show();
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Thread.sleep(3000);
+                registerOrder();
+
+
+            }catch (InterruptedException ex){
+                ex.getStackTrace();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void param) {
+            dialog.dismiss();
+
+        }
+    }
+    public void showError(String message){
+        ViewDialog alert = new ViewDialog();
+        alert.showDialog(MarketActivity.this, message);
 
     }
 }

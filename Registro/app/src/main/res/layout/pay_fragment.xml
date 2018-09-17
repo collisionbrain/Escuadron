@@ -6,19 +6,30 @@
     android:orientation="vertical"
     android:weightSum="100"
     android:background="@color/white">
-    <RelativeLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="80"
-        android:gravity="center"   >
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="100">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="60"
+            android:text="Ticket"
+            android:textSize="19sp"
+            android:textColor="@color/gray"
+            android:gravity="center"/>
+
         <ImageView
-            android:id="@+id/imgFrontId"
+            android:id="@+id/imgTicket"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="fitCenter"
             android:src="@drawable/add_photo"/>
-    </RelativeLayout>
-
+    </LinearLayout>
     <LinearLayout
         android:id="@+id/llyBoton"
         android:layout_width="match_parent"
@@ -33,7 +44,7 @@
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:padding="25dp"
-            app:buttonText="Siguiente"
+            app:buttonText="Continuar"
             app:buttonTextSize="25sp"
             app:buttonColor="@color/blueBorders"
             />
