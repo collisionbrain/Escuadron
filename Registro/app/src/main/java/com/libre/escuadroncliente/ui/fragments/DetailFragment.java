@@ -31,7 +31,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
     private Button btnPlus,btnMinus;
     private RelativeLayout rlyPanel;
     private ImageView backGround;
-    private TextView txtDesc,txtPrice,txtCounter;
+    private TextView txtDesc,txtPrice,txtDetail,txtTecnical,txtCounter;
     private SubmitButton addButton;
     private Product product;
     private int counter=0;
@@ -47,6 +47,8 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         btnMinus= this.view.findViewById(R.id.btnMinus);
         backGround=this.view.findViewById(R.id.bgrImage);
         txtDesc=this.view.findViewById(R.id.txtDesc);
+        //txtDetail=this.view.findViewById(R.id.txtDetail);
+        txtTecnical=this.view.findViewById(R.id.txtTecnical);
         txtPrice=this.view.findViewById(R.id.txtPrice);
         txtCounter=this.view.findViewById(R.id.txtCounter);
         addButton=this.view.findViewById(R.id.addButton);
@@ -55,7 +57,6 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         addButton.setOnClickListener(this);
         addButton.setOnResultEndListener(addFinishListener);
         Log.e("#######",""+product.name);
-
         Bitmap bitmap=Data.base64ToBitmap(product.image);
         Drawable background = new BitmapDrawable(getResources(), bitmap);
         backGround.setBackground(background);
@@ -63,6 +64,8 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         txtPrice.setText(product.price);
         counter=checkProductList(product.id);
         txtCounter.setText("" + counter);
+       // txtDetail.setText(product.detalle);
+        txtTecnical.setText(product.info_tecnica.toString().replace("|","\n"));
         return  this.view;
     }
     @Override

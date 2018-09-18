@@ -12,6 +12,8 @@ public class Product implements Serializable{
     public String name;
     public String image;
     public String price;
+    public String detalle;
+    public String info_tecnica;
 
 
 }

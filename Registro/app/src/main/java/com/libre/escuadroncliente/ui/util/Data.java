@@ -136,8 +136,8 @@ public class Data {
         }
         return b;
     }
-    public static JSONArray loadJSONFileObjet(String object) {
-        JSONArray data=null;
+    public static JSONObject loadJSONFileObjet(String object) {
+        JSONObject data=null;
         try {
             File yourFile = new File(Environment.getExternalStorageDirectory(), "Escuadron/DB/db.json");
             FileInputStream stream = new FileInputStream(yourFile);
@@ -146,11 +146,8 @@ public class Data {
                 FileChannel fc = stream.getChannel();
                 MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
                 jsonStr = Charset.defaultCharset().decode(bb).toString();
-
                 JSONObject jsonObj = new JSONObject(jsonStr);
-                data  = jsonObj.getJSONArray(object);
-
-                Log.e("###",data.get(0).toString());
+                data  = jsonObj.getJSONObject(object);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -168,6 +165,9 @@ public class Data {
         File myDir = new File(root + "/Escuadron/DB/");
         myDir.mkdirs();
         File file = new File(root + "/Escuadron/DB/db.json");
+        if(file.exists()){
+            file.delete();
+        }
         FileOutputStream fos;
 
         try {

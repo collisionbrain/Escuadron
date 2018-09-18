@@ -16,31 +16,49 @@
             android:id="@+id/bgrImage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/cookies"
-            android:scaleType="fitCenter"/>
-        <TextView
-            android:id="@+id/txtDesc"
+            android:visibility="gone"
+            android:scaleType="fitXY"/>
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:padding="15dp"
-            android:text="Descripcion del producto"
-            android:textAllCaps="false"
-            android:textColor="@color/green_text"
-            android:textSize="30sp" />
-        <TextView
-            android:id="@+id/txtDetail"
-            android:layout_below="@+id/txtDesc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:gravity="center_vertical"
-            android:padding="15dp"
-            android:text="Descripcion del xxxx"
-            android:textAllCaps="false"
-            android:textColor="@color/dialog_background"
-            android:textSize="30sp" />
+            android:orientation="vertical"
+            android:weightSum="100">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="50">
+                <TextView
+                    android:id="@+id/txtDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center_vertical"
+                    android:padding="15dp"
+                    android:text="Frasco de 20 ml"
+                    android:textAllCaps="false"
+                    android:textColor="@color/green_text"
+                    android:textSize="30sp" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="40">
+                <TextView
+                    android:id="@+id/txtTecnical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:paddingLeft="10dp"
+                    android:text="Aceite 80%|Extracto de Cannabis a base de Alcohol 20%"
+                    android:textColor="@color/green_text"
+                    android:textAllCaps="false"
+                    android:textSize="18sp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -48,6 +66,7 @@
         android:layout_weight="15"
         android:orientation="horizontal"
         android:weightSum="100"
+        android:layout_gravity="center"
         >
         <TextView
             android:id="@+id/txtSymbol"
@@ -56,7 +75,7 @@
             android:layout_weight="25"
             android:text="$"
             android:textSize="60dp"
-            android:gravity="left"
+            android:gravity="left|center_vertical"
             android:paddingLeft="20dp"
             android:textColor="@color/green_text"/>
         <TextView

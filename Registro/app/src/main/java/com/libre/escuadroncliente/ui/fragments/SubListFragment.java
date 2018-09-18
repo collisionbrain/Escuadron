@@ -34,7 +34,7 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
     private ArrayList<Product> mData;
     private int productRootItem;
     private  TextView txtHeaderTitle;
-    private JSONArray data;
+    private JSONObject data;
     private String title;
     private  View header,footer;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {

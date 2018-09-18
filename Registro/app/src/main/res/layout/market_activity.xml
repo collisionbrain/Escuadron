@@ -34,14 +34,13 @@
                 />
 
             <ImageView
-                android:id="@+id/imgMap"
+                android:id="@+id/imgReload"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
-                android:src="@drawable/map"
-                android:visibility="gone"
+                android:src="@drawable/reload"
                 />
             <Space
                 android:layout_width="56dp"

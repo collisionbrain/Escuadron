@@ -12,12 +12,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.etsy.android.grid.util.DynamicHeightTextView;
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.MarketActivity;
 import com.libre.escuadroncliente.ui.pojos.Product;
+import com.libre.escuadroncliente.ui.util.Data;
 
 /***
  * ADAPTER
@@ -28,7 +30,8 @@ public class SampleAdapter extends ArrayAdapter<Product> {
     private static final String TAG = "SampleAdapter";
 
     static class ViewHolder {
-        DynamicHeightTextView txtLineOne,txtId;
+        DynamicHeightTextView txtLineOne;
+        ImageView imgLogo;
         Button btnPlus;
     }
 
@@ -64,6 +67,7 @@ public class SampleAdapter extends ArrayAdapter<Product> {
             vh.txtLineOne =  convertView.findViewById(R.id.txt_line1);
             vh.txtLineOne.setBackgroundColor(Color.parseColor("#a0fcc9"));
             vh.btnPlus = convertView.findViewById(R.id.btn_plus);
+            vh.imgLogo=convertView.findViewById(R.id.imgItem);
 
             convertView.setTag(vh);
 
@@ -77,11 +81,11 @@ public class SampleAdapter extends ArrayAdapter<Product> {
                 position % mBackgroundColors.size() : position;
 
         convertView.setBackgroundResource(mBackgroundColors.get(backgroundIndex));
-
-        Log.d(TAG, "getView position:" + position + " h:" + positionHeight);
         vh.txtLineOne.setHeightRatio(positionHeight);
         product=getItem(position);
         vh.txtLineOne.setText(product.name);
+
+       // vh.imgLogo.setImageBitmap(Data.base64ToBitmap(product.image));
         vh.btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

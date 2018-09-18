@@ -6,11 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants">
-<TextView
-    android:id="@+id/txtId"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-   />
+
+
+
     <com.etsy.android.grid.util.DynamicHeightTextView
         android:id="@+id/txt_line1"
         android:layout_width="match_parent"
@@ -20,12 +18,19 @@
         android:textColor="@color/green_text"
         android:text="xxxxxxx"/>
 
+    <ImageView
+        android:id="@+id/imgItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cart"
+        android:layout_gravity="bottom|right"
+        android:padding="15dp"/>
     <Button
         android:id="@+id/btn_plus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="top|right"
         android:textColor="@color/white"
-        android:text="Ver" />
+        android:text="Adquirir" />
 
 </FrameLayout>

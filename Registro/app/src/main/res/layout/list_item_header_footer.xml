@@ -10,6 +10,7 @@
         android:layout_height="48dp"
         android:layout_weight="1"
         android:gravity="center"
+        android:textSize="21sp"
         android:textColor="@color/green_text"/>
 
 </LinearLayout>

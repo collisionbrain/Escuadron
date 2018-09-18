@@ -48,8 +48,6 @@ public class AddressDataRegister extends Fragment implements  View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
 
-
-
             case R.id.btnSiguienteAddress:
                 if(validateForm()) {
 

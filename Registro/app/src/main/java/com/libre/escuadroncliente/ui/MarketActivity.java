@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.fragments.DetailFragment;
@@ -68,6 +69,10 @@ import java.util.List;
 
 import ru.dimorinny.floatingtextbutton.FloatingTextButton;
 
+import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE;
+import static com.libre.escuadroncliente.ui.util.Constants.URL_REMOTE;
+import static com.libre.escuadroncliente.ui.util.Data.saveJSONFile;
+
 public class MarketActivity extends  Activity {
 
 
@@ -91,7 +96,9 @@ public class MarketActivity extends  Activity {
     private Uri imageUri;
     public Order order;
     private TapBarMenu tapBarMenu;
-    private ImageView imgPhoto,imgMap,imgUpload,imgCode;
+    private ImageView imgPhoto,imgReload,imgUpload,imgCode;
+    private FirebaseStorage storage;
+    final long ONE_MEGABYTE = 1024 * 1024;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +113,7 @@ public class MarketActivity extends  Activity {
         fragmentTransaction=fragmentManager.beginTransaction();
         context = this;
         productList=new ArrayList<>();
+        storage=FirebaseStorage.getInstance();
         recyclerView =findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new MyAdapter());
@@ -113,7 +121,7 @@ public class MarketActivity extends  Activity {
         imgPhoto= findViewById(R.id.imgPhoto);
         imgUpload= findViewById(R.id.imgUpload);
         imgCode= findViewById(R.id.imgCode);
-        imgMap= findViewById(R.id.imgMap);
+        imgReload= findViewById(R.id.imgReload);
         tapBarMenu=findViewById(R.id.tapBarMenu);
         tapBarMenu.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -128,19 +136,17 @@ public class MarketActivity extends  Activity {
                 initTicketPhotoFragment(bundle);
             }
         });
-        imgMap.setOnClickListener(new View.OnClickListener() {
+        imgReload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("product", null );
-                initMapFragment(bundle);
+                new RegloadTask().execute();
             }
         });
         imgUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                if(order.total!=0) {
+                if(productList.size()>0) {
                     new RegisterOrderTask().execute();
                 }else{
                     showError("Lista de Productos vacia");
@@ -389,6 +395,50 @@ public class MarketActivity extends  Activity {
 
 
     }
+    private class RegloadTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog dialog;
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(context, R.style.MyDialogTheme);
+            dialog.setMessage("Actualizando articulos.");
+            dialog.show();
+        }
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Thread.sleep(3000);
+                StorageReference fileRef = storage.getReferenceFromUrl(URL_REMOTE).child(JSON_FILE);
+                if (fileRef != null) {
+                    fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                        @Override
+                        public void onSuccess(byte[] bytes) {
+                            saveJSONFile(bytes);
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception exception) {
+
+                        }
+                    });
+                }
+
+
+            }catch (InterruptedException ex){
+                ex.getStackTrace();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void param) {
+            dialog.dismiss();
+
+
+        }
+    }
     private class RegisterOrderTask extends AsyncTask<Void, Void, Void> {
         private ProgressDialog dialog;
         @Override
@@ -415,6 +465,8 @@ public class MarketActivity extends  Activity {
         @Override
         protected void onPostExecute(Void param) {
             dialog.dismiss();
+            order=new Order();
+            productList=new ArrayList<>();
 
         }
     }

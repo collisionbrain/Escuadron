@@ -91,7 +91,7 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
     }
     public void setRecipemage(){
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.add_photo_green);
-        imageViewBack.setImageBitmap(bitmap);
+        imgRecipe.setImageBitmap(bitmap);
 
     }
 }
