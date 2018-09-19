@@ -256,13 +256,13 @@ public class MarketActivity extends  Activity {
             holder.iv.setParallaxStyles(verticalMovingStyle);
             switch (position % 5) {
                 case 0 :
-                    holder.iv.setImageResource(R.drawable.bud);
+                    holder.iv.setImageResource(R.drawable.img_flores);
                 break;
-                case 1 : holder.iv.setImageResource(R.drawable.cookies);
+                case 1 : holder.iv.setImageResource(R.drawable.img_reposteria);
                     break;
-                case 2 : holder.iv.setImageResource(R.drawable.cbd);
+                case 2 : holder.iv.setImageResource(R.drawable.img_extractos);
                     break;
-                case 3 : holder.iv.setImageResource(R.drawable.pomada);
+                case 3 : holder.iv.setImageResource(R.drawable.img_unguentos);
                     break;
             }
         }

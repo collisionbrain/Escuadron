@@ -25,6 +25,7 @@ public class SampleData {
                     Product product=new Product();
                     product.id=jsonObject.getString("id");
                     product.name=jsonObject.getString("desc");
+                    product.short_name=jsonObject.getString("short_name");
                     product.price=jsonObject.getString("precio");
                     product.image=jsonObject.getString("image");
                     product.detalle= productObject.getString("detalle");

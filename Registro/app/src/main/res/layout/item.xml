@@ -7,8 +7,9 @@
 
     <com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView
         android:id="@+id/img"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:src="@drawable/cbd"
+        android:layout_width="wrap_content"
+        android:layout_height="170dp"
+        android:src="@drawable/extractos"
+        android:padding="50dp"
         android:scaleType="centerCrop"/>
 </LinearLayout>

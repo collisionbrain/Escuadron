@@ -30,7 +30,7 @@ public class SampleAdapter extends ArrayAdapter<Product> {
     private static final String TAG = "SampleAdapter";
 
     static class ViewHolder {
-        DynamicHeightTextView txtLineOne;
+        DynamicHeightTextView txtLineOne,txtLineTwo;
         ImageView imgLogo;
         Button btnPlus;
     }
@@ -66,8 +66,10 @@ public class SampleAdapter extends ArrayAdapter<Product> {
             vh = new ViewHolder();
             vh.txtLineOne =  convertView.findViewById(R.id.txt_line1);
             vh.txtLineOne.setBackgroundColor(Color.parseColor("#a0fcc9"));
+            vh.txtLineTwo =  convertView.findViewById(R.id.txt_line2);
+            vh.txtLineTwo.setBackgroundColor(Color.parseColor("#a0fcc9"));
+
             vh.btnPlus = convertView.findViewById(R.id.btn_plus);
-            vh.imgLogo=convertView.findViewById(R.id.imgItem);
 
             convertView.setTag(vh);
 
@@ -83,9 +85,8 @@ public class SampleAdapter extends ArrayAdapter<Product> {
         convertView.setBackgroundResource(mBackgroundColors.get(backgroundIndex));
         vh.txtLineOne.setHeightRatio(positionHeight);
         product=getItem(position);
-        vh.txtLineOne.setText(product.name);
-
-       // vh.imgLogo.setImageBitmap(Data.base64ToBitmap(product.image));
+        vh.txtLineOne.setText(product.short_name);
+        vh.txtLineTwo.setText(product.name);
         vh.btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
