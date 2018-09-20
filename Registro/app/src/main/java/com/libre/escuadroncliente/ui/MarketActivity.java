@@ -38,6 +38,7 @@ import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.fragments.DetailFragment;
 import com.libre.escuadroncliente.ui.fragments.DigitalCode;
 import com.libre.escuadroncliente.ui.fragments.DigitalCodeRegister;
+import com.libre.escuadroncliente.ui.fragments.MapFragment;
 import com.libre.escuadroncliente.ui.fragments.PayFragment;
 import com.libre.escuadroncliente.ui.fragments.SubListFragment;
 import com.libre.escuadroncliente.ui.pojos.Order;
@@ -82,6 +83,9 @@ public class MarketActivity extends  Activity {
     private Fragment digitalCode=new DigitalCode();
     private Fragment subListFragment=new SubListFragment();
     private Fragment payFragment=new PayFragment();
+    private Fragment mapFragment=new MapFragment();
+
+
     public List<Product> productList;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -96,9 +100,10 @@ public class MarketActivity extends  Activity {
     private Uri imageUri;
     public Order order;
     private TapBarMenu tapBarMenu;
-    private ImageView imgPhoto,imgReload,imgUpload,imgCode;
+    private ImageView imgPhoto,imgMap,imgUpload,imgCode;
     private FirebaseStorage storage;
     final long ONE_MEGABYTE = 1024 * 1024;
+    private PreferencesStorage prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,8 +112,9 @@ public class MarketActivity extends  Activity {
         setContentView(R.layout.market_activity);
          calendar = Calendar.getInstance();
         context=this;
-        PreferencesStorage prefs=new PreferencesStorage(context);
+        prefs=new PreferencesStorage(context);
         userGuid=prefs.loadData("REGISTER_USER_KEY");
+
         fragmentManager=getFragmentManager();
         fragmentTransaction=fragmentManager.beginTransaction();
         context = this;
@@ -121,7 +127,7 @@ public class MarketActivity extends  Activity {
         imgPhoto= findViewById(R.id.imgPhoto);
         imgUpload= findViewById(R.id.imgUpload);
         imgCode= findViewById(R.id.imgCode);
-        imgReload= findViewById(R.id.imgReload);
+        imgMap= findViewById(R.id.imgMap);
         tapBarMenu=findViewById(R.id.tapBarMenu);
         tapBarMenu.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
@@ -136,10 +142,10 @@ public class MarketActivity extends  Activity {
                 initTicketPhotoFragment(bundle);
             }
         });
-        imgReload.setOnClickListener(new View.OnClickListener() {
+        imgMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new RegloadTask().execute();
+                startMapFragment();
             }
         });
         imgUpload.setOnClickListener(new View.OnClickListener() {
@@ -176,6 +182,10 @@ public class MarketActivity extends  Activity {
             getFragmentManager().beginTransaction().remove(detailFragment).commit();
 
         }
+        if(mapFragment.isVisible()){
+            getFragmentManager().beginTransaction().remove(mapFragment).commit();
+
+        }
         if(payFragment.isVisible()){
             getFragmentManager().beginTransaction().remove(payFragment).commit();
 
@@ -184,7 +194,10 @@ public class MarketActivity extends  Activity {
             getFragmentManager().beginTransaction().remove(subListFragment).commit();
 
         }
-        if(!detailFragment.isVisible() && !subListFragment.isVisible()&& !payFragment.isVisible()){
+        if(!detailFragment.isVisible() &&
+                !subListFragment.isVisible()&&
+                !payFragment.isVisible() &&
+                !mapFragment.isVisible()){
            finish();
         }
     }
@@ -309,8 +322,8 @@ public class MarketActivity extends  Activity {
     private void initMapFragment( Bundle bundle){
         //  floatingPayButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
-        payFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.container, payFragment, "MAP");
+        mapFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.container, mapFragment, "MAP");
         fragmentTransaction.commit();
 
     }
@@ -344,6 +357,10 @@ public class MarketActivity extends  Activity {
         bundle.putSerializable("product", product );
         this.initFragmentDetail(bundle);
     }
+    public void startMapFragment(){
+        Bundle bundle = new Bundle();
+        this.initMapFragment(bundle);
+    }
     public void  closeCodeFragment(){
 
         getFragmentManager().beginTransaction().remove(digitalCode).commit();
@@ -372,10 +389,10 @@ public class MarketActivity extends  Activity {
         DatabaseReference ref = database.getReference("registro");
         DatabaseReference usersRef = ref.child("pedidos");
         now = calendar.getTime();
-
         order.userGuid=userGuid;
         order.dateOrder=now.toString();
         order.pay=false;
+        order.feedback=false;
         order.total=toPayProducto();
         order.productList=productList;
         usersRef.child(userGuid).setValue(order,new DatabaseReference.CompletionListener() {
@@ -386,9 +403,10 @@ public class MarketActivity extends  Activity {
 
                 } else {
 
-                    System.out.println("xxxxxxx");
+                    prefs.saveDataObjet("QUIZ_PENDING",order.feedback);
                     order=null;
                     order=new Order();
+
                 }
             }
         });

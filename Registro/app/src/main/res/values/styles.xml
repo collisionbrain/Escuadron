@@ -31,4 +31,9 @@
         <!--dialog background-->
         <item name="android:windowBackground">@drawable/dialog_background</item>
     </style>
+
+    <style name="CustomRatingBar" parent="Widget.AppCompat.RatingBar">
+        <item name="colorControlNormal">#80CBC4</item>
+        <item name="colorControlActivated">#009688</item>
+    </style>
 </resources>

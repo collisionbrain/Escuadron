@@ -9,5 +9,7 @@ public class Order {
     public double  total;
     public boolean pay;
     public String ticket;
+    public boolean feedback;
     public List<Product> productList;
+
 }

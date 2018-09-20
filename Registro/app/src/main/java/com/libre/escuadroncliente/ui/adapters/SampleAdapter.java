@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.etsy.android.grid.util.DynamicHeightTextView;
@@ -30,8 +31,8 @@ public class SampleAdapter extends ArrayAdapter<Product> {
     private static final String TAG = "SampleAdapter";
 
     static class ViewHolder {
-        DynamicHeightTextView txtLineOne,txtLineTwo;
-        ImageView imgLogo;
+        DynamicHeightTextView txtLineOne;
+        TextView txtLineTwo;
         Button btnPlus;
     }
 
@@ -69,7 +70,7 @@ public class SampleAdapter extends ArrayAdapter<Product> {
             vh.txtLineTwo =  convertView.findViewById(R.id.txt_line2);
             vh.txtLineTwo.setBackgroundColor(Color.parseColor("#a0fcc9"));
 
-            vh.btnPlus = convertView.findViewById(R.id.btn_plus);
+            //vh.btnPlus = convertView.findViewById(R.id.btn_plus);
 
             convertView.setTag(vh);
 
@@ -87,7 +88,7 @@ public class SampleAdapter extends ArrayAdapter<Product> {
         product=getItem(position);
         vh.txtLineOne.setText(product.short_name);
         vh.txtLineTwo.setText(product.name);
-        vh.btnPlus.setOnClickListener(new View.OnClickListener() {
+        vh.txtLineOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
 

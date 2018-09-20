@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:weightSum="100"
+    android:background="@color/white">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:weightSum="100">
+
+        <TextView
+            android:id="@+id/id_product"
+            android:text="Producto adquirido:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"
+            android:padding="15dp"/>
+
+        <TextView
+            android:id="@+id/nombre"
+            android:layout_below="@+id/id_product"
+            android:paddingLeft="30sp"
+            android:textAllCaps="true"
+            android:text="NOMBRE DEL PRODUCTO"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/gray"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:weightSum="100"
+        android:gravity="center" >
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <RadioButton
+                android:id="@+id/drop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gotas"
+                android:textColor="@color/gray"
+                android:theme="@style/MyRadioButtonStyle"
+
+                android:textSize="16sp"/>
+            <RadioButton
+                android:id="@+id/vape"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Vaporizador"
+                android:textColor="@color/gray"
+                android:theme="@style/MyRadioButtonStyle"
+                android:textSize="16sp"/>
+            <RadioButton
+                android:id="@+id/apply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Aplicacion directa"
+                android:textColor="@color/gray"
+                android:theme="@style/MyRadioButtonStyle"
+                android:textSize="16sp"/>
+        </RadioGroup>
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="40"
+        android:orientation="vertical"
+        android:weightSum="100"
+        android:gravity="center">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="55"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal" >
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="@string/strComentario"
+
+            android:textColor="@color/gray"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal"
+            android:gravity="center">
+            <RatingBar
+                android:id="@+id/valoracion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:isIndicator="true"
+                style="@style/CustomRatingBar"
+                />
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="20"
+        android:orientation="horizontal"
+        android:padding="30dp"
+        android:gravity="center">
+
+        <com.unstoppable.submitbuttonview.SubmitButton
+            android:id="@+id/btnSiguienteQuiz"
+            android:layout_width="220dp"
+            android:layout_height="match_parent"
+            android:padding="25dp"
+            app:buttonText="Enviar"
+            app:buttonTextSize="25sp"
+            app:buttonColor="@color/blueBorders"
+            />
+    </LinearLayout>
+</LinearLayout>

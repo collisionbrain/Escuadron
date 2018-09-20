@@ -13,7 +13,8 @@ public class Splash extends Activity {
 
     private PreferencesStorage prefs;
     private String REGISTER_USER_KEY="REGISTER_USER_KEY";
-    private String ID_CAMERA_PREFERENCE="ID_CAMERA_PREFERENCE";
+    private String ORDER_PENDING="ORDER_PENDING";
+    private String ID_CAMERA_PREFERENCE="ORDER_PENDING";
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -26,6 +27,8 @@ public class Splash extends Activity {
             public void run() {
 
                 String key=prefs.loadData(REGISTER_USER_KEY);
+                String feed=prefs.loadData(ORDER_PENDING);
+
                 if(key==null){
                     Intent registerIntent = new Intent(Splash.this,RegisterActivity.class);
                     Splash.this.startActivity(registerIntent);
@@ -34,6 +37,21 @@ public class Splash extends Activity {
                     Intent registerIntent = new Intent(Splash.this,MarketActivity.class);
                     Splash.this.startActivity(registerIntent);
                     Splash.this.finish();
+
+    /*
+                    if(feed==null){
+
+                        Intent registerIntent = new Intent(Splash.this,MarketActivity.class);
+                        Splash.this.startActivity(registerIntent);
+                        Splash.this.finish();
+                    }else{
+                        Intent registerIntent = new Intent(Splash.this,QuizActivity.class);
+                        Splash.this.startActivity(registerIntent);
+                        Splash.this.finish();
+                    }
+
+*/
+
                 }
             }
         }, 2000);

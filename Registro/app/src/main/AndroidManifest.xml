@@ -21,12 +21,26 @@
         android:supportsRtl="true"
         android:largeHeap="true"
         android:hardwareAccelerated="false">
-
+        <service android:name="com.libre.escuadroncliente.ui.Services.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service android:name="com.libre.escuadroncliente.ui.Services.FirebaseIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
         <activity android:name="com.libre.escuadroncliente.ui.MarketActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat">
-        </activity>
 
+        </activity>
+        <activity android:name="com.libre.escuadroncliente.ui.QuizActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat">
+
+        </activity>
         <activity android:name="com.libre.escuadroncliente.ui.Splash"
             android:screenOrientation="portrait">
             <intent-filter>
