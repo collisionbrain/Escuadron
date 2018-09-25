@@ -15,7 +15,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.libre.escuadronpromotor.R;
 import com.libre.escuadronpromotor.ui.adapters.SignaturePanelAdapter;
-import com.libre.escuadronpromotor.ui.pojos.Member;
 import com.libre.escuadronpromotor.ui.pojos.Order;
 import com.unstoppable.submitbuttonview.SubmitButton;
 

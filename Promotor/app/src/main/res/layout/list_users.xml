@@ -21,7 +21,8 @@
             android:layout_height="56dp"
             android:layout_gravity="bottom"
             android:layout_marginBottom="24dp"
-            app:tbm_backgroundColor="@color/green_toolbar">
+            app:tbm_backgroundColor="@color/green_toolbar"
+            app:tbm_showItems="true">
 
             <ImageView
                 android:id="@+id/imgUpload"
@@ -30,8 +31,25 @@
                 android:layout_weight="1"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-                android:src="@drawable/upload"
-                />
+                android:src="@drawable/upload"/>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/cart"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:gravity="center"
+                    android:textColor="@color/gray"
+                    />
+            </RelativeLayout>
             <Space
                 android:layout_width="56dp"
                 android:layout_height="match_parent"
