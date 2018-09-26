@@ -17,8 +17,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.libre.escuadronpromotor.R;
 import com.libre.escuadronpromotor.ui.ListUsersActivity;
 import com.libre.escuadronpromotor.ui.adapters.SignaturePanelAdapter;
+<<<<<<< HEAD
 import com.libre.escuadronpromotor.ui.animations.DotProgressBar;
 import com.libre.escuadronpromotor.ui.pojos.Member;
+=======
+>>>>>>> 67dee1faa5251f87f14a5a4ca10e132386b47e74
 import com.libre.escuadronpromotor.ui.pojos.Order;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
