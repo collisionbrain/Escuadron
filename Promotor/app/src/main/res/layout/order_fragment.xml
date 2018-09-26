@@ -30,6 +30,7 @@
         android:orientation="horizontal"
         android:gravity="center">
         <com.libre.escuadronpromotor.ui.animations.DotProgressBar
+            android:id="@+id/progress"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <android.support.v7.widget.RecyclerView

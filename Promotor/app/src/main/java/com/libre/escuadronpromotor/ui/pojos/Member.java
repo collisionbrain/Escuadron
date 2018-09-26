@@ -24,6 +24,7 @@ public class Member implements Serializable {
     public String signature;
     public String b64FrontId;
     public String b64BackId;
+    public String b64Recipe;
 
 
 

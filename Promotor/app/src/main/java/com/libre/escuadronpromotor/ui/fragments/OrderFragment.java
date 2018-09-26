@@ -12,9 +12,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.libre.escuadronpromotor.R;
+import com.libre.escuadronpromotor.ui.ListUsersActivity;
 import com.libre.escuadronpromotor.ui.adapters.SignaturePanelAdapter;
+import com.libre.escuadronpromotor.ui.animations.DotProgressBar;
 import com.libre.escuadronpromotor.ui.pojos.Member;
 import com.libre.escuadronpromotor.ui.pojos.Order;
 import com.unstoppable.submitbuttonview.SubmitButton;
@@ -25,9 +28,12 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
     private TextView txtFirma;
     private SubmitButton btnConfirmOrder;
     private SignaturePanelAdapter firmaPanel;
+    private  Order order_local;
     private  String client_key;
-    private DatabaseReference mDatabase;
+    private  DatabaseReference reference;
+    private DotProgressBar progress;
 
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
@@ -35,21 +41,26 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
         client_key = getArguments().getString("id");
         this.view = inflater.inflate(R.layout.order_fragment, container, false);
         txtFirma=this.view.findViewById(R.id.txtTotal);
-        txtFirma.setText(client_key);
+        progress=this.view.findViewById(R.id.progress);
         btnConfirmOrder=this.view.findViewById(R.id.btnSiguienteSignature);
         btnConfirmOrder.setOnClickListener(this);
         btnConfirmOrder.setOnResultEndListener(finishOrder);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("pedidos").child(client_key).addListenerForSingleValueEvent(new ValueEventListener() {
+
+         reference = database.getReference("registro");
+        Query query = reference.child("pedidos").child(client_key);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Order order = dataSnapshot.getValue(Order.class);
-
+                if (dataSnapshot.exists()) {
+                     order_local = dataSnapshot.getValue(Order.class);
+                    txtFirma.setText("$" +order_local.total);
+                    progress.setVisibility(View.GONE);
+                }
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
+            public void onCancelled(DatabaseError databaseError) {
+                databaseError.getMessage().toString();
             }
         });
         return  this.view;
@@ -64,7 +75,20 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
         @Override
         public void onResultEnd() {
 
+            order_local.pay=true;
+            reference.child("pedidos").child(client_key).setValue(order_local,new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                    if (databaseError != null) {
+                        System.out.println("Data could not be saved " + databaseError.getMessage());
 
+                    } else {
+
+                        ((ListUsersActivity)context).onBackPressed();
+
+                    }
+                }
+            });
 
 
         }

@@ -21,12 +21,12 @@
         android:supportsRtl="true"
         android:largeHeap="true"
         android:hardwareAccelerated="false">
-        <service android:name="com.libre.escuadroncliente.ui.Services.MyFirebaseMessagingService">
+        <service android:name="com.libre.escuadroncliente.ui.services.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
-        <service android:name="com.libre.escuadroncliente.ui.Services.FirebaseIDService">
+        <service android:name="com.libre.escuadroncliente.ui.services.FirebaseIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>

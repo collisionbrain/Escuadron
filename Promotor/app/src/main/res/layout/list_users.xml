@@ -32,10 +32,16 @@
                 android:paddingBottom="10dp"
                 android:src="@drawable/upload"
                 />
-            <Space
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
+            <ImageView
+                android:id="@+id/imgEntrega"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/entrega"
                 />
+
             <Space
                 android:layout_width="56dp"
                 android:layout_height="match_parent"

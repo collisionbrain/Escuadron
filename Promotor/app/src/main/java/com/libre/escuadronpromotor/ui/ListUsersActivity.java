@@ -71,7 +71,7 @@ public class ListUsersActivity extends AppCompatActivity {
     private DialogFragment dialogFragment = new DialogUploadFragment();
     private OrderFragment orderFragment = new OrderFragment();
     private TapBarMenu tapBarMenu;
-    private ImageView imageViewAdd,imageViewUp,imageViewScan;
+    private ImageView imageViewAdd,imageViewUp,imageViewScan,imageViewDeli;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -114,12 +114,19 @@ public class ListUsersActivity extends AppCompatActivity {
         imageViewAdd= findViewById(R.id.imgAdd);
         imageViewUp= findViewById(R.id.imgUpload);
         imageViewScan= findViewById(R.id.imgScan);
-
+        imageViewDeli= findViewById(R.id.imgEntrega);
         imageViewAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(ListUsersActivity.this,RegisterActivity.class);
                 startActivityForResult(intent,500);
+            }
+        });
+        imageViewDeli.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(ListUsersActivity.this,ListPedidosActivity.class);
+                startActivityForResult(intent,400);
             }
         });
         imageViewUp.setOnClickListener(new View.OnClickListener() {
@@ -147,9 +154,12 @@ public class ListUsersActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
+        if(orderFragment.isVisible()){
+            getFragmentManager().beginTransaction().remove(orderFragment).commit();
 
-
-        finish();
+        }else{
+            finish();
+        }
     }
 
     @Override
@@ -159,7 +169,13 @@ public class ListUsersActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        if (requestCode == 400) {
+            if (resultCode == RESULT_OK) {
+                newMembers= db.getAllMembers();
+                newClientAdapter = new NewClientAdapter(this, newMembers);
+                recyclerView.setAdapter(newClientAdapter);
+            }
+        }
         if (requestCode == 500) {
             if (resultCode == RESULT_OK) {
                 newMembers= db.getAllMembers();
@@ -237,13 +253,13 @@ public class ListUsersActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Thread.sleep(50000);
-               /* newMembers= db.getAllMembers();
+                Thread.sleep(5000);
+                 newMembers= db.getAllMembers();
                 for (Member mem:newMembers) {
                     registerUser(mem);
 
                 }
-                */
+
             }catch (InterruptedException ex){
                 ex.getStackTrace();
             }
@@ -271,4 +287,5 @@ public class ListUsersActivity extends AppCompatActivity {
         fragmentTransaction.commit();
 
     }
+
 }

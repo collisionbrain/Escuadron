@@ -293,7 +293,7 @@ public class RegisterActivity extends FragmentActivity {
                             try {
                                 throw task.getException();
                             } catch (FirebaseAuthWeakPasswordException e) {
-                                showError("Tu Contraseña debil");
+                                showError("Tu Contraseña es debil");
 
 
                             } catch (FirebaseAuthInvalidCredentialsException e) {

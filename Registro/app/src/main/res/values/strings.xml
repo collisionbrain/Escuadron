@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">Escuadron Afiliado</string>
     <string name="strNombre">Nombre </string>
     <string name="strApellidos">Apellidos</string>
     <string name="strCorreo">Correo electronico</string>

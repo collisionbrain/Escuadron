@@ -11,50 +11,53 @@
         android:id="@+id/rlyPanel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="45" >
-        <ImageView
-            android:id="@+id/bgrImage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:scaleType="fitXY"/>
+        android:layout_weight="60" >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:weightSum="100">
             <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="50">
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="35">
+                <ImageView
+                    android:id="@+id/bgrImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bud"
+                    android:scaleType="fitXY"
+                    />
+
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="65"
+                android:background="@color/black"
+                android:gravity="center">
                 <TextView
                     android:id="@+id/txtDesc"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:gravity="center_vertical"
-                    android:padding="15dp"
+
                     android:text="Frasco de 20 ml"
                     android:textAllCaps="false"
-                    android:textColor="@color/green_text"
-                    android:textSize="30sp" />
-            </RelativeLayout>
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="40">
                 <TextView
                     android:id="@+id/txtTecnical"
+                    android:padding="15dp"
+                    android:layout_below="@+id/txtDesc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-                    android:paddingLeft="10dp"
                     android:text="Aceite 80%|Extracto de Cannabis a base de Alcohol 20%"
-                    android:textColor="@color/green_text"
-                    android:textAllCaps="false"
-                    android:textSize="18sp" />
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -63,7 +66,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="15"
+        android:layout_weight="10"
         android:orientation="horizontal"
         android:weightSum="100"
         android:layout_gravity="center"
@@ -74,7 +77,7 @@
             android:layout_height="match_parent"
             android:layout_weight="25"
             android:text="$"
-            android:textSize="60dp"
+            android:textSize="40dp"
             android:gravity="left|center_vertical"
             android:paddingLeft="20dp"
             android:textColor="@color/green_text"/>
@@ -84,14 +87,14 @@
             android:layout_height="match_parent"
             android:layout_weight="75"
             android:text="35.00 "
-            android:textSize="70dp"
+            android:textSize="50dp"
             android:gravity="right"
             android:textColor="@color/green_text"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="20"
+        android:layout_weight="10"
         android:orientation="horizontal"
         android:weightSum="100">
         <RelativeLayout
@@ -104,7 +107,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="-"
-                android:textSize="110dp"
+                android:textSize="40dp"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:background="@drawable/button_selector"/>
@@ -118,7 +121,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="0"
-                android:textSize="90dp"
+                android:textSize="40dp"
                 android:gravity="center"
                 android:textColor="@color/black"
 
@@ -134,7 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="+"
-                android:textSize="90dp"
+                android:textSize="40dp"
                 android:gravity="center"
                 android:textColor="@color/black"
                 android:background="@drawable/button_selector"/>

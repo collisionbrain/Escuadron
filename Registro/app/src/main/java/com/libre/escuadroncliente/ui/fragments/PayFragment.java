@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.MarketActivity;
@@ -25,6 +26,7 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
     private Context context;
     private SubmitButton btnSiguienteTicket;
     private ImageView imgTicket;
+    private TextView totalToPay;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
@@ -32,15 +34,16 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
         context = getActivity();
         this.view = inflater.inflate(R.layout.pay_fragment, container, false);
         btnSiguienteTicket =this.view.findViewById(R.id.btnSiguienteTicket);
+        totalToPay=this.view.findViewById(R.id.totalToPay);
         imgTicket=this.view.findViewById(R.id.imgTicket);
         String b64=((MarketActivity)context).order.ticket;
+        String total=((MarketActivity)context).toPayProducto()+".00";
         if(b64!=null   ){
-
-
             if(b64.length()>0) {
                 this.setFrontImage();
             }
         }
+        totalToPay.setText(total);
         btnSiguienteTicket.setOnClickListener(this);
         imgTicket.setOnClickListener(this);
         return this.view;

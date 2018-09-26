@@ -129,18 +129,18 @@ public class RegisterActivity extends FragmentActivity {
     public void onActivityResult(int requestCode, int resultCode,   Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         CredentialFragment credentialFragment=(CredentialFragment)adPaginador.getCredentialFragment();
-
+        Bitmap bitmap;
+        Uri selectedImage = imageUri;
+        getContentResolver().notifyChange(selectedImage, null);
+        ContentResolver cr = getContentResolver();
         switch (requestCode) {
             case 200:
                 if (resultCode == RESULT_OK) {
-                    Uri selectedImage = imageUri;
-                    getContentResolver().notifyChange(selectedImage, null);
-                    ContentResolver cr = getContentResolver();
-                    Bitmap bitmap;
+
                     try {
                         bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
                         newMember.b64FrontId= Data.bitmapToBase64(bitmap);
-                        credentialFragment.setFrontImage(bitmap);
+                        credentialFragment.setFrontImage();
 
                     } catch (Exception e) {
 
@@ -150,14 +150,23 @@ public class RegisterActivity extends FragmentActivity {
                 break;
             case 300:
                 if (resultCode == RESULT_OK) {
-                    Uri selectedImage = imageUri;
-                    getContentResolver().notifyChange(selectedImage, null);
-                    ContentResolver cr = getContentResolver();
-                    Bitmap bitmap;
                     try {
                         bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
                         newMember.b64BackId= Data.bitmapToBase64(bitmap);
-                        credentialFragment.setBackImage(bitmap);
+                        credentialFragment.setBackImage();
+
+                    } catch (Exception e) {
+
+                        Log.e("Camera", e.toString());
+                    }
+                }
+                break;
+            case 400:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
+                        newMember.b64Recipe=Data.bitmapToBase64(bitmap);
+                        credentialFragment.setRecipemage();
 
                     } catch (Exception e) {
 
@@ -215,6 +224,12 @@ public class RegisterActivity extends FragmentActivity {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                 imageUri = Uri.fromFile(photo);
                 this.startActivityForResult(intent, 300);
+                break;
+            case 2:
+                photo = new File(Environment.getExternalStorageDirectory(),  "/Escuadron/Receta.jpg");
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
+                imageUri = Uri.fromFile(photo);
+                this.startActivityForResult(intent, 400);
                 break;
         }
 

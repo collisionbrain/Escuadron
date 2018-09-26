@@ -3,6 +3,7 @@ package com.libre.escuadroncliente.ui.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.graphics.Point;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -13,9 +14,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.libre.escuadroncliente.R;
+import com.libre.escuadroncliente.ui.MarketActivity;
 import com.libre.escuadroncliente.ui.util.AppLocation;
+import com.unstoppable.submitbuttonview.SubmitButton;
 
 import org.osmdroid.api.IMapController;
+import org.osmdroid.events.DelayedMapListener;
+import org.osmdroid.events.MapListener;
+import org.osmdroid.events.ScrollEvent;
+import org.osmdroid.events.ZoomEvent;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -25,19 +32,23 @@ public class MapFragment extends Fragment implements LocationListener {
     private MapView mMapView;
     private double longitude;
     private double latitude;
-    private Context contexto;
+    private Context context;
     private  IMapController mapController;
     private LocationManager locationManager;
     private Location location;
-    //private MyItemizedOverlay myItemizedOverlay = null;
+    private SubmitButton btnGuardar;
+    private  Marker startMarker;
+    private GeoPoint pointCenter;
 
     @SuppressWarnings("deprecation")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
          View v = inflater.inflate(R.layout.map, null);
         mMapView = v.findViewById(R.id.mapview1);
-        contexto=getActivity();
-        Location location = AppLocation.getLocation(contexto);
+        btnGuardar=v.findViewById(R.id.btnFinishMap);
+        context=getActivity();
+        startMarker = new Marker(mMapView);
+        location = AppLocation.getLocation(context);
         if(location!=null){
             longitude =  location.getLongitude();
             latitude =    location.getLatitude();
@@ -46,10 +57,29 @@ public class MapFragment extends Fragment implements LocationListener {
             AppLocation.getLocationManager().requestLocationUpdates(bestProvider, 1000, 0, this);
         }
         mMapView.setBuiltInZoomControls(false);
+        mMapView.setMapListener(new DelayedMapListener(new MapListener() {
+            @Override
+            public boolean onScroll(ScrollEvent event) {
+
+                loadMarker();
+                return false;
+            }
+
+            @Override
+            public boolean onZoom(ZoomEvent event) {
+
+                return false;
+            }
+        }, 200));
 
         mMapView.setMultiTouchControls(true);
-
-
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnGuardar.setOnResultEndListener(finishListenerMap);
+                btnGuardar.doResult(true);
+            }
+        });
         return v;
 
     }
@@ -76,9 +106,6 @@ public class MapFragment extends Fragment implements LocationListener {
     @Override
     public void onResume() {
         super.onResume();
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        location=locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         setLocationInMap(location.getLatitude(),location.getLongitude());
 
         if (mMapView != null) {
@@ -130,12 +157,37 @@ public class MapFragment extends Fragment implements LocationListener {
         mapController.setZoom(19);
         mapController.setCenter(point);
         mapController.animateTo(point);
-        Marker startMarker = new Marker(mMapView);
+
         startMarker.setPosition(point);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         mMapView.getOverlays().add(startMarker);
         startMarker.setIcon(getResources().getDrawable(R.drawable.alocation));
-        startMarker.setTitle("Start point");
+        startMarker.setTitle("Aqui nos vemos");
+        startMarker.showInfoWindow();
     }
+
+    private void loadMarker(){
+        pointCenter=new GeoPoint(
+                mMapView.getMapCenter().getLatitude(),
+                mMapView.getMapCenter().getLongitude());
+
+        startMarker.setPosition(pointCenter);
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        mMapView.getOverlays().add(startMarker);
+        startMarker.setIcon(getResources().getDrawable(R.drawable.alocation));
+        startMarker.setTitle("Start point");
+        startMarker.showInfoWindow();
+    }
+
+    SubmitButton.OnResultEndListener finishListenerMap=new SubmitButton.OnResultEndListener() {
+        @Override
+        public void onResultEnd() {
+        ((MarketActivity) context).closeMapFragment(
+                    startMarker.getPosition().getLatitude(),
+                    startMarker.getPosition().getLongitude());
+
+        }
+    };
+
 
 }

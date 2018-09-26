@@ -1,7 +1,9 @@
 package com.libre.escuadronpromotor.ui.fragments;
 
+
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -25,7 +27,7 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
     private String condition;
     private Context context;
     private SubmitButton btnSiguienteCamera;
-    private ImageView imageViewFront,imageViewBack;
+    private ImageView imageViewFront,imageViewBack,imgRecipe;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
@@ -35,9 +37,11 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
         btnSiguienteCamera =this.view.findViewById(R.id.btnSiguienteCamera);
         imageViewFront=this.view.findViewById(R.id.imgFrontId);
         imageViewBack=this.view.findViewById(R.id.imgBackId);
+        imgRecipe=this.view.findViewById(R.id.imgRecipe);
         btnSiguienteCamera.setOnClickListener(this);
         imageViewFront.setOnClickListener(this);
         imageViewBack.setOnClickListener(this);
+        imgRecipe.setOnClickListener(this);
 
 
         return this.view;
@@ -53,6 +57,10 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
             case R.id.imgBackId:
                 ((RegisterActivity) context).takePicture(1);
                 break;
+            case R.id.imgRecipe:
+                ((RegisterActivity) context).takePicture(2);
+                break;
+
             case R.id.btnSiguienteCamera:
                 btnSiguienteCamera.setOnResultEndListener(finishListenerCamera);
 
@@ -70,13 +78,22 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
         }
     };
 
-    public void setFrontImage(Bitmap bitmap){
+    public void setFrontImage(){
 
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.add_photo_green);
         imageViewFront.setImageBitmap(bitmap);
+
     }
 
-    public void setBackImage(Bitmap bitmap){
-
+    public void setBackImage(){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.add_photo_green);
         imageViewBack.setImageBitmap(bitmap);
+
+    }
+
+    public void setRecipemage(){
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.add_photo_green);
+        imgRecipe.setImageBitmap(bitmap);
+
     }
 }

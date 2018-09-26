@@ -86,8 +86,8 @@ public class SampleAdapter extends ArrayAdapter<Product> {
         convertView.setBackgroundResource(mBackgroundColors.get(backgroundIndex));
         vh.txtLineOne.setHeightRatio(positionHeight);
         product=getItem(position);
-        vh.txtLineOne.setText(product.short_name);
-        vh.txtLineTwo.setText(product.name);
+        vh.txtLineOne.setText(product.name);
+        vh.txtLineTwo.setText(product.short_name);
         vh.txtLineOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

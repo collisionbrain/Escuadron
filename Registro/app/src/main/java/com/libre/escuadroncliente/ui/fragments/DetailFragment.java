@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.MarketActivity;
+import com.libre.escuadroncliente.ui.pojos.CartOrder;
 import com.libre.escuadroncliente.ui.pojos.Product;
 import com.libre.escuadroncliente.ui.util.Data;
 import com.unstoppable.submitbuttonview.SubmitButton;
@@ -113,7 +114,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
     };
     private int checkProductList(String id){
         int res=0;
-        for (Product product: ((MarketActivity)context).productList  ) {
+        for (CartOrder product: ((MarketActivity)context).productList  ) {
             if(product.id.equals(id)){
                 res=product.count;
 

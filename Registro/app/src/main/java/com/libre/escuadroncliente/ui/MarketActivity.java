@@ -5,15 +5,18 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,15 +25,19 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
 import com.gjiazhe.scrollparallaximageview.parallaxstyle.VerticalMovingStyle;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -41,6 +48,7 @@ import com.libre.escuadroncliente.ui.fragments.DigitalCodeRegister;
 import com.libre.escuadroncliente.ui.fragments.MapFragment;
 import com.libre.escuadroncliente.ui.fragments.PayFragment;
 import com.libre.escuadroncliente.ui.fragments.SubListFragment;
+import com.libre.escuadroncliente.ui.pojos.CartOrder;
 import com.libre.escuadroncliente.ui.pojos.Order;
 import com.libre.escuadroncliente.ui.pojos.Product;
 import com.libre.escuadroncliente.ui.storage.PreferencesStorage;
@@ -48,6 +56,7 @@ import com.libre.escuadroncliente.ui.util.Data;
 import com.michaldrabik.tapbarmenulib.TapBarMenu;
 
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -59,6 +68,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
 import java.io.File;
@@ -86,7 +96,7 @@ public class MarketActivity extends  Activity {
     private Fragment mapFragment=new MapFragment();
 
 
-    public List<Product> productList;
+    public List<CartOrder> productList;
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
     private  RecyclerView recyclerView;
@@ -100,10 +110,13 @@ public class MarketActivity extends  Activity {
     private Uri imageUri;
     public Order order;
     private TapBarMenu tapBarMenu;
-    private ImageView imgPhoto,imgMap,imgUpload,imgCode;
+    private ImageView imgPhoto,imgMap,imgUpload,imgCode,imageToast;
     private FirebaseStorage storage;
     final long ONE_MEGABYTE = 1024 * 1024;
     private PreferencesStorage prefs;
+    private  TextView textToas;
+    private View layoutToast;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,8 +134,16 @@ public class MarketActivity extends  Activity {
         productList=new ArrayList<>();
         storage=FirebaseStorage.getInstance();
         recyclerView =findViewById(R.id.recycler_view);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new MyAdapter());
+        LayoutInflater inflater = getLayoutInflater();
+        layoutToast = inflater.inflate(R.layout.toast_layout,
+                (ViewGroup) findViewById(R.id.toast_layout_root));
+
+
+        textToas=  layoutToast.findViewById(R.id.textToas);
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         imgPhoto= findViewById(R.id.imgPhoto);
         imgUpload= findViewById(R.id.imgUpload);
@@ -134,6 +155,7 @@ public class MarketActivity extends  Activity {
                 tapBarMenu.toggle();
             }
         });
+
         imgPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +164,7 @@ public class MarketActivity extends  Activity {
                 initTicketPhotoFragment(bundle);
             }
         });
+
         imgMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -151,12 +174,8 @@ public class MarketActivity extends  Activity {
         imgUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkPreviusOrder();
 
-                if(productList.size()>0) {
-                    new RegisterOrderTask().execute();
-                }else{
-                    showError("Lista de Productos vacia");
-                }
 
             }
         });
@@ -239,8 +258,11 @@ public class MarketActivity extends  Activity {
 
 
     public void addProduct(Product product){
-        product.image=null;
-        productList.add(product);
+        CartOrder cartOrder=new CartOrder();
+        cartOrder.id=product.id;
+        cartOrder.count=product.count;
+        cartOrder.price=product.price;
+        productList.add(cartOrder);
         count=totalProducto();
 
 
@@ -321,10 +343,15 @@ public class MarketActivity extends  Activity {
     }
     private void initMapFragment( Bundle bundle){
         //  floatingPayButton.setVisibility(View.GONE);
-        fragmentTransaction = fragmentManager.beginTransaction();
-        mapFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.container, mapFragment, "MAP");
-        fragmentTransaction.commit();
+        if(order.ticket==null){
+
+            showError("Captura tu ticket de pago");
+        }else {
+            fragmentTransaction = fragmentManager.beginTransaction();
+            mapFragment.setArguments(bundle);
+            fragmentTransaction.add(R.id.container, mapFragment, "MAP");
+            fragmentTransaction.commit();
+        }
 
     }
 
@@ -366,24 +393,74 @@ public class MarketActivity extends  Activity {
         getFragmentManager().beginTransaction().remove(digitalCode).commit();
 
     }
+    public void  closeMapFragment(double latitude,double longitude){
+
+
+        order.latitude=latitude;
+        order.longitude=longitude;
+
+        getFragmentManager().beginTransaction().remove(mapFragment).commit();
+
+    }
 
 
     public int totalProducto(){
         int total=0;
-        for (Product product:productList  ) {
+        for (CartOrder product:productList  ) {
             total=product.count+total;
         }
         return total;
     }
     public int toPayProducto(){
         int totalPay=0;
-        for (Product product:productList  ) {
+        for (CartOrder product:productList  ) {
             int price=Integer.parseInt(product.price);
-            totalPay=totalPay+price;
+            totalPay=(totalPay+price)*product.count;
         }
         return totalPay;
     }
 
+    public void checkPreviusOrder(){
+
+
+        DatabaseReference reference = database.getReference("registro");
+        Query query = reference.child("pedidos").child(userGuid);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    Order order_local = dataSnapshot.getValue(Order.class);
+                    if(order_local.pay){
+                        if (productList.size() > 0) {
+                            if(order.ticket==null){
+                                showError("Captura tu ticket de pago");
+                                }else {
+                                    if(order.latitude==0 && order.longitude==0){
+
+                                        showError("Define tu lugar de entrega");
+                                    }else {
+                                        new RegisterOrderTask().execute();
+                                    }
+                                }
+                        } else {
+                            showError("Lista de Productos vacia");
+                        }
+
+                    }else{
+                        showError("Tienes un pedido pendiente");
+                    }
+                }else{
+                    new RegisterOrderTask().execute();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                databaseError.getMessage().toString();
+            }
+        });
+
+    }
     public void registerOrder(){
 
         DatabaseReference ref = database.getReference("registro");
@@ -393,6 +470,7 @@ public class MarketActivity extends  Activity {
         order.dateOrder=now.toString();
         order.pay=false;
         order.feedback=false;
+
         order.total=toPayProducto();
         order.productList=productList;
         usersRef.child(userGuid).setValue(order,new DatabaseReference.CompletionListener() {
@@ -485,6 +563,7 @@ public class MarketActivity extends  Activity {
             dialog.dismiss();
             order=new Order();
             productList=new ArrayList<>();
+            toastFinish("Transaccion Completada");
 
         }
     }
@@ -492,5 +571,34 @@ public class MarketActivity extends  Activity {
         ViewDialog alert = new ViewDialog();
         alert.showDialog(MarketActivity.this, message);
 
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((mMessageReceiver),
+                new IntentFilter("notifications")
+        );
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+    }
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            new RegloadTask().execute();
+        }
+    };
+
+    public void toastFinish(String message){
+        textToas.setText(message);
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layoutToast);
+        toast.show();
     }
 }

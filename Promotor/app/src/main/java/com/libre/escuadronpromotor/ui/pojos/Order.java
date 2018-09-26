@@ -1,10 +1,17 @@
 package com.libre.escuadronpromotor.ui.pojos;
 
-import java.util.Date;
 import java.util.List;
 
 public class Order {
+    public int id;
     public String userGuid;
-    public Date  dateOrder;
-    public List<Product> productList;
+    public String  dateOrder;
+    public double  total;
+    public boolean pay;
+    public String ticket;
+    public boolean feedback;
+    public double latitude;
+    public double longitude;
+    public List<CartOrder> productList;
+
 }

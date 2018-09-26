@@ -7,11 +7,7 @@
     android:layout_height="wrap_content"
     android:descendantFocusability="blocksDescendants">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:weightSum="100">
+
     <com.etsy.android.grid.util.DynamicHeightTextView
         android:id="@+id/txt_line1"
         android:layout_width="match_parent"
@@ -19,6 +15,7 @@
         android:layout_weight="50"
         android:textSize="19sp"
         android:gravity="center"
+        android:paddingTop="15dp"
         android:textColor="@color/green_text"
         android:text="nombre"/>
     <TextView
@@ -27,10 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt_line1"
         android:textSize="19sp"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:textColor="@color/green_text"
         android:text="nombre largo"/>
-</RelativeLayout>
+
 
 
 

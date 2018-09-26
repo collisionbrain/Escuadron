@@ -1,5 +1,7 @@
 package com.libre.escuadroncliente.ui.pojos;
 
+import android.location.Location;
+
 import java.util.List;
 
 public class Order {
@@ -10,6 +12,8 @@ public class Order {
     public boolean pay;
     public String ticket;
     public boolean feedback;
-    public List<Product> productList;
+    public double latitude;
+    public double longitude;
+    public List<CartOrder> productList;
 
 }
