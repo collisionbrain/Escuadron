@@ -19,9 +19,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.libre.escuadronpromotor.R;
 import com.libre.escuadronpromotor.ui.adapters.NewClientAdapter;
 import com.libre.escuadronpromotor.ui.fragments.DialogUploadFragment;
@@ -41,6 +44,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -72,6 +76,8 @@ public class ListUsersActivity extends AppCompatActivity {
     private OrderFragment orderFragment = new OrderFragment();
     private TapBarMenu tapBarMenu;
     private ImageView imageViewAdd,imageViewUp,imageViewScan,imageViewDeli;
+    private TextView textCounter;
+    private int pendings=0;
 
     private FragmentManager fragmentManager;
     private FragmentTransaction fragmentTransaction;
@@ -90,6 +96,7 @@ public class ListUsersActivity extends AppCompatActivity {
         productList=new ArrayList<>();
         recyclerView =findViewById(R.id.recycler_view);
         tapBarMenu=findViewById(R.id.tapBarMenu);
+        textCounter=findViewById(R.id.txtCountPendings);
         dialogError = new Dialog(context);
         dialogUpload= new Dialog(context);
         dialogError.setContentView(R.layout.dialog_error);
@@ -109,12 +116,13 @@ public class ListUsersActivity extends AppCompatActivity {
         tapBarMenu.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 tapBarMenu.toggle();
+                textCounter.setVisibility(View.VISIBLE);
             }
         });
         imageViewAdd= findViewById(R.id.imgAdd);
         imageViewUp= findViewById(R.id.imgUpload);
         imageViewScan= findViewById(R.id.imgScan);
-        imageViewDeli= findViewById(R.id.imgEntrega);
+        imageViewDeli= findViewById(R.id.imgDelivery);
         imageViewAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -125,7 +133,7 @@ public class ListUsersActivity extends AppCompatActivity {
         imageViewDeli.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(ListUsersActivity.this,ListPedidosActivity.class);
+                Intent intent=new Intent(ListUsersActivity.this,ListDeliveryActivity.class);
                 startActivityForResult(intent,400);
             }
         });
@@ -149,6 +157,7 @@ public class ListUsersActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
         newClientAdapter = new NewClientAdapter(this, newMembers);
         recyclerView.setAdapter(newClientAdapter);
+        counterPendings();
     }
 
 
@@ -287,5 +296,30 @@ public class ListUsersActivity extends AppCompatActivity {
         fragmentTransaction.commit();
 
     }
+    public void  counterPendings(){
+        DatabaseReference ref = database.getReference("registro");
+        DatabaseReference pedRef = ref.child("pedidos");
 
+        Query query = pedRef.orderByChild("pay").equalTo(false);
+
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot pedido: snapshot.getChildren()) {
+                    Object object=pedido.child("password").getRef();
+                    pendings++;
+                }
+                if(pendings>0) {
+                    textCounter.setText("" + pendings);
+                }
+
+}
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+            }
+        });
+    }
 }

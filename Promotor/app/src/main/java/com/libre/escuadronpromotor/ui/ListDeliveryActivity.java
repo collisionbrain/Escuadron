@@ -1,0 +1,131 @@
+package com.libre.escuadronpromotor.ui;
+
+import android.app.Dialog;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Window;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.libre.escuadronpromotor.R;
+import com.libre.escuadronpromotor.ui.adapters.NewOrderAdapter;
+import com.libre.escuadronpromotor.ui.fragments.MapFragment;
+import com.libre.escuadronpromotor.ui.pojos.Order;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import static android.content.ContentValues.TAG;
+
+public class ListDeliveryActivity extends AppCompatActivity {
+
+
+
+    private Context context;
+    public List<Order> productOrder;
+    private RecyclerView recyclerView;
+    private int count = 0;
+    private DatabaseReference mDatabase;
+    private Date now ;
+    private NewOrderAdapter newOrderAdapter;
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private String userGuid;
+    public Dialog dialogError;
+    private FragmentTransaction fragmentTransaction;
+    private Fragment prev;
+    private FragmentManager fragmentManager;
+    private MapFragment mapFragment = new MapFragment();
+    private List<Order> newOrders=new ArrayList<>();
+    GenericTypeIndicator<Map<String, List<Order>>> genericTypeIndicator;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
+        getSupportActionBar().hide();
+        setContentView(R.layout.list_orders);
+        context=this;
+        productOrder=new ArrayList<>();
+        recyclerView =findViewById(R.id.recycler_view_order);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        fragmentManager=getFragmentManager();
+        fragmentTransaction=fragmentManager.beginTransaction();
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        listOrderPendings();
+    }
+
+
+    @Override
+    public void onBackPressed(){
+
+
+        finish();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    public void  listOrderPendings(){
+        DatabaseReference ref = database.getReference("registro");
+        DatabaseReference pedRef = ref.child("pedidos");
+
+        Query query = pedRef.orderByChild("pay").equalTo(false);
+
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot pedido: snapshot.getChildren()) {
+                    Order order=pedido.getValue(Order.class);
+
+                    newOrders.add(order);
+                }
+
+                newOrderAdapter = new NewOrderAdapter(context, newOrders);
+                recyclerView.setAdapter(newOrderAdapter);
+               /* for (DataSnapshot pedido: snapshot.getChildren()) {
+                    Object object=pedido.child("pedido").getRef();
+                    //Order order=(Order)object.getClass();
+                }*/
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "getUser:onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    public void startDetailOrder(Order order){
+        initFragmentMapOrder(order);
+    }
+
+    private void initFragmentMapOrder(Order order){
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("order",order);
+        fragmentTransaction = fragmentManager.beginTransaction();
+        mapFragment.setArguments(bundle);
+        fragmentTransaction.add(R.id.container, mapFragment, "Add detail");
+        fragmentTransaction.commit();
+
+    }
+}

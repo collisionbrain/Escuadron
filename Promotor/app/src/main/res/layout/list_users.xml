@@ -31,19 +31,9 @@
                 android:layout_weight="1"
                 android:paddingTop="10dp"
                 android:paddingBottom="10dp"
-<<<<<<< HEAD
                 android:src="@drawable/upload"
                 />
-            <ImageView
-                android:id="@+id/imgEntrega"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/entrega"
-=======
-                android:src="@drawable/upload"/>
+
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -51,22 +41,19 @@
                 android:gravity="center">
 
                 <ImageView
+                    android:id="@+id/imgDelivery"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/cart"/>
+                    android:src="@drawable/entrega"/>
                 <TextView
+                    android:id="@+id/txtCountPendings"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0"
                     android:gravity="center"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/colorAccent"
+                    android:visibility="gone"
                     />
             </RelativeLayout>
-            <Space
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
->>>>>>> 67dee1faa5251f87f14a5a4ca10e132386b47e74
-                />
 
             <Space
                 android:layout_width="56dp"

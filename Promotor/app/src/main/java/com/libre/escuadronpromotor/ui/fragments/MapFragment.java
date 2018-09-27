@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 
 import com.libre.escuadronpromotor.R;
 import com.libre.escuadronpromotor.ui.ListUsersActivity;
+import com.libre.escuadronpromotor.ui.pojos.Order;
 import com.libre.escuadronpromotor.ui.util.AppLocation;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
@@ -33,7 +34,7 @@ public class MapFragment extends Fragment implements LocationListener {
     private Context context;
     private  IMapController mapController;
     private LocationManager locationManager;
-    private Location location;
+    private Location location, locationDeliver;
     private SubmitButton btnGuardar;
     private  Marker startMarker;
     private GeoPoint pointCenter;
@@ -46,6 +47,10 @@ public class MapFragment extends Fragment implements LocationListener {
         btnGuardar=v.findViewById(R.id.btnFinishMap);
         context=getActivity();
         startMarker = new Marker(mMapView);
+        Order order=(Order)getArguments().getSerializable("order");
+        locationDeliver=new Location("");
+        locationDeliver.setLatitude(order.latitude);
+        locationDeliver.setLongitude(order.longitude);
         location = AppLocation.getLocation(context);
         if(location!=null){
             longitude =  location.getLongitude();
@@ -104,7 +109,8 @@ public class MapFragment extends Fragment implements LocationListener {
     @Override
     public void onResume() {
         super.onResume();
-        setLocationInMap(location.getLatitude(),location.getLongitude());
+        setLocationUserInMap(location.getLatitude(),location.getLongitude());
+        setLocationDeliveryInMap(locationDeliver.getLatitude(),locationDeliver.getLongitude());
 
         if (mMapView != null) {
 
@@ -149,7 +155,7 @@ public class MapFragment extends Fragment implements LocationListener {
     }
 
 
-    public void setLocationInMap(double latitude,double longitude){
+    public void setLocationUserInMap(double latitude,double longitude){
         GeoPoint point = new GeoPoint(latitude, longitude);
         mapController = mMapView.getController();
         mapController.setZoom(19);
@@ -163,7 +169,20 @@ public class MapFragment extends Fragment implements LocationListener {
         startMarker.setTitle("Aqui nos vemos");
         startMarker.showInfoWindow();
     }
+    public void setLocationDeliveryInMap(double latitude,double longitude){
+        GeoPoint point = new GeoPoint(latitude, longitude);
+        mapController = mMapView.getController();
+        mapController.setZoom(19);
+        mapController.setCenter(point);
+        mapController.animateTo(point);
 
+        startMarker.setPosition(point);
+        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        mMapView.getOverlays().add(startMarker);
+        startMarker.setIcon(getResources().getDrawable(R.drawable.alocation));
+        startMarker.setTitle("Aqui nos vemos");
+        startMarker.showInfoWindow();
+    }
     private void loadMarker(){
         pointCenter=new GeoPoint(
                 mMapView.getMapCenter().getLatitude(),
