@@ -25,7 +25,7 @@
                     android:id="@+id/bgrImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:src="@drawable/bud"
+                    android:src="@drawable/background"
                     android:scaleType="fitXY"
                     />
 
@@ -36,7 +36,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="65"
                 android:background="@color/black"
-                android:gravity="center">
+                android:gravity="center"
+                android:paddingLeft="20dp">
                 <TextView
                     android:id="@+id/txtDesc"
                     android:layout_width="match_parent"
@@ -52,6 +53,17 @@
                     android:id="@+id/txtTecnical"
                     android:padding="15dp"
                     android:layout_below="@+id/txtDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="Aceite 80%|Extracto de Cannabis a base de Alcohol 20%"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/txtDetail"
+                    android:padding="15dp"
+                    android:layout_below="@+id/txtTecnical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"

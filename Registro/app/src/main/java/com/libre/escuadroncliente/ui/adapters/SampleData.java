@@ -20,16 +20,16 @@ public class SampleData {
 
                 JSONArray items= productObject.getJSONArray("items");
 
-                for (int a=0;a<items.length()-1;a++) {
+                for (int a=0;a<=items.length()-1;a++) {
                     JSONObject jsonObject = items.getJSONObject(a);
                     Product product=new Product();
                     product.id=jsonObject.getString("id");
                     product.name=jsonObject.getString("nombre_corto");
                     product.presentation=jsonObject.getString("presentacion");
                     product.flavor=jsonObject.getString("sabor");
-                    product.amount= productObject.getString("cantidad");
-                    product.price= productObject.getString("precio");
-                    product.ingredients= productObject.getString("ingredientes");
+                    product.amount= jsonObject.getString("cantidad");
+                    product.price= jsonObject.getString("precio");
+                    product.ingredients= jsonObject.getString("ingredientes");
                     data.add(product);
                 }
 

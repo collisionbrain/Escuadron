@@ -48,7 +48,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         btnMinus= this.view.findViewById(R.id.btnMinus);
         backGround=this.view.findViewById(R.id.bgrImage);
         txtDesc=this.view.findViewById(R.id.txtDesc);
-        //txtDetail=this.view.findViewById(R.id.txtDetail);
+        txtDetail=this.view.findViewById(R.id.txtDetail);
         txtTecnical=this.view.findViewById(R.id.txtTecnical);
         txtPrice=this.view.findViewById(R.id.txtPrice);
         txtCounter=this.view.findViewById(R.id.txtCounter);
@@ -58,9 +58,11 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         addButton.setOnClickListener(this);
         addButton.setOnResultEndListener(addFinishListener);
         Log.e("#######",""+product.name);
-        Bitmap bitmap=Data.base64ToBitmap(product.image);
+
+      /*  Bitmap bitmap=Data.base64ToBitmap(product.image);
         Drawable background = new BitmapDrawable(getResources(), bitmap);
         backGround.setBackground(background);
+        */
         txtDesc.setText(product.name);
         txtPrice.setText(product.price);
         counter=checkProductList(product.id);

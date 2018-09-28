@@ -72,6 +72,8 @@ public class RegisterActivity extends FragmentActivity {
     private PreferencesStorage preferencesStorage;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private CredentialFragment credentialFragment;
+    private DigitalCodeRegister digitalCodeRegister;
+
 
     private Uri imageUri;
 
@@ -279,6 +281,7 @@ public class RegisterActivity extends FragmentActivity {
     public void registerUser(){
         String user=newMember.mail;
         String pass= newMember.phone;
+        digitalCodeRegister=(DigitalCodeRegister)adPaginador.getRegisterFragment();
         mAuth.createUserWithEmailAndPassword(user,pass)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -294,13 +297,16 @@ public class RegisterActivity extends FragmentActivity {
                                 throw task.getException();
                             } catch (FirebaseAuthWeakPasswordException e) {
                                 showError("Tu Contraseña es debil");
+                                digitalCodeRegister.setErrorButton();
 
 
                             } catch (FirebaseAuthInvalidCredentialsException e) {
                                 showError("Existe un error con el correo electronico");
+                                digitalCodeRegister.setErrorButton();
 
                             } catch (FirebaseAuthUserCollisionException e) {
                                 showError("Correo electronico ya fue registrado");
+                                digitalCodeRegister.setErrorButton();
                             } catch (Exception e) {
                                 Log.e(TAG, e.getMessage());
                             }

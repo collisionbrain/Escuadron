@@ -17,6 +17,7 @@ public class PageAdapter extends FragmentPagerAdapter {
     private Context contexto;
     Fragment fragmento;
     Fragment fragmentoCredencial;
+    Fragment fragmentoRegister;
 
     public PageAdapter(Context context, FragmentManager fm) {
         super(fm);
@@ -47,7 +48,8 @@ public class PageAdapter extends FragmentPagerAdapter {
                 fragmento =new SignatureRegister();
                 break;
             case 6:
-                fragmento =new DigitalCodeRegister();
+                fragmentoRegister =new DigitalCodeRegister();
+                fragmento=fragmentoRegister;
                 break;
         }
         return fragmento;
@@ -68,5 +70,8 @@ public class PageAdapter extends FragmentPagerAdapter {
     }
     public Fragment getCredentialFragment(){
         return fragmentoCredencial;
+    }
+    public Fragment getRegisterFragment(){
+        return fragmentoRegister;
     }
 }

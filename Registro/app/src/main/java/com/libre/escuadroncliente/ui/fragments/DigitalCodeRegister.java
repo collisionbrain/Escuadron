@@ -82,4 +82,7 @@ public class DigitalCodeRegister extends Fragment implements  View.OnClickListen
 
         }
     };
+    public void setErrorButton(){
+        btnRegistrar.reset();
+    }
 }

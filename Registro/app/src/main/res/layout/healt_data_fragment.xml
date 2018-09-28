@@ -126,7 +126,27 @@
                 android:textColor="@color/blueBorders"
                 android:text="¿Tienes padecimiento cronico?"/>
         </LinearLayout>
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:orientation="horizontal"
+            android:weightSum="100">
+            <CheckBox
+                android:id="@+id/checkHomoepatic"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="10"
+                android:theme="@style/MycheckBoxStyle" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="90"
+                android:textColor="@color/blueBorders"
+                android:text="¿Tratamiento Homeopatico?"/>
+        </LinearLayout>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
