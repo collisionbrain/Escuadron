@@ -24,12 +24,12 @@ public class SampleData {
                     JSONObject jsonObject = items.getJSONObject(a);
                     Product product=new Product();
                     product.id=jsonObject.getString("id");
-                    product.name=jsonObject.getString("desc");
-                    product.short_name=jsonObject.getString("short_name");
-                    product.price=jsonObject.getString("precio");
-                    product.image=jsonObject.getString("image");
-                    product.detalle= productObject.getString("detalle");
-                    product.info_tecnica= productObject.getString("info_tecnica");
+                    product.name=jsonObject.getString("nombre_corto");
+                    product.presentation=jsonObject.getString("presentacion");
+                    product.flavor=jsonObject.getString("sabor");
+                    product.amount= productObject.getString("cantidad");
+                    product.price= productObject.getString("precio");
+                    product.ingredients= productObject.getString("ingredientes");
                     data.add(product);
                 }
 

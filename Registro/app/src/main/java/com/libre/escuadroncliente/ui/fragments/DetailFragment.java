@@ -65,8 +65,8 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         txtPrice.setText(product.price);
         counter=checkProductList(product.id);
         txtCounter.setText("" + counter);
-       // txtDetail.setText(product.detalle);
-        txtTecnical.setText(product.info_tecnica.toString().replace("|","\n"));
+        txtDetail.setText(product.presentation);
+        txtTecnical.setText(product.ingredients.toString().replace("|","\n"));
         return  this.view;
     }
     @Override

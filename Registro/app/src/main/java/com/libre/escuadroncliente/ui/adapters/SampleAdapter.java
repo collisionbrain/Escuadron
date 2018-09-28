@@ -87,7 +87,7 @@ public class SampleAdapter extends ArrayAdapter<Product> {
         vh.txtLineOne.setHeightRatio(positionHeight);
         product=getItem(position);
         vh.txtLineOne.setText(product.name);
-        vh.txtLineTwo.setText(product.short_name);
+        vh.txtLineTwo.setText(product.amount);
         vh.txtLineOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {

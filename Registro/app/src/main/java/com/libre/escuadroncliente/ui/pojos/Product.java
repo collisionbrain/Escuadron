@@ -10,11 +10,11 @@ public class Product implements Serializable{
     public String id;
     public int count;
     public String name;
-    public String short_name;
-    public String image;
+    public String presentation;
+    public String flavor;
+    public String amount;
     public String price;
-    public String detalle;
-    public String info_tecnica;
-
+    public String ingredients;
+    public String image;
 
 }
