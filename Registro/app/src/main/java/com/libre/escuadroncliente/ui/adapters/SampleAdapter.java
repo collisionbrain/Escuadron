@@ -32,7 +32,7 @@ public class SampleAdapter extends ArrayAdapter<Product> {
 
     static class ViewHolder {
         DynamicHeightTextView txtLineOne;
-        TextView txtLineTwo;
+        TextView txtLineTwo,txtLineThree;
         Button btnPlus;
     }
 
@@ -69,6 +69,8 @@ public class SampleAdapter extends ArrayAdapter<Product> {
             vh.txtLineOne.setBackgroundColor(Color.parseColor("#a0fcc9"));
             vh.txtLineTwo =  convertView.findViewById(R.id.txt_line2);
             vh.txtLineTwo.setBackgroundColor(Color.parseColor("#a0fcc9"));
+            vh.txtLineThree =  convertView.findViewById(R.id.txt_line3);
+            vh.txtLineThree.setBackgroundColor(Color.parseColor("#a0fcc9"));
 
             //vh.btnPlus = convertView.findViewById(R.id.btn_plus);
 
@@ -87,7 +89,8 @@ public class SampleAdapter extends ArrayAdapter<Product> {
         vh.txtLineOne.setHeightRatio(positionHeight);
         product=getItem(position);
         vh.txtLineOne.setText(product.name);
-        vh.txtLineTwo.setText(product.amount);
+        vh.txtLineTwo.setText(product.flavor);
+        vh.txtLineThree.setText(product.amount);
         vh.txtLineOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
