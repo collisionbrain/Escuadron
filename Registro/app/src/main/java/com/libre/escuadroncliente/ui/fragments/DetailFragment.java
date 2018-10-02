@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.libre.escuadroncliente.ui.pojos.CartOrder;
 import com.libre.escuadroncliente.ui.pojos.Product;
 import com.libre.escuadroncliente.ui.util.Data;
 import com.unstoppable.submitbuttonview.SubmitButton;
+
+import static android.support.v7.content.res.AppCompatResources.getDrawable;
 
 /**
  * Created by hugo on 20/08/18.
@@ -59,15 +62,19 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         addButton.setOnResultEndListener(addFinishListener);
         Log.e("#######",""+product.name);
 
-      /*  Bitmap bitmap=Data.base64ToBitmap(product.image);
-        Drawable background = new BitmapDrawable(getResources(), bitmap);
-        backGround.setBackground(background);
-        */
+        if(product.image!=null) {
+            Bitmap bitmap = Data.base64ToBitmap(product.image);
+            Drawable background = new BitmapDrawable(getResources(), bitmap);
+            backGround.setBackground(background);
+        }else{
+            backGround.setBackground(getDrawable(context, R.drawable.background));
+
+        }
         txtDesc.setText(product.name);
         txtPrice.setText(product.price);
         counter=checkProductList(product.id);
         txtCounter.setText("" + counter);
-        txtDetail.setText(product.presentation);
+        txtDetail.setText(product.ingredients);
         txtTecnical.setText(product.ingredients.toString().replace("|","\n"));
         return  this.view;
     }

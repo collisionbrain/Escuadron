@@ -36,7 +36,7 @@ public class MapFragment extends Fragment implements LocationListener {
     private  IMapController mapController;
     private LocationManager locationManager;
     private Location location;
-    private SubmitButton btnGuardar;
+    private SubmitButton btnElegir,btnGuardar;
     private  Marker startMarker;
     private GeoPoint pointCenter;
 
@@ -46,6 +46,7 @@ public class MapFragment extends Fragment implements LocationListener {
          View v = inflater.inflate(R.layout.map, null);
         mMapView = v.findViewById(R.id.mapview1);
         btnGuardar=v.findViewById(R.id.btnFinishMap);
+        btnElegir=v.findViewById(R.id.btnChoiceMap);
         context=getActivity();
         startMarker = new Marker(mMapView);
         location = AppLocation.getLocation(context);
@@ -60,8 +61,9 @@ public class MapFragment extends Fragment implements LocationListener {
         mMapView.setMapListener(new DelayedMapListener(new MapListener() {
             @Override
             public boolean onScroll(ScrollEvent event) {
-
-                loadMarker();
+                btnGuardar.reset();
+                btnGuardar.setVisibility(View.GONE);
+                btnElegir.setVisibility(View.VISIBLE);
                 return false;
             }
 
@@ -73,11 +75,11 @@ public class MapFragment extends Fragment implements LocationListener {
         }, 200));
 
         mMapView.setMultiTouchControls(true);
-        btnGuardar.setOnClickListener(new View.OnClickListener() {
+        btnElegir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btnGuardar.setOnResultEndListener(finishListenerMap);
-                btnGuardar.doResult(true);
+                btnElegir.setOnResultEndListener(choiceListenerMap);
+                btnElegir.doResult(true);
             }
         });
         return v;
@@ -160,7 +162,7 @@ public class MapFragment extends Fragment implements LocationListener {
 
         startMarker.setPosition(point);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        mMapView.getOverlays().add(startMarker);
+        //mMapView.getOverlays().add(startMarker);
         startMarker.setIcon(getResources().getDrawable(R.drawable.alocation));
         startMarker.setTitle("Aqui nos vemos");
         startMarker.showInfoWindow();
@@ -172,22 +174,35 @@ public class MapFragment extends Fragment implements LocationListener {
                 mMapView.getMapCenter().getLongitude());
 
         startMarker.setPosition(pointCenter);
-        startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-        mMapView.getOverlays().add(startMarker);
+        //startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+       // mMapView.getOverlays().add(startMarker);
         startMarker.setIcon(getResources().getDrawable(R.drawable.alocation));
-        startMarker.setTitle("Start point");
+        startMarker.setTitle("Aqui nos vemos");
         startMarker.showInfoWindow();
+
+        btnElegir.setVisibility(View.GONE);
+        btnGuardar.setVisibility(View.VISIBLE);
+        btnGuardar.setOnResultEndListener(finishListenerMap);
+        btnGuardar.doResult(true);
     }
 
     SubmitButton.OnResultEndListener finishListenerMap=new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
+
         ((MarketActivity) context).closeMapFragment(
+
                     startMarker.getPosition().getLatitude(),
                     startMarker.getPosition().getLongitude());
 
         }
     };
+    SubmitButton.OnResultEndListener choiceListenerMap=new SubmitButton.OnResultEndListener() {
+        @Override
+        public void onResultEnd() {
 
+             loadMarker();
+        }
+    };
 
 }

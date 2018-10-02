@@ -30,6 +30,7 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
     private SubmitButton btnSiguienteCronic;
     private Resources resources;
     private EditText edtOtro;
+    private MaterialSpinner spinner,spinnerLudic;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
@@ -39,8 +40,8 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
         btnSiguienteCronic =this.view.findViewById(R.id.btnSiguienteCronic);
         edtOtro=this.view.findViewById(R.id.edtOtro);
         resources = getResources();
-        MaterialSpinner spinner = (MaterialSpinner) this.view.findViewById(R.id.spinner);
-
+        spinner = this.view.findViewById(R.id.spinner);
+        spinnerLudic= this.view.findViewById(R.id.spinnerLudic);
         spinner.setItems("Seleciona tu padecimiento","Diabetes", "Asma", "Estres", "Neuropatias", "Artritis","Otro");
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 

@@ -24,7 +24,7 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
     private Context context;
     private SubmitButton btnSiguienteHealt;
     private  EditText edtFechaNacimiento,edtPeso;
-    private CheckBox chckCronic;
+    private CheckBox chckCronic,chckLudic;
     private  boolean registerHealtSuccess;
     private int gender;
     private RadioButton radioButtonM,radioButtonF;
@@ -37,6 +37,7 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
         edtFechaNacimiento=this.view.findViewById(R.id.edtFecha);
         edtPeso=this.view.findViewById(R.id.edtPeso);
         chckCronic=this.view.findViewById(R.id.checkCronic);
+        chckLudic=this.view.findViewById(R.id.checkHomoepatic);
         edtFechaNacimiento.addTextChangedListener(txtWatcherListener);
         btnSiguienteHealt.setOnClickListener(this);
         radioButtonM=this.view.findViewById(R.id.rdMas);
@@ -119,6 +120,7 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
                     ((RegisterActivity) context).newMember.birthday=edtFechaNacimiento.getText().toString();
                     ((RegisterActivity) context).newMember.weigth=Integer.parseInt(edtPeso.getText().toString());
                     ((RegisterActivity) context).newMember.suffering=chckCronic.isChecked();
+                    ((RegisterActivity) context).newMember.ludic=chckLudic.isChecked();
 
                     if(radioButtonF.isChecked()){
                         gender=2;

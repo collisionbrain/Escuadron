@@ -19,6 +19,7 @@ public class Member implements Serializable {
     public String birthday ;
     public int weigth ;
     public boolean suffering;
+    public boolean ludic;
     public String condition;
     public String extra;
     public String signature;

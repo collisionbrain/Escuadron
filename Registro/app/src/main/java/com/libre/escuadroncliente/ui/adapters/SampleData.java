@@ -29,6 +29,7 @@ public class SampleData {
                     product.flavor=jsonObject.getString("sabor");
                     product.amount= jsonObject.getString("cantidad");
                     product.price= jsonObject.getString("precio");
+                    product.image=jsonObject.getString("image");
                     product.ingredients= jsonObject.getString("ingredientes");
                     data.add(product);
                 }

@@ -26,7 +26,7 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
     private Context context;
     private SubmitButton btnSiguienteTicket;
     private ImageView imgTicket;
-    private TextView totalToPay;
+    private TextView totalToPay,txtAccount,txtBank;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
@@ -36,6 +36,8 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
         btnSiguienteTicket =this.view.findViewById(R.id.btnSiguienteTicket);
         totalToPay=this.view.findViewById(R.id.totalToPay);
         imgTicket=this.view.findViewById(R.id.imgTicket);
+        txtAccount=this.view.findViewById(R.id.numAccount);
+        txtBank=this.view.findViewById(R.id.bank);
         String b64=((MarketActivity)context).order.ticket;
         String total=((MarketActivity)context).toPayProducto()+".00";
         if(b64!=null   ){
@@ -43,7 +45,10 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
                 this.setFrontImage();
             }
         }
-        totalToPay.setText(total);
+        txtAccount.setText(total);
+        totalToPay.setText("");
+        txtBank.setText("");
+
         btnSiguienteTicket.setOnClickListener(this);
         imgTicket.setOnClickListener(this);
         return this.view;

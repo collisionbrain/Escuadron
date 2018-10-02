@@ -116,6 +116,7 @@ public class MarketActivity extends  Activity {
     private PreferencesStorage prefs;
     private  TextView textToas;
     private View layoutToast;
+    private boolean isActive=false;
 
 
     @Override
@@ -196,34 +197,42 @@ public class MarketActivity extends  Activity {
     @Override
     public void onBackPressed(){
 
+        if(isActive) {
+            if (detailFragment.isVisible()) {
+                getFragmentManager().beginTransaction().remove(detailFragment).commit();
 
-        if(detailFragment.isVisible()){
-            getFragmentManager().beginTransaction().remove(detailFragment).commit();
+            }
+            if (mapFragment.isVisible()) {
+                getFragmentManager().beginTransaction().remove(mapFragment).commit();
 
-        }
-        if(mapFragment.isVisible()){
-            getFragmentManager().beginTransaction().remove(mapFragment).commit();
+            }
+            if (payFragment.isVisible()) {
+                getFragmentManager().beginTransaction().remove(payFragment).commit();
 
-        }
-        if(payFragment.isVisible()){
-            getFragmentManager().beginTransaction().remove(payFragment).commit();
+            }
+            if (subListFragment.isVisible() && !detailFragment.isVisible()) {
+                getFragmentManager().beginTransaction().remove(subListFragment).commit();
 
-        }
-        if(subListFragment.isVisible() && !detailFragment.isVisible()){
-            getFragmentManager().beginTransaction().remove(subListFragment).commit();
-
-        }
-        if(!detailFragment.isVisible() &&
-                !subListFragment.isVisible()&&
-                !payFragment.isVisible() &&
-                !mapFragment.isVisible()){
-           finish();
+            }
+            if (!detailFragment.isVisible() &&
+                    !subListFragment.isVisible() &&
+                    !payFragment.isVisible() &&
+                    !mapFragment.isVisible()) {
+                finish();
+            }
+        }else{
+            finish();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        if(!isActive){
+            Bundle bundle = new Bundle();
+            bundle.putInt("productItem", 10001 );
+            initFragmentCode( bundle);
+        }
     }
 
 
