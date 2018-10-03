@@ -51,7 +51,7 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
          mAdapter=null;
          txtHeaderTitle = header.findViewById(R.id.txt_title);
          title=getTitle(productRootItem);
-        data=Data.loadJSONFileObjet(title);
+        data=Data.loadJSONFileObjet(title,"db");
         getActivity().runOnUiThread(new Runnable() {
 
             @Override

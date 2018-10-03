@@ -44,6 +44,10 @@ import com.libre.escuadroncliente.ui.storage.PreferencesStorage;
 import com.libre.escuadroncliente.ui.util.Data;
 import com.libre.escuadroncliente.ui.util.NonSwipeableViewPager;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 
 import androidmads.library.qrgenearator.QRGContents;
@@ -51,6 +55,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 
 import static android.content.ContentValues.TAG;
 import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE;
+import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE_CONFIG;
 import static com.libre.escuadroncliente.ui.util.Constants.URL_REMOTE;
 import static com.libre.escuadroncliente.ui.util.Data.saveJSONFile;
 
@@ -237,6 +242,7 @@ public class RegisterActivity extends FragmentActivity {
 
     }
     public void launchMarket(){
+
         Intent intent = new Intent(this, MarketActivity.class);
         startActivityForResult(intent, 100);
         finish();
@@ -249,7 +255,7 @@ public class RegisterActivity extends FragmentActivity {
             fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                 @Override
                 public void onSuccess(byte[] bytes) {
-                    saveJSONFile(bytes);
+                    saveJSONFile(bytes,"db");
                     generateCode();
                 }
             }).addOnFailureListener(new OnFailureListener() {
@@ -260,7 +266,36 @@ public class RegisterActivity extends FragmentActivity {
             });
         }
     }
+    public void downloadConfig(){
 
+
+            StorageReference fileRef = storage.getReferenceFromUrl(URL_REMOTE).child(JSON_FILE_CONFIG);
+            if (fileRef != null) {
+
+                fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        try{
+
+                        saveJSONFile(bytes, "config");
+                        JSONObject dataObject = Data.loadJSONFileObjet("configuracion", "config");
+                        JSONArray items = dataObject.getJSONArray("items");
+                        JSONObject jsonObject = items.getJSONObject(0);
+                        preferencesStorage.saveData("REGISTER_USER_ACTIVE", ""+jsonObject.getBoolean("activo"));
+
+                        }catch (JSONException ex){
+                            ex.getStackTrace();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+
+                    }
+                });
+            }
+
+    }
     public void saveDataUser(String userGuid){
         DatabaseReference ref = database.getReference("registro");
         DatabaseReference usersRef = ref.child("clientes");
@@ -273,6 +308,7 @@ public class RegisterActivity extends FragmentActivity {
 
                 } else {
                      downloadDB();
+                    downloadConfig();
                 }
             }
         });

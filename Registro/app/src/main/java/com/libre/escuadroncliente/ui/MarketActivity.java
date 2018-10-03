@@ -71,6 +71,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -81,6 +85,7 @@ import java.util.List;
 import ru.dimorinny.floatingtextbutton.FloatingTextButton;
 
 import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE;
+import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE_CONFIG;
 import static com.libre.escuadroncliente.ui.util.Constants.URL_REMOTE;
 import static com.libre.escuadroncliente.ui.util.Data.saveJSONFile;
 
@@ -128,7 +133,7 @@ public class MarketActivity extends  Activity {
         context=this;
         prefs=new PreferencesStorage(context);
         userGuid=prefs.loadData("REGISTER_USER_KEY");
-
+        isActive=Boolean.parseBoolean(prefs.loadData("REGISTER_USER_ACTIVE"));
         fragmentManager=getFragmentManager();
         fragmentTransaction=fragmentManager.beginTransaction();
         context = this;
@@ -399,7 +404,9 @@ public class MarketActivity extends  Activity {
     }
     public void  closeCodeFragment(){
 
-        getFragmentManager().beginTransaction().remove(digitalCode).commit();
+        if(isActive) {
+            getFragmentManager().beginTransaction().remove(digitalCode).commit();
+        }
 
     }
     public void  closeMapFragment(double latitude,double longitude){
@@ -517,7 +524,8 @@ public class MarketActivity extends  Activity {
                     fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                         @Override
                         public void onSuccess(byte[] bytes) {
-                            saveJSONFile(bytes);
+                            saveJSONFile(bytes,"db");
+                            downloadConfig();
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -609,5 +617,35 @@ public class MarketActivity extends  Activity {
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layoutToast);
         toast.show();
+    }
+    public void downloadConfig(){
+
+
+        StorageReference fileRef = storage.getReferenceFromUrl(URL_REMOTE).child(JSON_FILE_CONFIG);
+        if (fileRef != null) {
+
+            fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    try{
+
+                        saveJSONFile(bytes, "config");
+                        JSONObject dataObject = Data.loadJSONFileObjet("configuracion", "config");
+                        JSONArray items = dataObject.getJSONArray("items");
+                        JSONObject jsonObject = items.getJSONObject(0);
+                        prefs.saveData("REGISTER_USER_ACTIVE", ""+jsonObject.getBoolean("activo"));
+
+                    }catch (JSONException ex){
+                        ex.getStackTrace();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+
+                }
+            });
+        }
+
     }
 }

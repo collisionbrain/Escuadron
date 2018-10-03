@@ -136,10 +136,10 @@ public class Data {
         }
         return b;
     }
-    public static JSONObject loadJSONFileObjet(String object) {
+    public static JSONObject loadJSONFileObjet(String object,String source) {
         JSONObject data=null;
         try {
-            File yourFile = new File(Environment.getExternalStorageDirectory(), "Escuadron/DB/db.json");
+            File yourFile = new File(Environment.getExternalStorageDirectory(), "Escuadron/DB/"+source+".json");
             FileInputStream stream = new FileInputStream(yourFile);
             String jsonStr = null;
             try {
@@ -159,12 +159,12 @@ public class Data {
         }
         return data;
     }
-    public static void saveJSONFile( byte[] data ){
+    public static void saveJSONFile( byte[] data,String type ){
 
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir = new File(root + "/Escuadron/DB/");
         myDir.mkdirs();
-        File file = new File(root + "/Escuadron/DB/db.json");
+        File file = new File(root + "/Escuadron/DB/"+type+".json");
         if(file.exists()){
             file.delete();
         }
