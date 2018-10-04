@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.libre.escuadroncliente.ui.fragments.AddressDataRegister;
 import com.libre.escuadroncliente.ui.fragments.CredentialFragment;
 import com.libre.escuadroncliente.ui.fragments.CronicSuffering;
 import com.libre.escuadroncliente.ui.fragments.DigitalCodeRegister;
@@ -31,23 +30,21 @@ public class PageAdapter extends FragmentPagerAdapter {
             case 0:
                 fragmento =new PersonalDataRegister();
                 break;
+
             case 1:
-                fragmento =new AddressDataRegister();
-                break;
-            case 2:
                 fragmento =new HealtDataRegister();
                 break;
-            case 3:
+            case 2:
                 fragmento =new CronicSuffering();
                 break;
-            case 4:
+            case 3:
                 fragmentoCredencial= new CredentialFragment();
                 fragmento =fragmentoCredencial;
                 break;
-            case 5:
+            case 4:
                 fragmento =new SignatureRegister();
                 break;
-            case 6:
+            case 5:
                 fragmentoRegister =new DigitalCodeRegister();
                 fragmento=fragmentoRegister;
                 break;
@@ -56,7 +53,7 @@ public class PageAdapter extends FragmentPagerAdapter {
     }
     @Override
     public int getCount() {
-        return 7;
+        return 6;
     }
 
 

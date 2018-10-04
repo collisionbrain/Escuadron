@@ -14,7 +14,6 @@ public class Member implements Serializable {
     public String phone;
     public boolean whats;
     public boolean privacy;
-    public Address address;
     public int gender;
     public String birthday ;
     public int weigth ;

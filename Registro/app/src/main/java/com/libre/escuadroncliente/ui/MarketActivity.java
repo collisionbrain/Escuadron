@@ -106,7 +106,6 @@ public class MarketActivity extends  Activity {
     private FragmentTransaction fragmentTransaction;
     private  RecyclerView recyclerView;
     private int count = 0;
-    private  MenuItem menuItem;
     private String userGuid="afsdajksmsdansjdnak";
     private DatabaseReference mDatabase;
     private Calendar calendar ;

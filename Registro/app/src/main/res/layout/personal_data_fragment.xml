@@ -42,9 +42,7 @@
                 android:inputType="textCapCharacters|textNoSuggestions"
                 android:singleLine="true"
                 android:hint="@string/strNombre"
-                android:textColorHint="@color/gray"
-                android:text="Hugo Miguel Gallardo Arvizu"
-                />
+                android:textColorHint="@color/gray" />
 
         </RelativeLayout>
 
@@ -65,8 +63,7 @@
                 android:hint="@string/strCorreo"
                 android:textColorHint="@color/gray"
                 android:inputType="textEmailAddress"
-                android:singleLine="true"
-                android:text="prueba_correo@hotmail.com"/>
+                android:singleLine="true" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -86,7 +83,6 @@
                 android:hint="@string/strCelular"
                 android:textColorHint="@color/gray"
                 android:maxLength="13"
-                android:text="125557678"
                 android:inputType="number"
                 android:singleLine="true" />
         </RelativeLayout>

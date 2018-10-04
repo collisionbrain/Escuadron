@@ -42,9 +42,7 @@
                 android:inputType="textCapWords|textNoSuggestions"
                 android:singleLine="true"
                 android:hint="@string/strFechaNacimiento"
-                android:textColorHint="@color/gray"
-                android:text="10/10/1980"
-                />
+                android:textColorHint="@color/gray"  />
 
         </RelativeLayout>
 
@@ -66,8 +64,7 @@
                 android:textColorHint="@color/gray"
                 android:inputType="number"
                 android:singleLine="true"
-                android:maxLength="3"
-                android:text="37"/>
+                android:maxLength="3" />
         </RelativeLayout>
 
         <RelativeLayout
