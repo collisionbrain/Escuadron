@@ -121,6 +121,7 @@ public class MarketActivity extends  Activity {
     private  TextView textToas;
     private View layoutToast;
     private boolean isActive=false;
+    public  static boolean isActivityOpen=true;
 
 
     @Override
@@ -229,6 +230,11 @@ public class MarketActivity extends  Activity {
         }
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        isActivityOpen=false;
+    }
     @Override
     public void onResume() {
         super.onResume();
