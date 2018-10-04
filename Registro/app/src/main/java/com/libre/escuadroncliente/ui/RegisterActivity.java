@@ -103,8 +103,7 @@ public class RegisterActivity extends FragmentActivity {
         storage=FirebaseStorage.getInstance();
         messageError=dialogError .findViewById(R.id.txtMensaje);
         newMember=new Member();
-        TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-        newMember.imei=telephonyManager.getDeviceId();
+         
 
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();

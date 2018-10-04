@@ -8,7 +8,7 @@ import java.util.Date;
  */
 
 public class Member implements Serializable {
-    public String imei;
+
     public String name;
     public String mail;
     public String phone;
