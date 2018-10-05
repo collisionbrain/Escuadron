@@ -77,7 +77,7 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
     SubmitButton.OnResultEndListener finishListenerCronic = new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
-            ((RegisterActivity) context).paginaSiguiente(4);
+            ((RegisterActivity) context).paginaSiguiente(3);
 
             btnSiguienteCronic.reset();
         }

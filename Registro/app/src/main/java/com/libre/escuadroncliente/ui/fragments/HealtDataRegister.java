@@ -141,7 +141,7 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
     SubmitButton.OnResultEndListener finishListenerHealt=new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
-            ((RegisterActivity) context).paginaSiguiente(3);
+            ((RegisterActivity) context).paginaSiguiente(2);
 
             btnSiguienteHealt.reset();
         }

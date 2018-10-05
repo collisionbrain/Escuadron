@@ -49,7 +49,7 @@ public class SignatureRegister extends Fragment implements  View.OnClickListener
             Bitmap bmpSignature =firmaPanel.getBitmap();
 
             ((RegisterActivity) context).newMember.signature=Data.bitmapToBase64(bmpSignature);
-            ((RegisterActivity) context).paginaSiguiente(6);
+            ((RegisterActivity) context).paginaSiguiente(5);
 
 
         }

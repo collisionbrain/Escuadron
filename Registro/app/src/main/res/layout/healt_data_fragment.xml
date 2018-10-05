@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"
                 android:background="@drawable/editext_line"
-                android:inputType="textCapWords|textNoSuggestions"
+                android:inputType="number"
                 android:singleLine="true"
                 android:hint="@string/strFechaNacimiento"
                 android:textColorHint="@color/gray"  />
