@@ -14,9 +14,7 @@ import com.libre.escuadroncliente.ui.fragments.SignatureRegister;
 
 public class PageAdapter extends FragmentPagerAdapter {
     private Context contexto;
-    Fragment fragmento;
-    Fragment fragmentoCredencial;
-    Fragment fragmentoRegister;
+    Fragment fragmento,fragmentoCronic,fragmentoHealt,fragmentoCredencial,fragmentoRegister;
 
     public PageAdapter(Context context, FragmentManager fm) {
         super(fm);
@@ -32,10 +30,12 @@ public class PageAdapter extends FragmentPagerAdapter {
                 break;
 
             case 1:
-                fragmento =new HealtDataRegister();
+                fragmentoHealt =new HealtDataRegister();
+                fragmento=fragmentoHealt;
                 break;
             case 2:
-                fragmento =new CronicSuffering();
+                fragmentoCronic =new CronicSuffering();
+                fragmento=fragmentoCronic;
                 break;
             case 3:
                 fragmentoCredencial= new CredentialFragment();
@@ -70,5 +70,11 @@ public class PageAdapter extends FragmentPagerAdapter {
     }
     public Fragment getRegisterFragment(){
         return fragmentoRegister;
+    }
+    public Fragment getCronicFragment(){
+        return fragmentoCronic;
+    }
+    public Fragment getHealFragment(){
+        return fragmentoHealt;
     }
 }

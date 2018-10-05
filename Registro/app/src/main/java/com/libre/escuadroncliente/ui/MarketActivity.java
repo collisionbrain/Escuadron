@@ -118,10 +118,11 @@ public class MarketActivity extends  Activity {
     private FirebaseStorage storage;
     final long ONE_MEGABYTE = 1024 * 1024;
     private PreferencesStorage prefs;
-    private  TextView textToas;
+
     private View layoutToast;
     private boolean isActive=false;
     public  static boolean isActivityOpen=true;
+    public  boolean needUpdate;
 
 
     @Override
@@ -129,6 +130,8 @@ public class MarketActivity extends  Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.market_activity);
+        Intent intent = getIntent();
+        needUpdate=intent.getBooleanExtra("UPDATE",false);
          calendar = Calendar.getInstance();
         context=this;
         prefs=new PreferencesStorage(context);
@@ -146,9 +149,6 @@ public class MarketActivity extends  Activity {
         LayoutInflater inflater = getLayoutInflater();
         layoutToast = inflater.inflate(R.layout.toast_layout,
                 (ViewGroup) findViewById(R.id.toast_layout_root));
-
-
-        textToas=  layoutToast.findViewById(R.id.textToas);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         imgPhoto= findViewById(R.id.imgPhoto);
@@ -242,6 +242,10 @@ public class MarketActivity extends  Activity {
             Bundle bundle = new Bundle();
             bundle.putInt("productItem", 10001 );
             initFragmentCode( bundle);
+        }
+        if(needUpdate){
+
+            new RegloadTask().execute();
         }
     }
 
@@ -616,7 +620,7 @@ public class MarketActivity extends  Activity {
     };
 
     public void toastFinish(String message){
-        textToas.setText(message);
+
         Toast toast = new Toast(getApplicationContext());
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.setDuration(Toast.LENGTH_LONG);

@@ -35,7 +35,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
     private Button btnPlus,btnMinus;
     private RelativeLayout rlyPanel;
     private ImageView backGround;
-    private TextView txtDesc,txtPrice,txtDetail,txtTecnical,txtCounter;
+    private TextView txtDesc,txtPrice,txtDetail,txtTecnical,txtIngredients,txtCounter;
     private SubmitButton addButton;
     private Product product;
     private int counter=0;
@@ -53,6 +53,7 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         txtDesc=this.view.findViewById(R.id.txtDesc);
         txtDetail=this.view.findViewById(R.id.txtDetail);
         txtTecnical=this.view.findViewById(R.id.txtTecnical);
+        txtIngredients=this.view.findViewById(R.id.txtIngredients);
         txtPrice=this.view.findViewById(R.id.txtPrice);
         txtCounter=this.view.findViewById(R.id.txtCounter);
         addButton=this.view.findViewById(R.id.addButton);
@@ -74,8 +75,9 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
         txtPrice.setText(product.price);
         counter=checkProductList(product.id);
         txtCounter.setText("" + counter);
-        txtDetail.setText(product.ingredients);
+        txtDetail.setText(product.presentation );
         txtTecnical.setText(product.ingredients.toString().replace("|","\n"));
+        txtIngredients.setText(product.flavor);
         return  this.view;
     }
     @Override

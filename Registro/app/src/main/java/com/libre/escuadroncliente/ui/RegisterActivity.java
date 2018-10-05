@@ -38,6 +38,7 @@ import com.google.zxing.WriterException;
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.adapters.PageAdapter;
 import com.libre.escuadroncliente.ui.fragments.CredentialFragment;
+import com.libre.escuadroncliente.ui.fragments.CronicSuffering;
 import com.libre.escuadroncliente.ui.fragments.DigitalCodeRegister;
 import com.libre.escuadroncliente.ui.pojos.Member;
 import com.libre.escuadroncliente.ui.storage.PreferencesStorage;
@@ -78,6 +79,7 @@ public class RegisterActivity extends FragmentActivity {
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private CredentialFragment credentialFragment;
     private DigitalCodeRegister digitalCodeRegister;
+    private CronicSuffering cronicSuffering;
 
 
     private Uri imageUri;
@@ -103,7 +105,7 @@ public class RegisterActivity extends FragmentActivity {
         storage=FirebaseStorage.getInstance();
         messageError=dialogError .findViewById(R.id.txtMensaje);
         newMember=new Member();
-         
+
 
         WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = manager.getDefaultDisplay();
@@ -136,6 +138,7 @@ public class RegisterActivity extends FragmentActivity {
                         break;
                     case 3:
                         txtTitulo.setText(resources.getString(R.string.strPadecimiento));
+
                         break;
 
                     case 4:
@@ -215,7 +218,18 @@ public class RegisterActivity extends FragmentActivity {
         }
     }
     public void paginaSiguiente(int paginaSiguiente){
-         vwPaginas.setCurrentItem(paginaSiguiente, true);
+
+         if(paginaSiguiente==2) {
+             cronicSuffering = (CronicSuffering) adPaginador.getCronicFragment();
+             if (newMember.ludic) {
+
+
+                 cronicSuffering.setHomeopaticView();
+             }else{
+                 cronicSuffering.setCronicView();
+             }
+         }
+        vwPaginas.setCurrentItem(paginaSiguiente, true);
 
     }
     @Override

@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:weightSum="100"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:clickable="true" >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

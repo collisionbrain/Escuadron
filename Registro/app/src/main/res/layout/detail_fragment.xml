@@ -67,6 +67,18 @@
                     android:text="Aceite 80%|Extracto de Cannabis a base de Alcohol 20%"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/txtIngredients"
+                    android:padding="15dp"
+                    android:layout_below="@+id/txtDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="Aceite 80%|Extracto de Cannabis a base de Alcohol 20%"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
             </RelativeLayout>
         </LinearLayout>
 

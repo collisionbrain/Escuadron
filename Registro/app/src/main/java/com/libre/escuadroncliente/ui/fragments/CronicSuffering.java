@@ -42,8 +42,8 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
         resources = getResources();
         spinner = this.view.findViewById(R.id.spinner);
         spinnerLudic= this.view.findViewById(R.id.spinnerLudic);
-        spinner.setItems("Seleciona tu padecimiento","Diabetes", "Asma", "Estres", "Neuropatias", "Artritis","Otro");
-        spinnerLudic.setItems("Seleciona tu tratamiento","Aromaterapia", "Vaporizacion", "Ingesta","Otro");
+        spinner.setItems("Padecimiento Cronico","Diabetes", "Asma", "Estres", "Neuropatias", "Artritis","Otro");
+        spinnerLudic.setItems("Tratamiento Homeopatico","Aromaterapia", "Vaporizacion", "Ingesta","Otro");
 
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
@@ -102,4 +102,28 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
             ((RegisterActivity) context).dialogError.show();
         }
     };
+
+    public void setHomeopaticView(){
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                spinner.setVisibility(View.GONE);
+                spinnerLudic.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+    public void setCronicView(){
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                spinner.setVisibility(View.VISIBLE);
+                spinnerLudic.setVisibility(View.GONE);
+            }
+        });
+
+    }
+
 }

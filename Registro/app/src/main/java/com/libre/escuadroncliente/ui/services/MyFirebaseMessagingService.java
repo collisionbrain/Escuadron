@@ -48,7 +48,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         PendingIntent contentIntent = null;
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-        Intent resultIntent = new Intent(this, Splash.class);
+        Intent resultIntent = new Intent(this, MarketActivity.class);
+        resultIntent.putExtra("UPDATE",true);
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
         stackBuilder.addNextIntentWithParentStack(resultIntent);
         contentIntent =

@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Escuadron Afiliado</string>
-    <string name="strNombre">Nombre </string>
+    <string name="app_name">edi</string>
+    <string name="strNombre">Nombre Completo </string>
     <string name="strApellidos">Apellidos</string>
-    <string name="strCorreo">Correo electronico</string>
-    <string name="strCelular">Celular</string>
-    <string name="strFechaNacimiento">Fecha de nacimiento</string>
+    <string name="strCorreo">Correo Electronico</string>
+    <string name="strCelular">Numero Celular</string>
+    <string name="strFechaNacimiento">Fecha de Nacimiento</string>
     <string name="strPeso">Peso</string>
     <string name="strEstatura">Estatura</string>
     <string name="strPassword">Contraseña</string>
@@ -13,7 +13,7 @@
     <string name="stPadecimiento">Información Médica</string>
     <string name="stFirma"></string>
     <string name="stTerminar">Listo!</string>
-    <string name="strFirma">Tu firma aquí</string>
+    <string name="strFirma">Tu Firma aquí</string>
     <string name="strCode">Código para comprar</string>
     <string name="errEspecialidad">Elige tu padecimiento</string>
     <string name="strPadecimiento">¿Sufre algun padecimiento cronico?</string>

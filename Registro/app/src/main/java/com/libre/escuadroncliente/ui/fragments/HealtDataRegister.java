@@ -10,8 +10,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.RegisterActivity;
@@ -38,6 +40,9 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
         edtPeso=this.view.findViewById(R.id.edtPeso);
         chckCronic=this.view.findViewById(R.id.checkCronic);
         chckLudic=this.view.findViewById(R.id.checkHomoepatic);
+        chckLudic.setOnCheckedChangeListener(listenerLudic);
+        chckCronic.setOnCheckedChangeListener(listenerCronic);
+
         edtFechaNacimiento.addTextChangedListener(txtWatcherListener);
         btnSiguienteHealt.setOnClickListener(this);
         radioButtonM=this.view.findViewById(R.id.rdMas);
@@ -174,4 +179,21 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
     public void setErrorMessageForm(String message){
         ((RegisterActivity) context).showError(message);
     }
+
+    CompoundButton.OnCheckedChangeListener listenerLudic=new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+            ((RegisterActivity) context).newMember.ludic=isChecked;
+        }
+    };
+
+    CompoundButton.OnCheckedChangeListener listenerCronic=new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            ((RegisterActivity) context).newMember.suffering=isChecked;
+
+
+        }
+    };
 }
