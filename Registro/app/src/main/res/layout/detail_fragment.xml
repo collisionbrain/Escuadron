@@ -20,12 +20,14 @@
             <RelativeLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="35">
+                android:layout_weight="35"
+                android:background="@drawable/background">
                 <ImageView
                     android:id="@+id/bgrImage"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="fitCenter"
+                    android:src="@drawable/pomada"
                     />
             </RelativeLayout>
             <RelativeLayout
@@ -108,7 +110,7 @@
             android:layout_height="match_parent"
             android:layout_weight="75"
             android:text="35.00 "
-            android:textSize="50dp"
+            android:textSize="45dp"
             android:gravity="right"
             android:textColor="@color/green_text"/>
     </LinearLayout>

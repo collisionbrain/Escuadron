@@ -15,11 +15,14 @@ public class Splash extends Activity {
     private String REGISTER_USER_KEY="REGISTER_USER_KEY";
     private String ORDER_PENDING="ORDER_PENDING";
     private String ID_CAMERA_PREFERENCE="ORDER_PENDING";
+    public  boolean needUpdate;
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.splash_screen);
-       // requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Intent intent = getIntent();
+        needUpdate=intent.getBooleanExtra("UPDATE",false);
+
         this.prefs=new PreferencesStorage(this);
         prefs.saveData(ID_CAMERA_PREFERENCE,"0");
         new Handler().postDelayed(new Runnable(){
@@ -35,6 +38,7 @@ public class Splash extends Activity {
                     Splash.this.finish();
                 }else{
                     Intent registerIntent = new Intent(Splash.this,MarketActivity.class);
+                    registerIntent.putExtra("UPDATE",needUpdate);
                     Splash.this.startActivity(registerIntent);
                     Splash.this.finish();
 

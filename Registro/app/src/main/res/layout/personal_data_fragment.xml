@@ -42,7 +42,8 @@
                 android:inputType="textCapCharacters|textNoSuggestions"
                 android:singleLine="true"
                 android:hint="@string/strNombre"
-                android:textColorHint="@color/gray" />
+                android:textColorHint="@color/gray"
+                android:imeOptions="actionNext"/>
 
         </RelativeLayout>
 
@@ -63,7 +64,8 @@
                 android:hint="@string/strCorreo"
                 android:textColorHint="@color/gray"
                 android:inputType="textEmailAddress"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:imeOptions="actionNext"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -84,7 +86,8 @@
                 android:textColorHint="@color/gray"
                 android:maxLength="13"
                 android:inputType="number"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:imeOptions="actionDone"/>
         </RelativeLayout>
 
         <LinearLayout
@@ -105,8 +108,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="90"
-                android:textColor="@color/blueBorders"
-                android:text="¿Contartar por WhatsApp?"/>
+                android:textColor="@color/green_text"
+                android:text="¿Contactar por WhatsApp?"/>
         </LinearLayout>
 
 
@@ -124,7 +127,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="90"
                 android:textStyle="bold|italic"
-                android:textColor="@color/blueBorders"
+                android:textColor="@color/green_text"
                 android:text="Ya tengo cuenta"/>
 
         </LinearLayout>
@@ -142,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="90"
                 android:textStyle="bold|italic"
-                android:textColor="@color/blueBorders"
+                android:textColor="@color/green_text"
                 android:text="Leer Aviso de Privacidad"/>
 
         </LinearLayout>

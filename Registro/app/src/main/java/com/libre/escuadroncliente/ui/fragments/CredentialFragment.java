@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.RegisterActivity;
+import com.libre.escuadroncliente.ui.pojos.Member;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
 import java.util.List;
@@ -69,11 +70,35 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
 
 
     } ;
+    private boolean validateForm() {
+        Member member=((RegisterActivity) context).newMember;
+        if (member.b64Recipe==null) {
+            setErrorMessageForm("Carga tu Preescripcion Médica");
+            return false;
+        }else if (member.b64FrontId==null) {
+
+            setErrorMessageForm("Carga tu Identificación Oficial");
+            return false;
+        } else if (member.b64BackId==null) {
+
+            setErrorMessageForm("Carga tu Comprobante de Domicilio");
+            return false;
+        } else {
+
+            return true;
+        }
+    }
+    public void setErrorMessageForm(String message){
+        ((RegisterActivity) context).showError(message);
+    }
     SubmitButton.OnResultEndListener finishListenerCamera = new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
-            ((RegisterActivity) context).paginaSiguiente(4);
-            btnSiguienteCamera.reset();
+
+            if(validateForm()) {
+                ((RegisterActivity) context).paginaSiguiente(4);
+                btnSiguienteCamera.reset();
+            }
         }
     };
 

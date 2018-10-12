@@ -129,25 +129,23 @@ public class RegisterActivity extends FragmentActivity {
                     case 0:
                         txtTitulo.setText(resources.getString(R.string.stPersonal));
                         break;
+
                     case 1:
-                        txtTitulo.setText(resources.getString(R.string.stPersonal));
-                        break;
-                    case 2:
                         txtTitulo.setText(resources.getString(R.string.stBiomedica));
 
                         break;
-                    case 3:
+                    case 2:
                         txtTitulo.setText(resources.getString(R.string.strPadecimiento));
 
                         break;
 
-                    case 4:
+                    case 3:
                         txtTitulo.setText(resources.getString(R.string.strIdentidad));
                         break;
-                    case 5:
+                    case 4:
                         txtTitulo.setText(resources.getString(R.string.strFirma));
                         break;
-                    case 6:
+                    case 5:
                         txtTitulo.setText(resources.getString(R.string.stTerminar));
                         break;
                 }
@@ -225,6 +223,8 @@ public class RegisterActivity extends FragmentActivity {
 
 
                  cronicSuffering.setHomeopaticView();
+             }else if(newMember.ludic && newMember.suffering){
+                 cronicSuffering.setAllView();
              }else{
                  cronicSuffering.setCronicView();
              }
@@ -371,6 +371,7 @@ public class RegisterActivity extends FragmentActivity {
     }
     public void showPrivacy(){
         ViewDialog alert = new ViewDialog();
+        newMember.privacy=true;
         alert.showDialogPrivacy(RegisterActivity.this);
 
     }

@@ -69,6 +69,8 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
                     }
                     break;
             case R.id.txtAviso:
+
+
                 ((RegisterActivity) context).showPrivacy();
                 break;
             case R.id.txtCuenta:

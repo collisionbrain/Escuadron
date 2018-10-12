@@ -25,7 +25,7 @@ import java.util.List;
 public class CronicSuffering extends Fragment implements  View.OnClickListener {
     private View view;
     List<String> listaPadecimientos;
-    private String condition;
+    private String condition,ludic;
     private Context context;
     private SubmitButton btnSiguienteCronic;
     private Resources resources;
@@ -44,7 +44,17 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
         spinnerLudic= this.view.findViewById(R.id.spinnerLudic);
         spinner.setItems("Padecimiento Cronico","Diabetes", "Asma", "Estres", "Neuropatias", "Artritis","Otro");
         spinnerLudic.setItems("Tratamiento Homeopatico","Aromaterapia", "Vaporizacion", "Ingesta","Otro");
+        spinnerLudic.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
+            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                Log.e("###########", "Clicked " + item);
+                if(item.equals("Otro")){
+                    edtOtro.setVisibility(View.VISIBLE);
+                }else{
+                    ludic=item;
+                }
+            }
+        });
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
@@ -67,6 +77,7 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
 
             case R.id.btnSiguienteCronic:
                 ((RegisterActivity) context).newMember.condition=condition;
+
                 ((RegisterActivity) context).newMember.extra=edtOtro.getText().toString();
                 btnSiguienteCronic.setOnResultEndListener(finishListenerCronic);
                 btnSiguienteCronic.doResult(true);
@@ -103,6 +114,17 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
         }
     };
 
+    public void setAllView(){
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                spinner.setVisibility(View.VISIBLE);
+                spinnerLudic.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
     public void setHomeopaticView(){
 
         getActivity().runOnUiThread(new Runnable() {
@@ -114,6 +136,7 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
         });
 
     }
+
     public void setCronicView(){
 
         getActivity().runOnUiThread(new Runnable() {

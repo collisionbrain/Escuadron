@@ -107,9 +107,10 @@
             <RatingBar
                 android:id="@+id/valoracion"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:numStars="5"
-                android:isIndicator="true"
+                android:rating="0.0"
+                android:stepSize="0.5"
                 style="@style/CustomRatingBar"
                 />
 

@@ -535,6 +535,9 @@ public class MarketActivity extends  Activity {
                         public void onSuccess(byte[] bytes) {
                             saveJSONFile(bytes,"db");
                             downloadConfig();
+                            Intent registerIntent = new Intent(context,Splash.class);
+                            startActivity(registerIntent);
+                            finish();
 
                         }
                     }).addOnFailureListener(new OnFailureListener() {
