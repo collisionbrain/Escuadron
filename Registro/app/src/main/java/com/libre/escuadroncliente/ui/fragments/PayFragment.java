@@ -13,8 +13,16 @@ import android.widget.TextView;
 
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.MarketActivity;
+import com.libre.escuadroncliente.ui.pojos.Quiz;
+import com.libre.escuadroncliente.ui.storage.PreferencesStorage;
 import com.libre.escuadroncliente.ui.util.Data;
 import com.unstoppable.submitbuttonview.SubmitButton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by hugo on 17/08/18.
@@ -27,11 +35,21 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
     private SubmitButton btnSiguienteTicket;
     private ImageView imgTicket;
     private TextView totalToPay,txtAccount,txtBank;
+    private PreferencesStorage prefs;
+    private String count_one,count_tow,count_three,count_four;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
         context = getActivity();
+        prefs=new PreferencesStorage(context);
+        count_one=prefs.loadData("PAY_ACCOUNT_ONE");
+        count_tow=prefs.loadData("PAY_ACCOUNT_TWO");
+        count_three=prefs.loadData("PAY_ACCOUNT_THREE");
+        count_four=prefs.loadData("PAY_ACCOUNT_FOUR");
+
+
+
         this.view = inflater.inflate(R.layout.pay_fragment, container, false);
         btnSiguienteTicket =this.view.findViewById(R.id.btnSiguienteTicket);
         totalToPay=this.view.findViewById(R.id.totalToPay);
@@ -51,6 +69,7 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
 
         btnSiguienteTicket.setOnClickListener(this);
         imgTicket.setOnClickListener(this);
+
         return this.view;
     }
 
@@ -81,6 +100,7 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
     public void setFrontImage(){
         Bitmap bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.add_photo_green);
         imgTicket.setImageBitmap(bitmap);
+
     }
 
 

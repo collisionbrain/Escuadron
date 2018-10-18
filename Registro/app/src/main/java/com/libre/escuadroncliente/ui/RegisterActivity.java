@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -50,6 +52,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -59,6 +67,7 @@ import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE;
 import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE_CONFIG;
 import static com.libre.escuadroncliente.ui.util.Constants.URL_REMOTE;
 import static com.libre.escuadroncliente.ui.util.Data.saveJSONFile;
+import static java.security.AccessController.getContext;
 
 public class RegisterActivity extends FragmentActivity {
 
@@ -80,6 +89,7 @@ public class RegisterActivity extends FragmentActivity {
     private CredentialFragment credentialFragment;
     private DigitalCodeRegister digitalCodeRegister;
     private CronicSuffering cronicSuffering;
+    private String mCurrentPhotoPath;
 
 
     private Uri imageUri;
@@ -155,20 +165,16 @@ public class RegisterActivity extends FragmentActivity {
     }
     public void onActivityResult(int requestCode, int resultCode,   Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap;
-        Uri selectedImage = imageUri;
-        getContentResolver().notifyChange(selectedImage, null);
-        ContentResolver cr = getContentResolver();
-        credentialFragment=(CredentialFragment)adPaginador.getCredentialFragment();
+
+        Bitmap bitmap = null;
+        credentialFragment = (CredentialFragment) adPaginador.getCredentialFragment();
         switch (requestCode) {
             case 200:
                 if (resultCode == RESULT_OK) {
-
-
                     try {
-                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
-                        newMember.b64FrontId=Data.bitmapToBase64(bitmap);
-                       credentialFragment.setFrontImage();
+                        bitmap =(Bitmap) data.getExtras().get("data");
+                        newMember.b64FrontId = Data.bitmapToBase64(bitmap);
+                        credentialFragment.setFrontImage();
 
                     } catch (Exception e) {
 
@@ -179,8 +185,8 @@ public class RegisterActivity extends FragmentActivity {
             case 300:
                 if (resultCode == RESULT_OK) {
                     try {
-                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
-                        newMember.b64BackId=Data.bitmapToBase64(bitmap);
+                        bitmap = (Bitmap) data.getExtras().get("data");
+                        newMember.b64BackId = Data.bitmapToBase64(bitmap);
                         credentialFragment.setBackImage();
 
                     } catch (Exception e) {
@@ -192,8 +198,8 @@ public class RegisterActivity extends FragmentActivity {
             case 400:
                 if (resultCode == RESULT_OK) {
                     try {
-                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
-                        newMember.b64Recipe=Data.bitmapToBase64(bitmap);
+                        bitmap =(Bitmap) data.getExtras().get("data");
+                        newMember.b64Recipe = Data.bitmapToBase64(bitmap);
                         credentialFragment.setRecipemage();
 
                     } catch (Exception e) {
@@ -203,7 +209,9 @@ public class RegisterActivity extends FragmentActivity {
                 }
                 break;
         }
+
          }
+
 
     @Override
     public void onBackPressed(){
@@ -282,33 +290,46 @@ public class RegisterActivity extends FragmentActivity {
     public void downloadConfig(){
 
 
-            StorageReference fileRef = storage.getReferenceFromUrl(URL_REMOTE).child(JSON_FILE_CONFIG);
-            if (fileRef != null) {
+        StorageReference fileRef = storage.getReferenceFromUrl(URL_REMOTE).child(JSON_FILE_CONFIG);
+        if (fileRef != null) {
 
-                fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        try{
+            fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    try{
 
                         saveJSONFile(bytes, "config");
                         JSONObject dataObject = Data.loadJSONFileObjet("configuracion", "config");
                         JSONArray items = dataObject.getJSONArray("items");
                         JSONObject jsonObject = items.getJSONObject(0);
-                        preferencesStorage.saveData("REGISTER_USER_ACTIVE", ""+jsonObject.getBoolean("activo"));
+                        JSONArray payArray= items.getJSONArray(1);
+                        List<String> account=new ArrayList<>();
 
-                        }catch (JSONException ex){
-                            ex.getStackTrace();
+
+                        for (int a=0;a<=payArray.length()-1;a++) {
+                            JSONObject jsonObjectAccount = items.getJSONObject(a);
+                            account.add(jsonObjectAccount.get("banco")+","+jsonObjectAccount.get("tarjeta"));
                         }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
+                        preferencesStorage.saveData("REGISTER_USER_ACTIVE", ""+jsonObject.getBoolean("activo"));
+                        preferencesStorage.saveData("PAY_ACCOUNT_ONE", account.get(0));
+                        preferencesStorage.saveData("PAY_ACCOUNT_TWO", account.get(1));
+                        preferencesStorage.saveData("PAY_ACCOUNT_THREE", account.get(2));
+                        preferencesStorage.saveData("PAY_ACCOUNT_FOUR", account.get(3));
 
+                    }catch (JSONException ex){
+                        ex.getStackTrace();
                     }
-                });
-            }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+
+                }
+            });
+        }
 
     }
+
     public void saveDataUser(String userGuid){
         DatabaseReference ref = database.getReference("registro");
         DatabaseReference usersRef = ref.child("clientes");
@@ -385,24 +406,41 @@ public class RegisterActivity extends FragmentActivity {
         File photo;
         switch (type){
             case 0:
-                photo = new File(Environment.getExternalStorageDirectory(),  "CredentialFront.jpg");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                imageUri = Uri.fromFile(photo);
                 this.startActivityForResult(intent, 200);
+
+
+
                 break;
             case 1:
-                photo = new File(Environment.getExternalStorageDirectory(),  "CredentialBack.jpg");
+                photo = new File(Environment.getExternalStorageDirectory()+"/Escuadron/",  "CredentialBack.jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                 imageUri = Uri.fromFile(photo);
                 this.startActivityForResult(intent, 300);
                 break;
             case 2:
-                photo = new File(Environment.getExternalStorageDirectory(),  "Receta.jpg");
+                photo = new File(Environment.getExternalStorageDirectory()+"/Escuadron/",  "Recipe.jpg");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
                 imageUri = Uri.fromFile(photo);
                 this.startActivityForResult(intent, 400);
                 break;
         }
 
+    }
+    private File createImageFile(String documentName) throws IOException {
+        // Create an image file name
+        /*String imageFileName = documentName;
+        File storageDir = new File(Environment.
+                getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Escuadron");
+       if(!storageDir.exists()) {
+           storageDir.createNewFile();
+       }
+        File image = File.createTempFile( imageFileName, ".jpg", storageDir );
+        */
+        File imagePath = new File(Environment.getExternalStorageDirectory()+"/Escuadron/",  "CredentialFront.jpg");
+        File newFile = new File(imagePath, "CredentialFront.jpg");
+
+
+        mCurrentPhotoPath = "content:" + imagePath.getAbsolutePath();
+        return imagePath;
     }
 }

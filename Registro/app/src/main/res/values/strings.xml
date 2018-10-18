@@ -2,8 +2,8 @@
     <string name="app_name">edi</string>
     <string name="strNombre">Nombre Completo </string>
     <string name="strApellidos">Apellidos</string>
-    <string name="strCorreo">Correo Electronico</string>
-    <string name="strCelular">Numero Celular</string>
+    <string name="strCorreo">Correo Electrónico</string>
+    <string name="strCelular">Número Celular</string>
     <string name="strFechaNacimiento">Fecha de Nacimiento</string>
     <string name="strPeso">Peso</string>
     <string name="strEstatura">Estatura</string>

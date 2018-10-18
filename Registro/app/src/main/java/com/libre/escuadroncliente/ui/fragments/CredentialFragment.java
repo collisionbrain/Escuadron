@@ -74,14 +74,17 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
         Member member=((RegisterActivity) context).newMember;
         if (member.b64Recipe==null) {
             setErrorMessageForm("Carga tu Preescripcion Médica");
+            btnSiguienteCamera.reset();
             return false;
         }else if (member.b64FrontId==null) {
 
             setErrorMessageForm("Carga tu Identificación Oficial");
+            btnSiguienteCamera.reset();
             return false;
         } else if (member.b64BackId==null) {
 
             setErrorMessageForm("Carga tu Comprobante de Domicilio");
+            btnSiguienteCamera.reset();
             return false;
         } else {
 

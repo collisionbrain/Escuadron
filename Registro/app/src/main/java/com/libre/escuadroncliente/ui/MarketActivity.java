@@ -86,6 +86,7 @@ import ru.dimorinny.floatingtextbutton.FloatingTextButton;
 
 import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE;
 import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE_CONFIG;
+import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE_QUIZ;
 import static com.libre.escuadroncliente.ui.util.Constants.URL_REMOTE;
 import static com.libre.escuadroncliente.ui.util.Data.saveJSONFile;
 
@@ -510,6 +511,7 @@ public class MarketActivity extends  Activity {
                     order=null;
                     order=new Order();
 
+
                 }
             }
         });
@@ -577,6 +579,7 @@ public class MarketActivity extends  Activity {
             try {
                 Thread.sleep(3000);
                 registerOrder();
+                downloadQuiz();
 
 
             }catch (InterruptedException ex){
@@ -645,11 +648,43 @@ public class MarketActivity extends  Activity {
                         JSONObject dataObject = Data.loadJSONFileObjet("configuracion", "config");
                         JSONArray items = dataObject.getJSONArray("items");
                         JSONObject jsonObject = items.getJSONObject(0);
+                        JSONArray payArray= items.getJSONArray(1);
+                        List<String> account=new ArrayList<>();
+
+
+                        for (int a=0;a<=payArray.length()-1;a++) {
+                            JSONObject jsonObjectAccount = items.getJSONObject(a);
+                            account.add(jsonObjectAccount.get("banco")+","+jsonObjectAccount.get("tarjeta"));
+                        }
                         prefs.saveData("REGISTER_USER_ACTIVE", ""+jsonObject.getBoolean("activo"));
+                        prefs.saveData("PAY_ACCOUNT_ONE", account.get(0));
+                        prefs.saveData("PAY_ACCOUNT_TWO", account.get(1));
+                        prefs.saveData("PAY_ACCOUNT_THREE", account.get(2));
+                        prefs.saveData("PAY_ACCOUNT_FOUR", account.get(3));
 
                     }catch (JSONException ex){
                         ex.getStackTrace();
                     }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+
+                }
+            });
+        }
+
+    }
+    public void downloadQuiz(){
+
+
+        StorageReference fileRef = storage.getReferenceFromUrl(URL_REMOTE).child(JSON_FILE_QUIZ);
+        if (fileRef != null) {
+
+            fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    saveJSONFile(bytes, "quiz");
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
