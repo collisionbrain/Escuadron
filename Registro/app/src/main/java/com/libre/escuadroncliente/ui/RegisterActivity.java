@@ -1,26 +1,36 @@
 package com.libre.escuadroncliente.ui;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -67,7 +77,7 @@ import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE;
 import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE_CONFIG;
 import static com.libre.escuadroncliente.ui.util.Constants.URL_REMOTE;
 import static com.libre.escuadroncliente.ui.util.Data.saveJSONFile;
-import static java.security.AccessController.getContext;
+
 
 public class RegisterActivity extends FragmentActivity {
 
@@ -89,7 +99,8 @@ public class RegisterActivity extends FragmentActivity {
     private CredentialFragment credentialFragment;
     private DigitalCodeRegister digitalCodeRegister;
     private CronicSuffering cronicSuffering;
-    private String mCurrentPhotoPath;
+    public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+    private ContentValues values;
 
 
     private Uri imageUri;
@@ -162,6 +173,12 @@ public class RegisterActivity extends FragmentActivity {
             }
 
         });
+        if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
+            // do your stuff..
+        }
+
+        //JSONObject dataObject = Data.loadJSONFileObjet("configuracion", "config");
+
     }
     public void onActivityResult(int requestCode, int resultCode,   Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -172,10 +189,10 @@ public class RegisterActivity extends FragmentActivity {
             case 200:
                 if (resultCode == RESULT_OK) {
                     try {
-                        bitmap =(Bitmap) data.getExtras().get("data");
+                        bitmap = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
                         newMember.b64FrontId = Data.bitmapToBase64(bitmap);
                         credentialFragment.setFrontImage();
-
                     } catch (Exception e) {
 
                         Log.e("Camera", e.toString());
@@ -185,7 +202,8 @@ public class RegisterActivity extends FragmentActivity {
             case 300:
                 if (resultCode == RESULT_OK) {
                     try {
-                        bitmap = (Bitmap) data.getExtras().get("data");
+                        bitmap = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
                         newMember.b64BackId = Data.bitmapToBase64(bitmap);
                         credentialFragment.setBackImage();
 
@@ -198,7 +216,8 @@ public class RegisterActivity extends FragmentActivity {
             case 400:
                 if (resultCode == RESULT_OK) {
                     try {
-                        bitmap =(Bitmap) data.getExtras().get("data");
+                        bitmap = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
                         newMember.b64Recipe = Data.bitmapToBase64(bitmap);
                         credentialFragment.setRecipemage();
 
@@ -212,7 +231,23 @@ public class RegisterActivity extends FragmentActivity {
 
          }
 
-
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // do your stuff
+                } else {
+                    Toast.makeText(RegisterActivity.this, "GET_ACCOUNTS Denied",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions,
+                        grantResults);
+        }
+    }
     @Override
     public void onBackPressed(){
 
@@ -302,15 +337,15 @@ public class RegisterActivity extends FragmentActivity {
                         JSONObject dataObject = Data.loadJSONFileObjet("configuracion", "config");
                         JSONArray items = dataObject.getJSONArray("items");
                         JSONObject jsonObject = items.getJSONObject(0);
-                        JSONArray payArray= items.getJSONArray(1);
+                        boolean status=jsonObject.getBoolean("activo");
+                        JSONArray pay = jsonObject.getJSONArray("pay");
                         List<String> account=new ArrayList<>();
-
-
-                        for (int a=0;a<=payArray.length()-1;a++) {
-                            JSONObject jsonObjectAccount = items.getJSONObject(a);
+                        for (int a=0;a<=pay.length()-1;a++) {
+                            JSONObject jsonObjectAccount = pay.getJSONObject(a);
                             account.add(jsonObjectAccount.get("banco")+","+jsonObjectAccount.get("tarjeta"));
                         }
-                        preferencesStorage.saveData("REGISTER_USER_ACTIVE", ""+jsonObject.getBoolean("activo"));
+
+                        preferencesStorage.saveData("REGISTER_USER_ACTIVE", ""+status);
                         preferencesStorage.saveData("PAY_ACCOUNT_ONE", account.get(0));
                         preferencesStorage.saveData("PAY_ACCOUNT_TWO", account.get(1));
                         preferencesStorage.saveData("PAY_ACCOUNT_THREE", account.get(2));
@@ -406,41 +441,85 @@ public class RegisterActivity extends FragmentActivity {
         File photo;
         switch (type){
             case 0:
+                values = new ContentValues();
+                values.put(MediaStore.Images.Media.TITLE, "Identificacion Oficial");
+                values.put(MediaStore.Images.Media.DESCRIPTION, "None");
+                imageUri = getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                 intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 this.startActivityForResult(intent, 200);
 
 
 
                 break;
             case 1:
-                photo = new File(Environment.getExternalStorageDirectory()+"/Escuadron/",  "CredentialBack.jpg");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                imageUri = Uri.fromFile(photo);
+                values = new ContentValues();
+                values.put(MediaStore.Images.Media.TITLE, "Comprobante de Domicilio");
+                values.put(MediaStore.Images.Media.DESCRIPTION, "None");
+                imageUri = getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 this.startActivityForResult(intent, 300);
                 break;
             case 2:
-                photo = new File(Environment.getExternalStorageDirectory()+"/Escuadron/",  "Recipe.jpg");
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-                imageUri = Uri.fromFile(photo);
+                values = new ContentValues();
+                values.put(MediaStore.Images.Media.TITLE, "Receta Medica");
+                values.put(MediaStore.Images.Media.DESCRIPTION, "None");
+                imageUri = getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 this.startActivityForResult(intent, 400);
                 break;
         }
 
     }
-    private File createImageFile(String documentName) throws IOException {
-        // Create an image file name
-        /*String imageFileName = documentName;
-        File storageDir = new File(Environment.
-                getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), "Escuadron");
-       if(!storageDir.exists()) {
-           storageDir.createNewFile();
-       }
-        File image = File.createTempFile( imageFileName, ".jpg", storageDir );
-        */
-        File imagePath = new File(Environment.getExternalStorageDirectory()+"/Escuadron/",  "CredentialFront.jpg");
-        File newFile = new File(imagePath, "CredentialFront.jpg");
+    public boolean checkPermissionREAD_EXTERNAL_STORAGE(
+            final Context context) {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        (RegisterActivity) context,
+                        Manifest.permission.READ_EXTERNAL_STORAGE)) {
 
+                        showDialog("External storage", context, Manifest.permission.READ_EXTERNAL_STORAGE);
 
-        mCurrentPhotoPath = "content:" + imagePath.getAbsolutePath();
-        return imagePath;
+                } else {
+                    ActivityCompat
+                            .requestPermissions(
+                                    (Activity) context,
+                                    new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
+                                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                }
+                return false;
+            } else {
+                return true;
+            }
+
+        } else {
+            return true;
+        }
     }
+    public void showDialog(final String msg, final Context context,
+                           final String permission) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+        alertBuilder.setCancelable(true);
+        alertBuilder.setTitle("Permission necessary");
+        alertBuilder.setMessage(msg + " permission is necessary");
+        alertBuilder.setPositiveButton(android.R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions((Activity) context,
+                                new String[] { permission },
+                                MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                    }
+                });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
+    }
+
 }

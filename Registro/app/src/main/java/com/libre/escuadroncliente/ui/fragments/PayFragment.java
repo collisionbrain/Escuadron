@@ -23,6 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Created by hugo on 17/08/18.
@@ -37,18 +39,19 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
     private TextView totalToPay,txtAccount,txtBank;
     private PreferencesStorage prefs;
     private String count_one,count_tow,count_three,count_four;
+    private String [] toPay= new String [4];
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
         context = getActivity();
         prefs=new PreferencesStorage(context);
-        count_one=prefs.loadData("PAY_ACCOUNT_ONE");
-        count_tow=prefs.loadData("PAY_ACCOUNT_TWO");
-        count_three=prefs.loadData("PAY_ACCOUNT_THREE");
-        count_four=prefs.loadData("PAY_ACCOUNT_FOUR");
-
-
+        toPay[0]=prefs.loadData("PAY_ACCOUNT_ONE");
+        toPay[1]=prefs.loadData("PAY_ACCOUNT_TWO");
+        toPay[2]=prefs.loadData("PAY_ACCOUNT_THREE");
+        toPay[3]=prefs.loadData("PAY_ACCOUNT_FOUR");
+        Random rand = new Random();
+        int rand_int = rand.nextInt(toPay.length);
 
         this.view = inflater.inflate(R.layout.pay_fragment, container, false);
         btnSiguienteTicket =this.view.findViewById(R.id.btnSiguienteTicket);
@@ -63,9 +66,11 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
                 this.setFrontImage();
             }
         }
-        txtAccount.setText(total);
-        totalToPay.setText("");
-        txtBank.setText("");
+
+        String []data=toPay[rand_int].split(",");
+        totalToPay.setText(total);
+        txtBank.setText(data[0]);
+        txtAccount.setText(data[1]);
 
         btnSiguienteTicket.setOnClickListener(this);
         imgTicket.setOnClickListener(this);

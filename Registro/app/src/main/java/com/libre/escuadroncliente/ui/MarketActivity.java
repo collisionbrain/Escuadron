@@ -133,11 +133,12 @@ public class MarketActivity extends  Activity {
         setContentView(R.layout.market_activity);
         Intent intent = getIntent();
         needUpdate=intent.getBooleanExtra("UPDATE",false);
-         calendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
         context=this;
         prefs=new PreferencesStorage(context);
         userGuid=prefs.loadData("REGISTER_USER_KEY");
-        isActive=Boolean.parseBoolean(prefs.loadData("REGISTER_USER_ACTIVE"));
+        String ss=prefs.loadData("REGISTER_USER_ACTIVE");
+        isActive=Boolean.parseBoolean(ss);
         fragmentManager=getFragmentManager();
         fragmentTransaction=fragmentManager.beginTransaction();
         context = this;
@@ -197,6 +198,8 @@ public class MarketActivity extends  Activity {
 
         order=new Order();
         order.id=1;
+
+
     }
 
 
@@ -239,6 +242,8 @@ public class MarketActivity extends  Activity {
     @Override
     public void onResume() {
         super.onResume();
+
+
         if(!isActive){
             Bundle bundle = new Bundle();
             bundle.putInt("productItem", 10001 );
