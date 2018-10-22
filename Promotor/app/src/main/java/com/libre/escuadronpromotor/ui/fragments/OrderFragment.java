@@ -1,6 +1,7 @@
 package com.libre.escuadronpromotor.ui.fragments;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,17 +22,23 @@ import com.libre.escuadronpromotor.ui.animations.DotProgressBar;
 import com.libre.escuadronpromotor.ui.pojos.Order;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
+
+import com.elyeproj.loaderviewlibrary.LoaderTextView;
 public class OrderFragment extends Fragment implements  View.OnClickListener  {
     private View view;
     private Context context;
-    private TextView txtFirma;
+    private TextView txtFecha,txtEstatus,txtDetalle,txtProductos;
     private SubmitButton btnConfirmOrder;
     private SignaturePanelAdapter firmaPanel;
     private  Order order_local;
     private  String client_key;
     private  DatabaseReference reference;
-    private DotProgressBar progress;
+    private PrettyDialog prettyDialog;
 
+    private int WAIT_DURATION = 5000;
+    private DummyWait dummyWait;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
@@ -39,9 +46,12 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
         context=getActivity();
         client_key = getArguments().getString("id");
         this.view = inflater.inflate(R.layout.order_fragment, container, false);
-        txtFirma=this.view.findViewById(R.id.txtTotal);
-        progress=this.view.findViewById(R.id.progress);
-        btnConfirmOrder=this.view.findViewById(R.id.btnSiguienteSignature);
+
+        txtFecha=this.view.findViewById(R.id.txtFecha);
+        txtEstatus=this.view.findViewById(R.id.txtEstatus);
+        txtDetalle=this.view.findViewById(R.id.txtDetalle);
+        txtProductos=this.view.findViewById(R.id.txtProductos);
+        btnConfirmOrder=this.view.findViewById(R.id.btnFinalizar);
         btnConfirmOrder.setOnClickListener(this);
         btnConfirmOrder.setOnResultEndListener(finishOrder);
 
@@ -52,8 +62,8 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.exists()) {
                      order_local = dataSnapshot.getValue(Order.class);
-                    txtFirma.setText("$" +order_local.total);
-                    progress.setVisibility(View.GONE);
+                     //start loader
+                    //                    viewLoader.setVisibility(View.GONE);
                 }
             }
 
@@ -62,6 +72,23 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
                 databaseError.getMessage().toString();
             }
         });
+        prettyDialog= new PrettyDialog(context)
+                .setTitle("Entrega Completada")
+                .setMessage("Entrega Completada").setIcon(
+                R.drawable.pdlg_icon_info,     // icon resource
+                R.color.pdlg_color_green,      // icon tint
+                null)
+                .addButton(
+                        "OK",     // button text
+                        R.color.pdlg_color_white,  // button text color
+                        R.color.pdlg_color_green,  // button background color
+                        new PrettyDialogCallback() {  // button OnClick listener
+                            @Override
+                            public void onClick() {
+                                // Do what you gotta do
+                            }
+                        }
+                ) ;
         return  this.view;
     }
 
@@ -80,6 +107,7 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
                 public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                     if (databaseError != null) {
                         System.out.println("Data could not be saved " + databaseError.getMessage());
+                        prettyDialog.show();
 
                     } else {
 
@@ -92,6 +120,56 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
 
         }
     };
+
+    private void loadData() {
+        if (dummyWait != null) {
+            dummyWait.cancel(true);
+        }
+        dummyWait = new DummyWait();
+        dummyWait.execute();
+    }
+
+    private void postLoadData() {
+        txtFecha.setText("Mr. Donald Trump");
+        txtEstatus.setText("President of United State (2017 - now)");
+        txtDetalle.setText("+001 2345 6789");
+        txtProductos.setText("donald.trump@donaldtrump.com");
+
+    }
+
+    public void resetLoader(View view) {
+
+        txtFecha.resetLoader();
+        txtEstatus.resetLoader();
+        txtDetalle.resetLoader();
+        txtProductos.resetLoader();
+
+        loadData();
+    }
+
+    class DummyWait extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                Thread.sleep(WAIT_DURATION);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            postLoadData();
+        }
+    }
+
 
 
 

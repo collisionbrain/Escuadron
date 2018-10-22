@@ -34,6 +34,9 @@ dependencies {
     compile 'com.github.michaldrabik:tapbarmenu:1.0.5'
     compile 'org.osmdroid:osmdroid-android:6.0.1'
     compile 'com.github.MKergall:osmbonuspack:6.5.1'
+    compile 'com.github.mjn1369:prettydialog:1.0.4'
+    compile 'com.elyeproj.libraries:loaderviewlibrary:1.5.0'
+    
 }
 
 apply plugin: 'com.google.gms.google-services'
