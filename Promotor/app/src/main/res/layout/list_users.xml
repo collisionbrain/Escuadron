@@ -14,77 +14,96 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    android:layout_gravity="bottom"
+    android:gravity="center"
+    android:layout_marginBottom="24dp">
 
-        <com.michaldrabik.tapbarmenulib.TapBarMenu
-            android:id="@+id/tapBarMenu"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="24dp"
-            app:tbm_backgroundColor="@color/green_toolbar"
-            app:tbm_showItems="true">
+    <com.michaldrabik.tapbarmenulib.TapBarMenu
+        android:id="@+id/tapBarMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:tbm_backgroundColor="@color/green_toolbar"
+        app:tbm_showItems="true">
 
-            <ImageView
-                android:id="@+id/imgUpload"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/upload"
-                />
+        <ImageView
+            android:id="@+id/imgUpload"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/upload"
+            />
+        <RelativeLayout
+            android:id="@+id/relative_layout1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center">
 
             <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center">
+                android:id="@+id/badge_layout1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-                <ImageView
-                    android:id="@+id/imgDelivery"
+                <RelativeLayout
+                    android:id="@+id/relative_layout"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/entrega"/>
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imgDelivery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/entrega" />
+                </RelativeLayout>
+
                 <TextView
                     android:id="@+id/txtCountPendings"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="@color/colorAccent"
-                    android:visibility="gone"
-                    />
+                    android:layout_alignRight="@id/relative_layout"
+                    android:background="@drawable/item_count"
+                    android:text="16"
+                    android:textColor="#FFF"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:visibility="gone"/>
             </RelativeLayout>
+        </RelativeLayout>
+        <Space
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            />
+        <Space
+            android:layout_width="56dp"
+            android:layout_height="match_parent"
+            />
+        <ImageView
+            android:id="@+id/imgAdd"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/add"
+            />
+        <ImageView
+            android:id="@+id/imgScan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:src="@drawable/scan"
+            />
+    </com.michaldrabik.tapbarmenulib.TapBarMenu>
 
-            <Space
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
-                />
-            <Space
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
-                />
+</RelativeLayout>
 
-            <ImageView
-                android:id="@+id/imgAdd"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/add"
-                />
-
-
-            <ImageView
-                android:id="@+id/imgScan"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/scan"
-                />
-        </com.michaldrabik.tapbarmenulib.TapBarMenu>
     </FrameLayout>
 
 </LinearLayout>

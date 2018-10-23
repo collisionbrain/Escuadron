@@ -18,7 +18,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.libre.escuadronpromotor.R;
 import com.libre.escuadronpromotor.ui.ListUsersActivity;
 import com.libre.escuadronpromotor.ui.adapters.SignaturePanelAdapter;
-import com.libre.escuadronpromotor.ui.animations.DotProgressBar;
 import com.libre.escuadronpromotor.ui.pojos.Order;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
@@ -138,12 +137,11 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
     }
 
     public void resetLoader(View view) {
-
-        txtFecha.resetLoader();
-        txtEstatus.resetLoader();
-        txtDetalle.resetLoader();
-        txtProductos.resetLoader();
-
+        ((LoaderTextView)view.findViewById(R.id.txtFecha)).resetLoader();
+        ((LoaderTextView)view.findViewById(R.id.txtEstatus)).resetLoader();
+        ((LoaderTextView)view.findViewById(R.id.txtDetalle)).resetLoader();
+        ((LoaderTextView)view.findViewById(R.id.txtProductos)).resetLoader();
+        ((LoaderTextView)view.findViewById(R.id.txtFecha)).resetLoader();
         loadData();
     }
 
