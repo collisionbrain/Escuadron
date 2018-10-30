@@ -17,4 +17,15 @@
         <item name="android:colorControlNormal">@color/gray</item>
         <item name="android:colorControlActivated">@color/green_toolbar</item>
     </style>
+    <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <!--buttons color-->
+        <item name="colorAccent">@color/green_text</item>
+        <!--title and message color-->
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <!--dialog background-->
+        <item name="android:windowBackground">@drawable/dialog_background</item>
+    </style>
+
+
+
 </resources>

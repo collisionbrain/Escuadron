@@ -27,7 +27,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.libre.escuadronpromotor.R;
 import com.libre.escuadronpromotor.ui.adapters.NewClientAdapter;
-import com.libre.escuadronpromotor.ui.fragments.DialogUploadFragment;
 import com.libre.escuadronpromotor.ui.fragments.OrderFragment;
 import com.libre.escuadronpromotor.ui.pojos.Member;
 import com.libre.escuadronpromotor.ui.pojos.Product;
@@ -42,7 +41,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -72,7 +70,6 @@ public class ListUsersActivity extends AppCompatActivity {
     public Dialog  dialogUpload,dialogError;
     private FragmentTransaction ft;
     private Fragment prev;
-    private DialogFragment dialogFragment = new DialogUploadFragment();
     private OrderFragment orderFragment = new OrderFragment();
     private TapBarMenu tapBarMenu;
     private ImageView imageViewAdd,imageViewUp,imageViewScan,imageViewDeli;
@@ -254,10 +251,12 @@ public class ListUsersActivity extends AppCompatActivity {
     }
 
     private class RegisterMemberTask extends AsyncTask<Void, Void, Void> {
+        private ProgressDialog dialog;
         @Override
         protected void onPreExecute() {
-
-            dialogFragment.show(ft, "dialog");
+            dialog = new ProgressDialog(context, R.style.MyDialogTheme);
+            dialog.setMessage("Guardando pedido.");
+            dialog.show();
         }
         @Override
         protected Void doInBackground(Void... params) {
@@ -279,7 +278,8 @@ public class ListUsersActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void param) {
-            dialogFragment.dismiss();
+
+            dialog.dismiss();
         }
     }
 

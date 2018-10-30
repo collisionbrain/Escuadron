@@ -27,8 +27,8 @@ public class NewClientAdapter extends RecyclerView.Adapter<NewClientAdapter.MyVi
 
         public MyViewHolder(View view) {
             super(view);
-            name = view.findViewById(R.id.client_name);
-            mail = view.findViewById(R.id.client_mail);
+            name = view.findViewById(R.id.item_name);
+            mail = view.findViewById(R.id.item_email);
         }
     }
 

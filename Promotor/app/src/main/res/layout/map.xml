@@ -6,12 +6,51 @@
     android:orientation="vertical"
     android:weightSum="100"
     android:background="@color/white">
+    <LinearLayout
+        android:id="@+id/detail_order"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="50"
+        android:orientation="vertical"
+        android:weightSum="100">
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:layout_weight="20"
+           android:padding="10dp">
+           <TextView
+               android:id="@+id/txtFechaCompra"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:textSize="18sp"
+               android:text="Fecha de compra"/>
+       </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20"
+            android:padding="10dp">
+            <TextView
+                android:id="@+id/txtCliente"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="18sp"
+                android:text="Nombre cliente"/>
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rlProducts"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="60" >
+
+        </RelativeLayout>
+    </LinearLayout>
 
         <org.osmdroid.views.MapView
             android:id="@+id/mapview1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="80"
+            android:layout_weight="30"
             tilesource="Positron" />
 
      <LinearLayout
@@ -27,7 +66,7 @@
             android:layout_width="220dp"
             android:layout_height="match_parent"
             android:padding="25dp"
-            app:buttonText="Siguiente"
+            app:buttonText="Entregar"
             app:buttonTextSize="25sp"
             app:buttonColor="@color/blueBorders"
             />

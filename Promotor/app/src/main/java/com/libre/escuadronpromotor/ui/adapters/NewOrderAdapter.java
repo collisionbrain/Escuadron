@@ -1,17 +1,21 @@
 package com.libre.escuadronpromotor.ui.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.libre.escuadronpromotor.R;
 import com.libre.escuadronpromotor.ui.ListDeliveryActivity;
+import com.libre.escuadronpromotor.ui.pojos.Delivery;
 import com.libre.escuadronpromotor.ui.pojos.Member;
 import com.libre.escuadronpromotor.ui.pojos.Order;
+import com.libre.escuadronpromotor.ui.util.Data;
 
 import java.util.List;
 
@@ -22,21 +26,22 @@ import java.util.List;
 public class NewOrderAdapter extends RecyclerView.Adapter<NewOrderAdapter.MyViewHolder> {
 
     private Context context;
-    private List<Order> orderList;
+    private List<Delivery> orderList;
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        public TextView dateOrder;
         public TextView mail;
+        public TextView name;
+        public ImageView imageView;
 
         public MyViewHolder(View view) {
             super(view);
-            dateOrder = view.findViewById(R.id.client_name);
-            mail = view.findViewById(R.id.client_mail);
+            mail = view.findViewById(R.id.item_name);
+            name = view.findViewById(R.id.item_email);
         }
     }
 
 
-    public NewOrderAdapter(Context context, List<Order> orderList) {
+    public NewOrderAdapter(Context context, List<Delivery> orderList) {
         this.context = context;
         this.orderList = orderList;
     }
@@ -52,10 +57,13 @@ public class NewOrderAdapter extends RecyclerView.Adapter<NewOrderAdapter.MyView
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-       final Order order = orderList.get(position);
+       final Delivery order = orderList.get(position);
 
-        holder.dateOrder.setText(order.dateOrder);
-        holder.dateOrder.setOnClickListener(new View.OnClickListener() {
+        holder.name.setText(order.name);
+        holder.mail.setText(order.mail);
+        Bitmap bitmap= Data.base64ToBitmap(order.image);
+        holder.imageView.setImageBitmap(bitmap);
+        holder.name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ((ListDeliveryActivity)context).startDetailOrder(order);

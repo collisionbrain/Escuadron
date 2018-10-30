@@ -20,8 +20,11 @@ import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.libre.escuadronpromotor.R;
+import com.libre.escuadronpromotor.ui.adapters.NewClientAdapter;
 import com.libre.escuadronpromotor.ui.adapters.NewOrderAdapter;
 import com.libre.escuadronpromotor.ui.fragments.MapFragment;
+import com.libre.escuadronpromotor.ui.pojos.Delivery;
+import com.libre.escuadronpromotor.ui.pojos.Member;
 import com.libre.escuadronpromotor.ui.pojos.Order;
 
 import java.util.ArrayList;
@@ -51,6 +54,8 @@ public class ListDeliveryActivity extends AppCompatActivity {
     private MapFragment mapFragment = new MapFragment();
     private List<Order> newOrders=new ArrayList<>();
     GenericTypeIndicator<Map<String, List<Order>>> genericTypeIndicator;
+    private DatabaseReference ref;
+    private List<Delivery> listOrders;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +71,10 @@ public class ListDeliveryActivity extends AppCompatActivity {
         fragmentTransaction=fragmentManager.beginTransaction();
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(mLayoutManager);
-        listOrderPendings();
+         listOrderPendings();
+
+
+
     }
 
 
@@ -83,9 +91,9 @@ public class ListDeliveryActivity extends AppCompatActivity {
     }
 
     public void  listOrderPendings(){
-        DatabaseReference ref = database.getReference("registro");
-        DatabaseReference pedRef = ref.child("pedidos");
-
+      final  DatabaseReference ref = database.getReference("registro");
+      final  DatabaseReference pedRef = ref.child("pedidos");
+      final  List<Delivery> orderDelivery=new ArrayList<>();
         Query query = pedRef.orderByChild("pay").equalTo(false);
 
 
@@ -93,18 +101,39 @@ public class ListDeliveryActivity extends AppCompatActivity {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 for (DataSnapshot pedido: snapshot.getChildren()) {
-                    Order order=pedido.getValue(Order.class);
+                    final Order order=pedido.getValue(Order.class);
+                    DatabaseReference cliRef = ref.child("clientes").child(order.userGuid);
+                    Query queryCli = pedRef.orderByChild("pay").equalTo(false);
 
-                    newOrders.add(order);
+                    queryCli.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            for (DataSnapshot cliente: dataSnapshot.getChildren()) {
+                                Member member=cliente.getValue(Member.class);
+                                Delivery delivery=new Delivery();
+                                delivery.name=member.name;
+                                delivery.mail=member.mail;
+                                delivery.image=member.b64FrontId;
+                                delivery.latitude=order.latitude;
+                                delivery.longitude=order.longitude;
+                                delivery.productList=order.productList;
+                                orderDelivery.add(delivery);
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
                 }
 
-                newOrderAdapter = new NewOrderAdapter(context, newOrders);
+                newOrderAdapter = new NewOrderAdapter(context, orderDelivery);
                 recyclerView.setAdapter(newOrderAdapter);
-               /* for (DataSnapshot pedido: snapshot.getChildren()) {
-                    Object object=pedido.child("pedido").getRef();
-                    //Order order=(Order)object.getClass();
-                }*/
-
 
             }
 
@@ -115,11 +144,11 @@ public class ListDeliveryActivity extends AppCompatActivity {
         });
     }
 
-    public void startDetailOrder(Order order){
+    public void startDetailOrder(Delivery order){
         initFragmentMapOrder(order);
     }
 
-    private void initFragmentMapOrder(Order order){
+    private void initFragmentMapOrder(Delivery order){
         Bundle bundle=new Bundle();
         bundle.putSerializable("order",order);
         fragmentTransaction = fragmentManager.beginTransaction();
