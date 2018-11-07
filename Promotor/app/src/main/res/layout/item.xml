@@ -1,44 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_user_parent"
     android:layout_width="match_parent"
-    android:layout_height="125dp"
-    android:padding="3dp"
-    android:background="@color/white"
-    android:weightSum="100"
-    android:orientation="vertical">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="50">
-    <TextView
-        android:id="@+id/client_name"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/simple_padding_small"
+    android:foreground="?attr/selectableItemBackground"
+    android:padding="@dimen/simple_padding_large">
+
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/green_text"
-        android:padding="5dp"
-        android:text="NOMBRE"/>
+        android:padding="@dimen/simple_padding_large">
 
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="?attr/listPreferredItemHeightSmall"
+            android:layout_height="?attr/listPreferredItemHeightSmall"
+            android:layout_centerVertical="true"
+            android:src="@drawable/add_photo"
+            tools:ignore="ContentDescription" />
 
-</RelativeLayout>
-<RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="50"
-       >
-        <TextView
-            android:id="@+id/client_mail"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray"
-            android:text="MAIL"
-            android:gravity="center"
-            />
+            android:layout_centerVertical="true"
+            android:layout_marginStart="@dimen/simple_padding_large"
+            android:layout_toEndOf="@id/item_image"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/item_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:lines="1"
+                android:text="Nombre cliente"
+                android:textColor="@color/green_toolbar"
+                android:textSize="@dimen/text_size_primary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/item_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="start"
+                android:lines="1"
+                android:text="Correo electronico"
+                android:textColor="@color/green_toolbar"
+                android:textSize="@dimen/text_size_secondary" />
+
+        </LinearLayout>
+
     </RelativeLayout>
 
-
-    <View
-        android:layout_below="@+id/spinner"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/green_toolbar"/>
 </LinearLayout>
