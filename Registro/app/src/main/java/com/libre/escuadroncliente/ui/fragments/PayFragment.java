@@ -69,7 +69,7 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
         }
         String []data;
         String current=prefs.loadData("CURRENT_COUNT");
-        int rand_int = rand.nextInt(toPay.length);
+        int rand_int = rand.nextInt(toPay.length-1);
         if(current=="" || current==null) {
             prefs.saveData("CURRENT_COUNT", toPay[rand_int]);
             data =toPay[rand_int].split(",");
