@@ -1,7 +1,5 @@
 package com.libre.escuadroncliente.ui.pojos;
 
-import android.location.Location;
-
 import java.util.List;
 
 public class Order {

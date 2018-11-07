@@ -1,4 +1,5 @@
 package com.libre.escuadroncliente.ui;
+import android.Manifest;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -7,9 +8,12 @@ import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -19,13 +23,17 @@ import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import com.gjiazhe.scrollparallaximageview.ScrollParallaxImageView;
@@ -82,6 +90,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 import ru.dimorinny.floatingtextbutton.FloatingTextButton;
 
 import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE;
@@ -100,6 +110,7 @@ public class MarketActivity extends  Activity {
     private Fragment subListFragment=new SubListFragment();
     private Fragment payFragment=new PayFragment();
     private Fragment mapFragment=new MapFragment();
+    private  PrettyDialog prettyDialog=null;
 
 
     public List<CartOrder> productList;
@@ -122,23 +133,52 @@ public class MarketActivity extends  Activity {
 
     private View layoutToast;
     private boolean isActive=false;
+    public boolean isDeliveryActive=false;
     public  static boolean isActivityOpen=true;
     public  boolean needUpdate;
+    private ContentValues values;
 
+    public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 321;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.market_activity);
+
         Intent intent = getIntent();
         needUpdate=intent.getBooleanExtra("UPDATE",false);
+        Log.e("################","tttttttttt "+needUpdate);
         calendar = Calendar.getInstance();
         context=this;
+        prettyDialog= new PrettyDialog(context);
+        prettyDialog.setIcon(
+                R.drawable.pdlg_icon_info,     // icon resource
+                R.color.pdlg_color_red,      // icon tint
+                new PrettyDialogCallback() {   // icon OnClick listener
+                    @Override
+                    public void onClick() {
+                        // Do what you gotta do
+                    }
+                })
+                .addButton(
+                        "OK",					// button text
+                        R.color.pdlg_color_white,		// button text color
+                        R.color.pdlg_color_green,		// button background color
+                        new PrettyDialogCallback() {		// button OnClick listener
+                            @Override
+                            public void onClick() {
+
+                                prettyDialog.dismiss();
+                            }
+                        }
+                );
         prefs=new PreferencesStorage(context);
         userGuid=prefs.loadData("REGISTER_USER_KEY");
-        String ss=prefs.loadData("REGISTER_USER_ACTIVE");
-        isActive=Boolean.parseBoolean(ss);
+        String status=prefs.loadData("REGISTER_USER_ACTIVE");
+        String delivery=prefs.loadData("DELIVER_ACTIVE");
+        isActive=Boolean.parseBoolean(status);
+        isDeliveryActive=Boolean.parseBoolean(delivery);
         fragmentManager=getFragmentManager();
         fragmentTransaction=fragmentManager.beginTransaction();
         context = this;
@@ -199,7 +239,9 @@ public class MarketActivity extends  Activity {
         order=new Order();
         order.id=1;
 
-
+        if (checkPermissionACCESS_FINE_LOCATION(this)) {
+            // do your stuff..
+        }
     }
 
 
@@ -251,7 +293,7 @@ public class MarketActivity extends  Activity {
         }
         if(needUpdate){
 
-            new RegloadTask().execute();
+          update();
         }
     }
 
@@ -261,15 +303,14 @@ public class MarketActivity extends  Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap;
-        Uri selectedImage = imageUri;
-        getContentResolver().notifyChange(selectedImage, null);
-        ContentResolver cr = getContentResolver();
 
         switch (requestCode) {
             case 200:
                 if (resultCode == RESULT_OK) {
                     try {
-                        bitmap = android.provider.MediaStore.Images.Media.getBitmap(cr, selectedImage);
+
+                        bitmap = MediaStore.Images.Media.getBitmap(
+                                getContentResolver(), imageUri);
                         order.ticket= Data.bitmapToBase64(bitmap);
                         PayFragment payFragment=(PayFragment) fragmentManager.findFragmentByTag("PAY");
                         payFragment.setFrontImage();
@@ -298,11 +339,15 @@ public class MarketActivity extends  Activity {
     }
     public void takePhotoTicket(){
 
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo = new File(Environment.getExternalStorageDirectory(),  "Ticket.jpg");
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photo));
-        imageUri = Uri.fromFile(photo);
-        startActivityForResult(intent, 200);
+
+        values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "Comprobante Donativo");
+        values.put(MediaStore.Images.Media.DESCRIPTION, "None");
+        imageUri = getContentResolver().insert(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        this.startActivityForResult(intent, 200);
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -424,11 +469,9 @@ public class MarketActivity extends  Activity {
         }
 
     }
-    public void  closeMapFragment(double latitude,double longitude){
+    public void  closeMapFragment(){
 
 
-        order.latitude=latitude;
-        order.longitude=longitude;
 
         getFragmentManager().beginTransaction().remove(mapFragment).commit();
 
@@ -513,6 +556,7 @@ public class MarketActivity extends  Activity {
                 } else {
 
                     prefs.saveDataObjet("QUIZ_PENDING",order.feedback);
+                    prefs.saveData("CURRENT_COUNT","");
                     order=null;
                     order=new Order();
 
@@ -605,8 +649,10 @@ public class MarketActivity extends  Activity {
         }
     }
     public void showError(String message){
-        ViewDialog alert = new ViewDialog();
-        alert.showDialog(MarketActivity.this, message);
+         prettyDialog.setTitle("Ocurrio un error")
+                .setMessage(message)
+
+                .show();
 
     }
     @Override
@@ -626,7 +672,7 @@ public class MarketActivity extends  Activity {
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            new RegloadTask().execute();
+           update();
         }
     };
 
@@ -652,16 +698,21 @@ public class MarketActivity extends  Activity {
                         saveJSONFile(bytes, "config");
                         JSONObject dataObject = Data.loadJSONFileObjet("configuracion", "config");
                         JSONArray items = dataObject.getJSONArray("items");
+
                         JSONObject jsonObject = items.getJSONObject(0);
-                        JSONArray payArray= items.getJSONArray(1);
+                        boolean status=jsonObject.getBoolean("activo");
+                        boolean delivery=jsonObject.getBoolean("delivery");
+                        JSONArray pay = jsonObject.getJSONArray("pay");
                         List<String> account=new ArrayList<>();
-
-
-                        for (int a=0;a<=payArray.length()-1;a++) {
-                            JSONObject jsonObjectAccount = items.getJSONObject(a);
+                        for (int a=0;a<=pay.length()-1;a++) {
+                            JSONObject jsonObjectAccount = pay.getJSONObject(a);
                             account.add(jsonObjectAccount.get("banco")+","+jsonObjectAccount.get("tarjeta"));
                         }
-                        prefs.saveData("REGISTER_USER_ACTIVE", ""+jsonObject.getBoolean("activo"));
+
+
+
+                        prefs.saveData("REGISTER_USER_ACTIVE", ""+status);
+                        prefs.saveData("DELIVER_ACTIVE", ""+delivery);
                         prefs.saveData("PAY_ACCOUNT_ONE", account.get(0));
                         prefs.saveData("PAY_ACCOUNT_TWO", account.get(1));
                         prefs.saveData("PAY_ACCOUNT_THREE", account.get(2));
@@ -699,5 +750,55 @@ public class MarketActivity extends  Activity {
             });
         }
 
+    }
+
+    public boolean checkPermissionACCESS_FINE_LOCATION(
+            final Context context) {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        (MarketActivity) context,
+                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                    showDialog("Geolocalizacion ", context, Manifest.permission.ACCESS_FINE_LOCATION);
+
+                } else {
+                    ActivityCompat
+                            .requestPermissions(
+                                    (Activity) context,
+                                    new String[] { Manifest.permission.ACCESS_FINE_LOCATION },
+                                    MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                }
+                return false;
+            } else {
+                return true;
+            }
+
+        } else {
+            return true;
+        }
+    }
+    public void showDialog(final String msg, final Context context,
+                           final String permission) {
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+        alertBuilder.setCancelable(true);
+        alertBuilder.setTitle("Permission necessary");
+        alertBuilder.setMessage(msg + " permission is necessary");
+        alertBuilder.setPositiveButton(android.R.string.yes,
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        ActivityCompat.requestPermissions((Activity) context,
+                                new String[] { permission },
+                                MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    }
+                });
+        AlertDialog alert = alertBuilder.create();
+        alert.show();
+    }
+
+    public void update(){
+        new RegloadTask().execute();
     }
 }

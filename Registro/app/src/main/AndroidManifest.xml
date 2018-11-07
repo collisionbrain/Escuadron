@@ -37,9 +37,14 @@
         </service>
         <service android:name="com.libre.escuadroncliente.ui.services.FirebaseIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
+        <intent-filter>
+            <action android:name="com.libre.escuadroncliente.ui.Update"/>
+            <category
+                android:name="android.intent.category.DEFAULT"/>
+        </intent-filter>
         <activity android:name="com.libre.escuadroncliente.ui.MarketActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat">
@@ -50,7 +55,8 @@
             android:theme="@style/Theme.AppCompat">
 
         </activity>
-        <activity android:name="com.libre.escuadroncliente.ui.Splash"
+        <activity
+            android:name="com.libre.escuadroncliente.ui.Splash"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"
@@ -58,7 +64,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.libre.escuadroncliente.ui.Update"
+            android:screenOrientation="portrait"
+            android:parentActivityName="com.libre.escuadroncliente.ui.Splash"
+            android:launchMode="singleTask"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:theme="@style/Theme.AppCompat">
 
+        </activity>
         <activity android:name="com.libre.escuadroncliente.ui.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat">

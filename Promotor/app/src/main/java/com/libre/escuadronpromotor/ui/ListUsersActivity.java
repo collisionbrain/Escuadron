@@ -29,7 +29,10 @@ import com.libre.escuadronpromotor.R;
 import com.libre.escuadronpromotor.ui.adapters.NewClientAdapter;
 import com.libre.escuadronpromotor.ui.fragments.DialogUploadFragment;
 import com.libre.escuadronpromotor.ui.fragments.OrderFragment;
+import com.libre.escuadronpromotor.ui.pojos.CartOrder;
+import com.libre.escuadronpromotor.ui.pojos.Delivery;
 import com.libre.escuadronpromotor.ui.pojos.Member;
+import com.libre.escuadronpromotor.ui.pojos.Order;
 import com.libre.escuadronpromotor.ui.pojos.Product;
 import com.libre.escuadronpromotor.ui.storage.PreferencesStorage;
 import com.libre.escuadronpromotor.ui.storage.db.DBHelper;
@@ -63,7 +66,6 @@ public class ListUsersActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private Calendar calendar ;
     private Date now ;
-    private DBHelper db;
     private List<Member> newMembers=new ArrayList<>();
     private NewClientAdapter newClientAdapter;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -78,9 +80,12 @@ public class ListUsersActivity extends AppCompatActivity {
     private ImageView imageViewAdd,imageViewUp,imageViewScan,imageViewDeli;
     private TextView textCounter;
     private int pendings=0;
-
+    private DBHelper db;
     private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
+    private DatabaseReference ref;
+    private DatabaseReference pedRef ;
+    private DatabaseReference cliRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +98,10 @@ public class ListUsersActivity extends AppCompatActivity {
         db=new DBHelper(context);
         PreferencesStorage prefs=new PreferencesStorage(context);
         userGuid=prefs.loadData("REGISTER_USER_KEY");
+        ref = database.getReference("registro");
+        pedRef = ref.child("pedidos");
+        cliRef = ref.child("clientes");
+
         productList=new ArrayList<>();
         recyclerView =findViewById(R.id.recycler_view);
         tapBarMenu=findViewById(R.id.tapBarMenu);
@@ -105,8 +114,6 @@ public class ListUsersActivity extends AppCompatActivity {
         ft = getFragmentManager().beginTransaction();
 
         fragmentManager=getFragmentManager();
-        fragmentTransaction=fragmentManager.beginTransaction();
-
         prev = getFragmentManager().findFragmentByTag("dialog");
         if (prev != null) {
             ft.remove(prev);
@@ -163,12 +170,9 @@ public class ListUsersActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed(){
-        if(orderFragment.isVisible()){
-            getFragmentManager().beginTransaction().remove(orderFragment).commit();
 
-        }else{
             finish();
-        }
+
     }
 
     @Override
@@ -195,9 +199,9 @@ public class ListUsersActivity extends AppCompatActivity {
         if (requestCode == 600) {
             if (resultCode == RESULT_OK) {
                 String id_user= data.getStringExtra("id");
-                Bundle bundle=new Bundle();
-                bundle.putString("id",id_user);
-                initFragmentOrder(bundle);
+                Intent intent=new Intent(this,OrderFragment.class);
+                intent.putExtra("id",id_user);
+                startActivity(intent);
             }
         }
     }
@@ -288,26 +292,57 @@ public class ListUsersActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(),ScannerActivity.class);
         startActivityForResult(intent, 600);
     }
-    private void initFragmentOrder( Bundle bundle){
 
-        fragmentTransaction = fragmentManager.beginTransaction();
-        orderFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.container, orderFragment, "Add detail");
-        fragmentTransaction.commit();
-
-    }
     public void  counterPendings(){
-        DatabaseReference ref = database.getReference("registro");
-        DatabaseReference pedRef = ref.child("pedidos");
+          ref = database.getReference("registro");
+          pedRef = ref.child("pedidos");
 
         Query query = pedRef.orderByChild("pay").equalTo(false);
-
-
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
                 for (DataSnapshot pedido: snapshot.getChildren()) {
-                    Object object=pedido.child("password").getRef();
+                    final Order order=pedido.getValue(Order.class);
+                    Query query = ref.child("clientes").child(order.userGuid);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                Member member=dataSnapshot.getValue(Member.class);
+                                Log.e("################",""+order.userGuid);
+                                Log.e("################",""+member.name);
+                                Log.e("################",""+order.dateOrder);
+                                Log.e("################",""+order.productList);
+
+                                Delivery delivery=new Delivery();
+                                delivery.user_key=order.userGuid;
+                                delivery.user_name=member.name;
+                                //delivery.user_idb64=member.b64FrontId;
+                                List<CartOrder> orderCart= order.productList;
+                                String stProduct="";
+                                if(orderCart!=null) {
+                                    for (CartOrder cart : orderCart) {
+
+
+                                        stProduct += cart.id + " x " + cart.count + "|";
+                                    }
+                                }
+
+                                delivery.products=stProduct;
+                                delivery.delivery_date=order.dateOrder;
+                                delivery.total=order.total+"";
+                                db.insertOrder(delivery);
+
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            databaseError.getMessage().toString();
+                        }
+                    });
+
+
                     pendings++;
                 }
                 if(pendings>0) {

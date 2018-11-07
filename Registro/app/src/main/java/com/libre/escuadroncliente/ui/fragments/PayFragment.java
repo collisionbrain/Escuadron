@@ -46,12 +46,13 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
         setRetainInstance(true);
         context = getActivity();
         prefs=new PreferencesStorage(context);
+
         toPay[0]=prefs.loadData("PAY_ACCOUNT_ONE");
         toPay[1]=prefs.loadData("PAY_ACCOUNT_TWO");
         toPay[2]=prefs.loadData("PAY_ACCOUNT_THREE");
         toPay[3]=prefs.loadData("PAY_ACCOUNT_FOUR");
         Random rand = new Random();
-        int rand_int = rand.nextInt(toPay.length);
+
 
         this.view = inflater.inflate(R.layout.pay_fragment, container, false);
         btnSiguienteTicket =this.view.findViewById(R.id.btnSiguienteTicket);
@@ -66,8 +67,16 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
                 this.setFrontImage();
             }
         }
+        String []data;
+        String current=prefs.loadData("CURRENT_COUNT");
+        int rand_int = rand.nextInt(toPay.length);
+        if(current=="" || current==null) {
+            prefs.saveData("CURRENT_COUNT", toPay[rand_int]);
+            data =toPay[rand_int].split(",");
+        }else{
+            data =current.split(",");
+        }
 
-        String []data=toPay[rand_int].split(",");
         totalToPay.setText(total);
         txtBank.setText(data[0]);
         txtAccount.setText(data[1]);

@@ -56,7 +56,7 @@
         <RatingBar
             android:id="@+id/r2"
             style="?android:attr/ratingBarStyleIndicator"
-            android:layout_below="@+id/q1"
+            android:layout_below="@+id/q2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:numStars="5"

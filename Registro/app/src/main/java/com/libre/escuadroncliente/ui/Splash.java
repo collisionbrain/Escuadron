@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Window;
 
+import com.google.firebase.messaging.RemoteMessage;
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.storage.PreferencesStorage;
 
@@ -22,6 +24,7 @@ public class Splash extends Activity {
         setContentView(R.layout.splash_screen);
         Intent intent = getIntent();
         needUpdate=intent.getBooleanExtra("UPDATE",false);
+        Log.e("$$$$$$$$$$$$$$$$",""+needUpdate);
 
         this.prefs=new PreferencesStorage(this);
         prefs.saveData(ID_CAMERA_PREFERENCE,"0");
@@ -59,8 +62,16 @@ public class Splash extends Activity {
                 }
             }
         }, 2000);
-
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
 
+        if (intent.getAction()!=null)
+        {
+
+
+        }
+    }
 }

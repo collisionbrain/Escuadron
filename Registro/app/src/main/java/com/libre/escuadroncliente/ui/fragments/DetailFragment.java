@@ -65,10 +65,8 @@ public class DetailFragment extends Fragment   implements View.OnClickListener{
 
         if(product.image!=null) {
             Bitmap bitmap = Data.base64ToBitmap(product.image);
-            Drawable background = new BitmapDrawable(getResources(), bitmap);
-            backGround.setBackground(background);
-        }else{
-            backGround.setBackground(getDrawable(context, R.drawable.background));
+            backGround.setImageBitmap(bitmap) ;
+
 
         }
         txtDesc.setText(product.name);

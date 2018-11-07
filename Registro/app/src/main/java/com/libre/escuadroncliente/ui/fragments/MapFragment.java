@@ -39,7 +39,8 @@ public class MapFragment extends Fragment implements LocationListener {
     private SubmitButton btnElegir,btnGuardar;
     private  Marker startMarker;
     private GeoPoint pointCenter;
-
+    private boolean previus=false;
+    private boolean devlivery=false;
     @SuppressWarnings("deprecation")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -49,14 +50,26 @@ public class MapFragment extends Fragment implements LocationListener {
         btnElegir=v.findViewById(R.id.btnChoiceMap);
         context=getActivity();
         startMarker = new Marker(mMapView);
-        location = AppLocation.getLocation(context);
-        if(location!=null){
-            longitude =  location.getLongitude();
-            latitude =    location.getLatitude();
-        }else{
-            String bestProvider=AppLocation.getbestProvider();
-            AppLocation.getLocationManager().requestLocationUpdates(bestProvider, 1000, 0, this);
-        }
+        devlivery=((MarketActivity) context).isDeliveryActive;
+
+
+            if (((MarketActivity) context).order.latitude != 0.0 &&
+                    ((MarketActivity) context).order.longitude != 0.0) {
+                longitude = ((MarketActivity) context).order.longitude;
+                latitude = ((MarketActivity) context).order.latitude;
+                previus = true;
+            } else {
+                location = AppLocation.getLocation(context);
+                if (location != null) {
+                    longitude = location.getLongitude();
+                    latitude = location.getLatitude();
+                } else {
+                    String bestProvider = AppLocation.getbestProvider();
+                    AppLocation.getLocationManager().requestLocationUpdates(bestProvider, 1000, 0, this);
+                }
+            }
+
+
         mMapView.setBuiltInZoomControls(false);
         mMapView.setMapListener(new DelayedMapListener(new MapListener() {
             @Override
@@ -80,6 +93,13 @@ public class MapFragment extends Fragment implements LocationListener {
             public void onClick(View v) {
                 btnElegir.setOnResultEndListener(choiceListenerMap);
                 btnElegir.doResult(true);
+            }
+        });
+        btnGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                btnGuardar.setOnResultEndListener(finishListenerMap);
+                btnGuardar.doResult(true);
             }
         });
         return v;
@@ -108,7 +128,20 @@ public class MapFragment extends Fragment implements LocationListener {
     @Override
     public void onResume() {
         super.onResume();
-        setLocationInMap(location.getLatitude(),location.getLongitude());
+        if(devlivery){
+
+            if(!previus) {
+                setLocationInMap(location.getLatitude(), location.getLongitude());
+            }else{
+                setLocationInMap(latitude, longitude);
+            }
+
+        }else {
+            latitude = 19.427171;
+            longitude=  -99.166741;
+            setLocationInMap(latitude, longitude);
+        }
+
 
         if (mMapView != null) {
 
@@ -159,7 +192,6 @@ public class MapFragment extends Fragment implements LocationListener {
         mapController.setZoom(19);
         mapController.setCenter(point);
         mapController.animateTo(point);
-
         startMarker.setPosition(point);
         startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
         //mMapView.getOverlays().add(startMarker);
@@ -174,8 +206,6 @@ public class MapFragment extends Fragment implements LocationListener {
                 mMapView.getMapCenter().getLongitude());
 
         startMarker.setPosition(pointCenter);
-        //startMarker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-       // mMapView.getOverlays().add(startMarker);
         startMarker.setIcon(getResources().getDrawable(R.drawable.alocation));
         startMarker.setTitle("Aqui nos vemos");
         startMarker.showInfoWindow();
@@ -190,10 +220,12 @@ public class MapFragment extends Fragment implements LocationListener {
         @Override
         public void onResultEnd() {
 
-        ((MarketActivity) context).closeMapFragment(
+            double latitude=startMarker.getPosition().getLatitude();
+            double longitude=startMarker.getPosition().getLongitude();
+            ((MarketActivity) context).order.latitude=latitude;
+            ((MarketActivity) context).order.longitude=longitude;
 
-                    startMarker.getPosition().getLatitude(),
-                    startMarker.getPosition().getLongitude());
+            ((MarketActivity) context).closeMapFragment();
 
         }
     };

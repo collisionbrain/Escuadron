@@ -72,11 +72,7 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
     } ;
     private boolean validateForm() {
         Member member=((RegisterActivity) context).newMember;
-        if (member.b64Recipe==null) {
-            setErrorMessageForm("Carga tu Preescripcion Médica");
-            btnSiguienteCamera.reset();
-            return false;
-        }else if (member.b64FrontId==null) {
+        if (member.b64FrontId==null) {
 
             setErrorMessageForm("Carga tu Identificación Oficial");
             btnSiguienteCamera.reset();
@@ -86,7 +82,12 @@ public class CredentialFragment extends Fragment implements  View.OnClickListene
             setErrorMessageForm("Carga tu Comprobante de Domicilio");
             btnSiguienteCamera.reset();
             return false;
-        } else {
+        }
+        else if (member.b64Recipe==null) {
+            setErrorMessageForm("Carga tu Preescripcion Médica");
+            btnSiguienteCamera.reset();
+            return false;
+        }else   {
 
             return true;
         }

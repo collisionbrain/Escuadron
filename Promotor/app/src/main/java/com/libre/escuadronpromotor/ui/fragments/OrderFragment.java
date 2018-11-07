@@ -1,12 +1,15 @@
 package com.libre.escuadronpromotor.ui.fragments;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.firebase.database.DataSnapshot;
@@ -18,59 +21,48 @@ import com.google.firebase.database.ValueEventListener;
 import com.libre.escuadronpromotor.R;
 import com.libre.escuadronpromotor.ui.ListUsersActivity;
 import com.libre.escuadronpromotor.ui.adapters.SignaturePanelAdapter;
+import com.libre.escuadronpromotor.ui.pojos.CartOrder;
+import com.libre.escuadronpromotor.ui.pojos.Delivery;
+import com.libre.escuadronpromotor.ui.pojos.Member;
 import com.libre.escuadronpromotor.ui.pojos.Order;
+import com.libre.escuadronpromotor.ui.pojos.Product;
+import com.libre.escuadronpromotor.ui.storage.db.DBHelper;
+import com.libre.escuadronpromotor.ui.util.Data;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
 import libs.mjn.prettydialog.PrettyDialog;
 import libs.mjn.prettydialog.PrettyDialogCallback;
 
 import com.elyeproj.loaderviewlibrary.LoaderTextView;
-public class OrderFragment extends Fragment implements  View.OnClickListener  {
+
+import java.util.List;
+
+public class OrderFragment extends Activity implements  View.OnClickListener  {
     private View view;
     private Context context;
-    private TextView txtFecha,txtEstatus,txtDetalle,txtProductos;
+    private TextView txtMember,txtFecha,txtEstatus,txtDetalle,txtProductos;
     private SubmitButton btnConfirmOrder;
     private SignaturePanelAdapter firmaPanel;
     private  Order order_local;
+    private  Member member;
     private  String client_key;
     private  DatabaseReference reference;
     private PrettyDialog prettyDialog;
-
+    private Delivery delivery;
+    private DBHelper db;
     private int WAIT_DURATION = 5000;
     private DummyWait dummyWait;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
-        super.onSaveInstanceState(savedInstance);
-        setRetainInstance(true);
-        context=getActivity();
-        client_key = getArguments().getString("id");
-        this.view = inflater.inflate(R.layout.order_fragment, container, false);
-
-        txtFecha=this.view.findViewById(R.id.txtFecha);
-        txtEstatus=this.view.findViewById(R.id.txtEstatus);
-        txtDetalle=this.view.findViewById(R.id.txtDetalle);
-        txtProductos=this.view.findViewById(R.id.txtProductos);
-        btnConfirmOrder=this.view.findViewById(R.id.btnFinalizar);
-        btnConfirmOrder.setOnClickListener(this);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context=this;
+        db=new DBHelper(context);
+        client_key = getIntent().getStringExtra("id");
+        setContentView(R.layout.order_fragment);
+        btnConfirmOrder=findViewById(R.id.btnFinalizar);
+        txtMember=findViewById(R.id.txtMember);
         btnConfirmOrder.setOnResultEndListener(finishOrder);
-
-         reference = database.getReference("registro");
-        Query query = reference.child("pedidos").child(client_key);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                     order_local = dataSnapshot.getValue(Order.class);
-                     //start loader
-                    //                    viewLoader.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                databaseError.getMessage().toString();
-            }
-        });
+        reference = database.getReference("registro");
         prettyDialog= new PrettyDialog(context)
                 .setTitle("Entrega Completada")
                 .setMessage("Entrega Completada").setIcon(
@@ -88,7 +80,26 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
                             }
                         }
                 ) ;
-        return  this.view;
+
+      /*  DatabaseReference reference = database.getReference("registro");
+        Query query = reference.child("clientes").child(client_key);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    member = dataSnapshot.getValue(Member.class);
+                    txtMember.setText(member.name);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                databaseError.getMessage().toString();
+            }
+        });*/
+
+        loadData();
+
     }
 
 
@@ -128,20 +139,31 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
         dummyWait.execute();
     }
 
-    private void postLoadData() {
-        txtFecha.setText("Mr. Donald Trump");
-        txtEstatus.setText("President of United State (2017 - now)");
-        txtDetalle.setText("+001 2345 6789");
-        txtProductos.setText("donald.trump@donaldtrump.com");
+    private void postLoadData(Delivery delivery) {
+        txtMember.setText(delivery.user_name);
+        ((TextView)findViewById(R.id.txt_date)).setText(delivery.delivery_date);
+        ((TextView)findViewById(R.id.txt_title)).setText(delivery.total);
+        ((TextView)findViewById(R.id.txt_phone)).setText(delivery.products);
+        if(delivery.user_idb64!=null){
+            Bitmap imgbitmap=Data.base64ToBitmap(delivery.user_idb64);
+            ((ImageView)findViewById(R.id.image_icon)).setImageBitmap(imgbitmap);
+        }
+
+        if(delivery.total!="0.0"){
+            ((TextView)findViewById(R.id.txt_email)).setText("Sin pedidos pendientes");
+        }else{
+            ((TextView)findViewById(R.id.txt_email)).setText("");
+        }
+
 
     }
 
     public void resetLoader(View view) {
-        ((LoaderTextView)view.findViewById(R.id.txtFecha)).resetLoader();
-        ((LoaderTextView)view.findViewById(R.id.txtEstatus)).resetLoader();
-        ((LoaderTextView)view.findViewById(R.id.txtDetalle)).resetLoader();
-        ((LoaderTextView)view.findViewById(R.id.txtProductos)).resetLoader();
-        ((LoaderTextView)view.findViewById(R.id.txtFecha)).resetLoader();
+        ((LoaderTextView)findViewById(R.id.txt_date)).resetLoader();
+        ((LoaderTextView)findViewById(R.id.txt_title)).resetLoader();
+        ((LoaderTextView)findViewById(R.id.txt_phone)).resetLoader();
+        ((LoaderTextView)findViewById(R.id.txt_email)).resetLoader();
+
         loadData();
     }
 
@@ -155,6 +177,12 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
         protected Void doInBackground(Void... params) {
             try {
                 Thread.sleep(WAIT_DURATION);
+
+                //getDataClient();
+                //getDataDelivery();
+                  delivery=db.getOrder(client_key);
+
+
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -164,11 +192,35 @@ public class OrderFragment extends Fragment implements  View.OnClickListener  {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            postLoadData();
+            postLoadData(delivery);
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dummyWait != null) {
+            dummyWait.cancel(true);
+        }
+    }
+    public void getDataDelivery(){
+        Query query = reference.child("pedidos").child(client_key);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    order_local = dataSnapshot.getValue(Order.class);
+                    ((TextView)findViewById(R.id.txt_date)).setText(order_local.dateOrder);
+                }
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                databaseError.getMessage().toString();
+            }
+        });
+    }
+    public void getDataClient(){
 
-
+    }
 }

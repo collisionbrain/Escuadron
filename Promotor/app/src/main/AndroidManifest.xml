@@ -32,6 +32,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat">
         </activity>
+        <activity android:name="com.libre.escuadronpromotor.ui.fragments.OrderFragment"
+        android:screenOrientation="portrait"
+        android:theme="@style/Theme.AppCompat">
+    </activity>
         <activity android:name="com.libre.escuadronpromotor.ui.Splash"
             android:screenOrientation="portrait">
             <intent-filter>

@@ -7,7 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.libre.escuadronpromotor.ui.pojos.Address;
+import com.libre.escuadronpromotor.ui.pojos.Delivery;
 import com.libre.escuadronpromotor.ui.pojos.Member;
+import com.libre.escuadronpromotor.ui.pojos.Order;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,16 +59,41 @@ public class DBHelper   extends SQLiteOpenHelper {
                 "est TEXT, " +
                 "idfront TEXT, " +
                 "idback TEXT)");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS  Orders(" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                "user_key TEXT, " +
+                "user_name TEXT, " +
+                "user_idb64 TEXT, " +
+                "delivery_date TEXT, " +
+                "products TEXT, " +
+                "total TEXT)");
     }
+
+
 
     // Upgrading database
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + "Miembros");
-
+        db.execSQL("DROP TABLE IF EXISTS " + "Orders");
         // Create tables again
         onCreate(db);
+    }
+    public long insertOrder(Delivery delivery) {
+        // get writable database as we want to write data
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues vOrder = new ContentValues();
+        vOrder.put("user_key", ""+delivery.user_key);
+        vOrder.put("user_name", ""+delivery.user_name);
+        vOrder.put("user_idb64", ""+delivery.user_idb64);
+        vOrder.put("delivery_date", ""+delivery.delivery_date);
+        vOrder.put("products", ""+delivery.products);
+        vOrder.put("total", ""+delivery.total);
+        long id = db.insert("Orders", null, vOrder);
+        db.close();
+        return id;
     }
     public long insertMember(Member member) {
         // get writable database as we want to write data
@@ -99,6 +126,30 @@ public class DBHelper   extends SQLiteOpenHelper {
         long id = db.insert("Miembros", null, vMember);
         db.close();
         return id;
+    }
+    public Delivery getOrder(String user_key) {
+        String selectQuery = "SELECT  * FROM Orders WHERE user_key='"+user_key+"'";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        int c=cursor.getCount() ;
+        Delivery delivery = new Delivery();
+        if (cursor.getCount() > 0){
+            if (cursor.moveToFirst()) {
+                do {
+
+
+                    delivery.user_key=cursor.getString(cursor.getColumnIndex("user_key"));
+                    delivery.user_name=cursor.getString(cursor.getColumnIndex("user_name"));
+                    delivery.user_idb64=cursor.getString(cursor.getColumnIndex("user_idb64"));
+                    delivery.products=cursor.getString(cursor.getColumnIndex("products"));
+                    delivery.delivery_date=cursor.getString(cursor.getColumnIndex("delivery_date"));
+                    delivery.total=cursor.getString(cursor.getColumnIndex("total"));
+
+                } while (cursor.moveToNext());
+            }
+        }
+        db.close();
+        return delivery;
     }
     public List<Member> getAllMembers() {
         List<Member> memberList = new ArrayList<>();

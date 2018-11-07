@@ -177,7 +177,6 @@ public class RegisterActivity extends FragmentActivity {
             // do your stuff..
         }
 
-        //JSONObject dataObject = Data.loadJSONFileObjet("configuracion", "config");
 
     }
     public void onActivityResult(int requestCode, int resultCode,   Intent data) {
@@ -338,6 +337,7 @@ public class RegisterActivity extends FragmentActivity {
                         JSONArray items = dataObject.getJSONArray("items");
                         JSONObject jsonObject = items.getJSONObject(0);
                         boolean status=jsonObject.getBoolean("activo");
+                        boolean delivery=jsonObject.getBoolean("delivery");
                         JSONArray pay = jsonObject.getJSONArray("pay");
                         List<String> account=new ArrayList<>();
                         for (int a=0;a<=pay.length()-1;a++) {
@@ -346,6 +346,7 @@ public class RegisterActivity extends FragmentActivity {
                         }
 
                         preferencesStorage.saveData("REGISTER_USER_ACTIVE", ""+status);
+                        preferencesStorage.saveData("DELIVER_ACTIVE", ""+delivery);
                         preferencesStorage.saveData("PAY_ACCOUNT_ONE", account.get(0));
                         preferencesStorage.saveData("PAY_ACCOUNT_TWO", account.get(1));
                         preferencesStorage.saveData("PAY_ACCOUNT_THREE", account.get(2));
@@ -437,8 +438,7 @@ public class RegisterActivity extends FragmentActivity {
         finish();
     }
     public void takePicture(int type){
-        Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-        File photo;
+        Intent intent ;
         switch (type){
             case 0:
                 values = new ContentValues();
