@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.etsy.android.grid.StaggeredGridView;
 import com.google.gson.JsonObject;
 import com.libre.escuadroncliente.R;
+import com.libre.escuadroncliente.ui.MarketActivity;
 import com.libre.escuadroncliente.ui.adapters.SampleAdapter;
 import com.libre.escuadroncliente.ui.adapters.SampleData;
 import com.libre.escuadroncliente.ui.pojos.Product;
@@ -29,7 +31,7 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
     private View view;
     private Context context;
     private int counter=0;
-    private StaggeredGridView staggeredGridView;
+    private GridView staggeredGridView;
     private SampleAdapter mAdapter;
     private ArrayList<Product> mData;
     private int productRootItem;
@@ -41,7 +43,7 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
         context = getActivity();
-        this.view = inflater.inflate(R.layout.sublist_fragment, container, false);
+        this.view = inflater.inflate(R.layout.gridview_fragment, container, false);
         staggeredGridView=this.view.findViewById(R.id.grid_view_sublist);
         productRootItem =  getArguments().getInt("productRootItem");
 
@@ -52,14 +54,15 @@ public class SubListFragment extends Fragment implements   AbsListView.OnScrollL
          txtHeaderTitle = header.findViewById(R.id.txt_title);
          title=getTitle(productRootItem);
         data=Data.loadJSONFileObjet(title,"db");
+        ((MarketActivity)context).updateHeader(title);
         getActivity().runOnUiThread(new Runnable() {
 
             @Override
             public void run() {
 
-                txtHeaderTitle.setText(title);
-                staggeredGridView.addHeaderView(header);
-                staggeredGridView.addFooterView(footer);
+                //txtHeaderTitle.setText(title);
+               // staggeredGridView.addHeaderView(header);
+               // staggeredGridView.addFooterView(footer);
                 mAdapter = new SampleAdapter(getActivity(), R.id.txt_line1);
                 mData = SampleData.generateSampleData(data);
 

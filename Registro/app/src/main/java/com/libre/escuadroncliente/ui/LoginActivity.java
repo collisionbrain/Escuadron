@@ -31,9 +31,21 @@ import com.libre.escuadroncliente.ui.storage.PreferencesStorage;
 import com.libre.escuadroncliente.ui.util.Data;
 import com.libre.escuadroncliente.ui.util.Network;
 import com.unstoppable.submitbuttonview.SubmitButton;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
+
 import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE;
+import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE_CONFIG;
 import static com.libre.escuadroncliente.ui.util.Constants.URL_REMOTE;
 import static com.libre.escuadroncliente.ui.util.Data.saveJSONFile;
 
@@ -59,7 +71,7 @@ public class LoginActivity  extends Activity implements  View.OnClickListener  {
     private FirebaseStorage storage;
     final long ONE_MEGABYTE = 1024 * 1024;
     private int smallerDimension;
-
+    private PrettyDialog prettyDialog=null;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -85,7 +97,29 @@ public class LoginActivity  extends Activity implements  View.OnClickListener  {
         int height = point.y;
         smallerDimension = width < height ? width : height;
         smallerDimension = smallerDimension * 3 / 4;
+        prettyDialog= new PrettyDialog(context);
+        prettyDialog.setIcon(
+                R.drawable.pdlg_icon_info,     // icon resource
+                R.color.pdlg_color_red,      // icon tint
+                new PrettyDialogCallback() {   // icon OnClick listener
+                    @Override
+                    public void onClick() {
+                        // Do what you gotta do
+                    }
+                })
+                .addButton(
+                        "OK",					// button text
+                        R.color.pdlg_color_white,		// button text color
+                        R.color.pdlg_color_green,		// button background color
+                        new PrettyDialogCallback() {		// button OnClick listener
+                            @Override
+                            public void onClick() {
 
+                                btnEntrar.reset();
+                                prettyDialog.dismiss();
+                            }
+                        }
+                );
     }
 
     @Override
@@ -117,6 +151,7 @@ public class LoginActivity  extends Activity implements  View.OnClickListener  {
 
 
                                                             saveJSONFile(bytes,"db");
+                                                            downloadConfig();
                                                             btnEntrar.doResult(true);
                                                             loginSuccess=true;
 
@@ -130,12 +165,18 @@ public class LoginActivity  extends Activity implements  View.OnClickListener  {
                                                         }
                                                     });
                                                 }else{
+
                                                     btnEntrar.doResult(false);
+                                                    String messg=task.getException().getMessage();
+                                                    showError(messg);
 
                                                 }
                                             } else {
+
                                                 btnEntrar.doResult(false);
                                                 loginSuccess=false;
+                                                String messg=task.getException().getMessage();
+                                                showError(messg);
                                             }
 
                                             // ...
@@ -213,5 +254,55 @@ public class LoginActivity  extends Activity implements  View.OnClickListener  {
         }
     };
 
+    public void showError(String message){
+        prettyDialog.setTitle("Ocurrio un error")
+                .setMessage(message)
 
+                .show();
+
+    }
+    public void downloadConfig(){
+
+
+        StorageReference fileRef = storage.getReferenceFromUrl(URL_REMOTE).child(JSON_FILE_CONFIG);
+        if (fileRef != null) {
+
+            fileRef.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                @Override
+                public void onSuccess(byte[] bytes) {
+                    try{
+
+                        saveJSONFile(bytes, "config");
+                        JSONObject dataObject = Data.loadJSONFileObjet("configuracion", "config");
+                        JSONArray items = dataObject.getJSONArray("items");
+                        JSONObject jsonObject = items.getJSONObject(0);
+                        boolean status=jsonObject.getBoolean("activo");
+                        boolean delivery=jsonObject.getBoolean("delivery");
+                        JSONArray pay = jsonObject.getJSONArray("pay");
+                        List<String> account=new ArrayList<>();
+                        for (int a=0;a<=pay.length()-1;a++) {
+                            JSONObject jsonObjectAccount = pay.getJSONObject(a);
+                            account.add(jsonObjectAccount.get("banco")+","+jsonObjectAccount.get("tarjeta"));
+                        }
+
+                        prefs.saveData("REGISTER_USER_ACTIVE", ""+status);
+                        prefs.saveData("DELIVER_ACTIVE", ""+delivery);
+                        prefs.saveData("PAY_ACCOUNT_ONE", account.get(0));
+                        prefs.saveData("PAY_ACCOUNT_TWO", account.get(1));
+                        prefs.saveData("PAY_ACCOUNT_THREE", account.get(2));
+                        prefs.saveData("PAY_ACCOUNT_FOUR", account.get(3));
+
+                    }catch (JSONException ex){
+                        ex.getStackTrace();
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+
+                }
+            });
+        }
+
+    }
 }

@@ -19,14 +19,16 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="70"
+        android:layout_weight="75"
         android:text="El Colectivo 'Escuadron Canabico', es el responsable del tratamiento de los datos personales que nos proporcione.
 
 Sus datos personales serán utilizados para mantener el control de el registro y ventas de quienes se registran al protocolo de investigacion y este tratamiento forma parte de las medidas de seguridad adoptadas, por lo que, se comunica que no se efectuarán tratamientos adicionales.
 
 Se informa que no realizarán transferencias que requieran su consentimiento, salvo aquellas que sean necesarias para atender requerimientos de información de una autoridad competente, debidamente fundados y motivados.
 
-Usted podrá solicitar el aviso de privacidad integral en  las instalaciones del Colectivo.
+Usted podrá solicitar el aviso de privacidad integral en el sitio virtual del colectivo
+
+Este documento esta sujeto a cambios sin previo aviso.
 "/>
 
 

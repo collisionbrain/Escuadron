@@ -206,4 +206,9 @@ public class DBHelper   extends SQLiteOpenHelper {
         db.delete("Miembros","mail=?",new String[]{email});
         db.close();
     }
+    public void deleteMemberOrders(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE  FROM Orders");
+        db.close();
+    }
 }

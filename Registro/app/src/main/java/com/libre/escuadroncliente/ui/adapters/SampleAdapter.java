@@ -31,7 +31,7 @@ public class SampleAdapter extends ArrayAdapter<Product> {
     private static final String TAG = "SampleAdapter";
 
     static class ViewHolder {
-        DynamicHeightTextView txtLineOne;
+        TextView txtLineOne;
         TextView txtLineTwo,txtLineThree;
         Button btnPlus;
     }
@@ -63,16 +63,15 @@ public class SampleAdapter extends ArrayAdapter<Product> {
         final Product product;
 
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(R.layout.list_item_sample, parent, false);
+            convertView = mLayoutInflater.inflate(R.layout.grid_item, parent, false);
             vh = new ViewHolder();
-            vh.txtLineOne =  convertView.findViewById(R.id.txt_line1);
-            vh.txtLineOne.setBackgroundColor(Color.parseColor("#a0fcc9"));
-            vh.txtLineTwo =  convertView.findViewById(R.id.txt_line2);
-            vh.txtLineTwo.setBackgroundColor(Color.parseColor("#a0fcc9"));
-            vh.txtLineThree =  convertView.findViewById(R.id.txt_line3);
-            vh.txtLineThree.setBackgroundColor(Color.parseColor("#a0fcc9"));
+
+            vh.txtLineOne =  convertView.findViewById(R.id.txtName);
+            vh.txtLineTwo =  convertView.findViewById(R.id.txtPercentSative);
+            vh.txtLineThree =  convertView.findViewById(R.id.txtPercentIndic);
 
             //vh.btnPlus = convertView.findViewById(R.id.btn_plus);
+
 
             convertView.setTag(vh);
 
@@ -85,9 +84,10 @@ public class SampleAdapter extends ArrayAdapter<Product> {
         int backgroundIndex = position >= mBackgroundColors.size() ?
                 position % mBackgroundColors.size() : position;
 
-        convertView.setBackgroundResource(mBackgroundColors.get(backgroundIndex));
-        vh.txtLineOne.setHeightRatio(positionHeight);
+        //convertView.setBackgroundResource(mBackgroundColors.get(backgroundIndex));
+       // vh.txtLineOne.setHeightRatio(positionHeight);
         product=getItem(position);
+
         vh.txtLineOne.setText(product.name);
         vh.txtLineTwo.setText(product.flavor);
         vh.txtLineThree.setText(product.amount);

@@ -112,12 +112,13 @@ public class ListDeliveryActivity extends AppCompatActivity {
                             for (DataSnapshot cliente: dataSnapshot.getChildren()) {
                                 Member member=cliente.getValue(Member.class);
                                 Delivery delivery=new Delivery();
-                                delivery.name=member.name;
-                                delivery.mail=member.mail;
+                                delivery.user_name=member.name;
+                               /* delivery.mail=member.mail;
                                 delivery.image=member.b64FrontId;
                                 delivery.latitude=order.latitude;
                                 delivery.longitude=order.longitude;
                                 delivery.productList=order.productList;
+                                */
                                 orderDelivery.add(delivery);
 
                             }

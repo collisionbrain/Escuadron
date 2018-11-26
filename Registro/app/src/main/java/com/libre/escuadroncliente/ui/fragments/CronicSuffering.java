@@ -42,8 +42,8 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
         resources = getResources();
         spinner = this.view.findViewById(R.id.spinner);
         spinnerLudic= this.view.findViewById(R.id.spinnerLudic);
-        spinner.setItems("Padecimiento Cronico","Diabetes", "Asma", "Estres", "Neuropatias", "Artritis","Otro");
-        spinnerLudic.setItems("Tratamiento Homeopatico","Aromaterapia", "Vaporizacion", "Ingesta","Otro");
+        spinner.setItems("Padecimiento Cronico","Cancer","Parkinson","Diabetes", "Asma", "Neuropatias", "Artritis","Otro");
+        spinnerLudic.setItems("Tratamiento Homeopatico","Estres", "Ansiedad", "Depresion","Otro");
         spinnerLudic.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {

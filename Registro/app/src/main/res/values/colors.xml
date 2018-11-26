@@ -18,5 +18,6 @@
     <color name="dialog_background"> #CCFFFF</color>
     <color name="border_blue_button_white">#03A9F4</color>
     <color name="black">#000000</color>
+    <color name="yellow">#FFEB3B</color>
 </resources>
 

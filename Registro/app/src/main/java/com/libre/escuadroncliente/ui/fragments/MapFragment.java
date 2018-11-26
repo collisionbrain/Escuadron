@@ -10,6 +10,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -69,6 +70,17 @@ public class MapFragment extends Fragment implements LocationListener {
                 }
             }
 
+
+       if(!devlivery){
+           mMapView.setOnTouchListener(new View.OnTouchListener() {
+               @Override
+               public boolean onTouch(View v, MotionEvent event) {
+
+
+                   return true;
+               }
+           });
+       }
 
         mMapView.setBuiltInZoomControls(false);
         mMapView.setMapListener(new DelayedMapListener(new MapListener() {

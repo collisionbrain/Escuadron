@@ -4,7 +4,45 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" >
+        <TextView
+            android:id="@+id/bar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textSize="21sp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:padding="5dp">
+            <ImageView
+                android:id="@+id/cart"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@drawable/cart"
+                android:visibility="invisible"/>
 
+            <TextView
+                android:id="@+id/txtCount"
+                android:layout_width="20dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_count"
+                android:text="1"
+                android:gravity="center"
+                android:textColor="#FFF"
+                android:textSize="8sp"
+                android:textStyle="bold"
+                android:layout_alignRight="@+id/cart"
+                android:visibility="invisible"/>
+
+        </RelativeLayout>
+        </android.support.v7.widget.Toolbar>
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
@@ -13,68 +51,82 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-        <com.michaldrabik.tapbarmenulib.TapBarMenu
-            android:id="@+id/tapBarMenu"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
+            android:layout_height="55dp"
+            android:orientation="horizontal"
+            android:background="@color/green_toolbar"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="24dp"
-            app:tbm_backgroundColor="@color/green_toolbar" >
+            android:weightSum="100">
 
-
-            <ImageView
-                android:id="@+id/imgPhoto"
+            <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:src="@drawable/ticket"
-
-                />
-
-            <ImageView
-                android:id="@+id/imgMap"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:src="@drawable/map"
-                />
-            <Space
-                android:layout_width="56dp"
                 android:layout_height="match_parent"
-                />
-            <Space
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
-                />
-            <Space
-                android:layout_width="56dp"
-                android:layout_height="match_parent"
-                />
+                android:layout_weight="20"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/imgPhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:src="@drawable/ticket"
 
-            <ImageView
-                android:id="@+id/imgUpload"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:src="@drawable/upload"
-                />
+                android:layout_height="match_parent"
+                android:layout_weight="20"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/imgMap"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:src="@drawable/map"
+                    />
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="20"
+                android:clickable="true">
 
-            <ImageView
-                android:id="@+id/imgCode"
+            </RelativeLayout>
+            <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:paddingTop="15dp"
-                android:paddingBottom="15dp"
-                android:src="@drawable/scan"
-                />
-        </com.michaldrabik.tapbarmenulib.TapBarMenu>
+                android:layout_height="match_parent"
+                android:layout_weight="20"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/imgUpload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:src="@drawable/upload"
+                    />
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="20"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/imgCode"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="15dp"
+                    android:paddingBottom="15dp"
+                    android:src="@drawable/scan"
+                    />
+            </RelativeLayout>
+        </LinearLayout>
+
     </FrameLayout>
 
 </LinearLayout>

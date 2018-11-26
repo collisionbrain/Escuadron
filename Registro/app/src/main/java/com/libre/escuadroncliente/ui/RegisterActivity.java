@@ -114,6 +114,7 @@ public class RegisterActivity extends FragmentActivity {
         context = this;
         resources=getResources();
         preferencesStorage=new PreferencesStorage(context);
+       
         vwPaginas=findViewById(R.id.id_viewpager);
         txtTitulo=findViewById(R.id.txtTitulo);
         adPaginador=new PageAdapter(getApplicationContext(),getSupportFragmentManager());

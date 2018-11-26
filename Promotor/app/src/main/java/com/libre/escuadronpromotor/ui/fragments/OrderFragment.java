@@ -39,7 +39,7 @@ import java.util.List;
 
 public class OrderFragment extends Activity implements  View.OnClickListener  {
     private View view;
-    private Context context;
+    private Context context,activity;
     private TextView txtMember,txtFecha,txtEstatus,txtDetalle,txtProductos;
     private SubmitButton btnConfirmOrder;
     private SignaturePanelAdapter firmaPanel;
@@ -56,12 +56,15 @@ public class OrderFragment extends Activity implements  View.OnClickListener  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=this;
+        activity=getParent();
         db=new DBHelper(context);
         client_key = getIntent().getStringExtra("id");
         setContentView(R.layout.order_fragment);
         btnConfirmOrder=findViewById(R.id.btnFinalizar);
-        txtMember=findViewById(R.id.txtMember);
+        btnConfirmOrder.setOnClickListener(this);
         btnConfirmOrder.setOnResultEndListener(finishOrder);
+        txtMember=findViewById(R.id.txtMember);
+
         reference = database.getReference("registro");
         prettyDialog= new PrettyDialog(context)
                 .setTitle("Entrega Completada")
@@ -107,10 +110,11 @@ public class OrderFragment extends Activity implements  View.OnClickListener  {
     public void onClick(View v) {
         btnConfirmOrder.doResult(true);
     }
+
     SubmitButton.OnResultEndListener finishOrder=new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
-
+            order_local=new Order();
             order_local.pay=true;
             reference.child("pedidos").child(client_key).setValue(order_local,new DatabaseReference.CompletionListener() {
                 @Override
@@ -121,7 +125,7 @@ public class OrderFragment extends Activity implements  View.OnClickListener  {
 
                     } else {
 
-                        ((ListUsersActivity)context).onBackPressed();
+                        ((ListUsersActivity)activity).onBackPressed();
 
                     }
                 }
@@ -143,16 +147,22 @@ public class OrderFragment extends Activity implements  View.OnClickListener  {
         txtMember.setText(delivery.user_name);
         ((TextView)findViewById(R.id.txt_date)).setText(delivery.delivery_date);
         ((TextView)findViewById(R.id.txt_title)).setText(delivery.total);
-        ((TextView)findViewById(R.id.txt_phone)).setText(delivery.products);
+        if(delivery.products!=null){
+            String formated=delivery.products.replace("|","\n");
+            ((TextView)findViewById(R.id.txt_phone)).setText(formated);
+        }
+
         if(delivery.user_idb64!=null){
             Bitmap imgbitmap=Data.base64ToBitmap(delivery.user_idb64);
+
             ((ImageView)findViewById(R.id.image_icon)).setImageBitmap(imgbitmap);
         }
 
-        if(delivery.total!="0.0"){
-            ((TextView)findViewById(R.id.txt_email)).setText("Sin pedidos pendientes");
+        if(delivery.total!=null || delivery.total!=""){
+            ((TextView)findViewById(R.id.txt_email)).setText(delivery.total);
+
         }else{
-            ((TextView)findViewById(R.id.txt_email)).setText("");
+            ((TextView)findViewById(R.id.txt_email)).setText("Sin pedidos pendientes");
         }
 
 

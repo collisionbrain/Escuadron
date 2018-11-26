@@ -15,7 +15,11 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.graphics.LightingColorFilter;
+import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -61,7 +65,6 @@ import com.libre.escuadroncliente.ui.pojos.Order;
 import com.libre.escuadroncliente.ui.pojos.Product;
 import com.libre.escuadroncliente.ui.storage.PreferencesStorage;
 import com.libre.escuadroncliente.ui.util.Data;
-import com.michaldrabik.tapbarmenulib.TapBarMenu;
 
 import android.util.Log;
 import android.view.Gravity;
@@ -74,6 +77,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -107,10 +111,10 @@ public class MarketActivity extends  Activity {
     private Context context;
     private Fragment detailFragment=new DetailFragment();
     private Fragment digitalCode=new DigitalCode();
-    private Fragment subListFragment=new SubListFragment();
+    private Fragment subListFragment;
     private Fragment payFragment=new PayFragment();
     private Fragment mapFragment=new MapFragment();
-    private  PrettyDialog prettyDialog=null;
+    private  PrettyDialog prettyDialog=null,prettyDialogError=null;
 
 
     public List<CartOrder> productList;
@@ -125,19 +129,21 @@ public class MarketActivity extends  Activity {
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private Uri imageUri;
     public Order order;
-    private TapBarMenu tapBarMenu;
     private ImageView imgPhoto,imgMap,imgUpload,imgCode,imageToast;
     private FirebaseStorage storage;
     final long ONE_MEGABYTE = 1024 * 1024;
     private PreferencesStorage prefs;
-
     private View layoutToast;
     private boolean isActive=false;
     public boolean isDeliveryActive=false;
     public  static boolean isActivityOpen=true;
     public  boolean needUpdate;
     private ContentValues values;
+    private TextView txtCount;
 
+    private TextView txtHeader;
+    private ProgressDialog checkDialog;
+    private ImageView icon;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 321;
 
     @Override
@@ -152,6 +158,7 @@ public class MarketActivity extends  Activity {
         calendar = Calendar.getInstance();
         context=this;
         prettyDialog= new PrettyDialog(context);
+        prettyDialogError= new PrettyDialog(context);
         prettyDialog.setIcon(
                 R.drawable.pdlg_icon_info,     // icon resource
                 R.color.pdlg_color_red,      // icon tint
@@ -173,6 +180,27 @@ public class MarketActivity extends  Activity {
                             }
                         }
                 );
+        prettyDialogError.setIcon(
+                R.drawable.pdlg_icon_info,     // icon resource
+                R.color.pdlg_color_red,      // icon tint
+                new PrettyDialogCallback() {   // icon OnClick listener
+                    @Override
+                    public void onClick() {
+                        // Do what you gotta do
+                    }
+                })
+                .addButton(
+                        "OK",					// button text
+                        R.color.pdlg_color_white,		// button text color
+                        R.color.pdlg_color_red,		// button background color
+                        new PrettyDialogCallback() {		// button OnClick listener
+                            @Override
+                            public void onClick() {
+
+                                prettyDialogError.dismiss();
+                            }
+                        }
+                );
         prefs=new PreferencesStorage(context);
         userGuid=prefs.loadData("REGISTER_USER_KEY");
         String status=prefs.loadData("REGISTER_USER_ACTIVE");
@@ -185,7 +213,7 @@ public class MarketActivity extends  Activity {
         productList=new ArrayList<>();
         storage=FirebaseStorage.getInstance();
         recyclerView =findViewById(R.id.recycler_view);
-
+        txtCount=findViewById(R.id.txtCount);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(new MyAdapter());
         LayoutInflater inflater = getLayoutInflater();
@@ -197,19 +225,22 @@ public class MarketActivity extends  Activity {
         imgUpload= findViewById(R.id.imgUpload);
         imgCode= findViewById(R.id.imgCode);
         imgMap= findViewById(R.id.imgMap);
-        tapBarMenu=findViewById(R.id.tapBarMenu);
-        tapBarMenu.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                tapBarMenu.toggle();
-            }
-        });
+        icon=findViewById(R.id.cart);
+        txtHeader=findViewById(R.id.bar_title);
+        if(isActive){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    icon.setVisibility(View.VISIBLE);
+                }
+            });
 
+        }
         imgPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("product", null );
-                initTicketPhotoFragment(bundle);
+
+                initTicketPhotoFragment();
             }
         });
 
@@ -222,6 +253,9 @@ public class MarketActivity extends  Activity {
         imgUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                checkDialog = new ProgressDialog(context, R.style.MyDialogTheme);
+                checkDialog.setMessage("Preparando pedido.");
+                checkDialog.show();
                 checkPreviusOrder();
 
 
@@ -236,8 +270,22 @@ public class MarketActivity extends  Activity {
             }
         });
 
-        order=new Order();
-        order.id=1;
+        Order loadedOrder=(Order)prefs.loadDatObjet("CURRENT_CART");
+        if(loadedOrder!=null){
+            if(loadedOrder.id>0){
+                order=loadedOrder;
+                productList=order.productList;
+                updateUICurrenteCart(order);
+            }else{
+                order=new Order();
+                order.id=1;
+            }
+        }else{
+            order=new Order();
+            order.id=1;
+        }
+
+
 
         if (checkPermissionACCESS_FINE_LOCATION(this)) {
             // do your stuff..
@@ -262,6 +310,7 @@ public class MarketActivity extends  Activity {
 
             }
             if (subListFragment.isVisible() && !detailFragment.isVisible()) {
+                updateHeader("");
                 getFragmentManager().beginTransaction().remove(subListFragment).commit();
 
             }
@@ -280,6 +329,7 @@ public class MarketActivity extends  Activity {
     public void onDestroy() {
         super.onDestroy();
         isActivityOpen=false;
+        saveCurrentCart();
     }
     @Override
     public void onResume() {
@@ -296,8 +346,6 @@ public class MarketActivity extends  Activity {
           update();
         }
     }
-
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -334,6 +382,8 @@ public class MarketActivity extends  Activity {
         cartOrder.price=product.price;
         productList.add(cartOrder);
         count=totalProducto();
+        txtCount.setVisibility(View.VISIBLE);
+        txtCount.setText(""+count);
 
 
     }
@@ -348,6 +398,9 @@ public class MarketActivity extends  Activity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         this.startActivityForResult(intent, 200);
+        Bitmap bitmap = ((BitmapDrawable)imgPhoto.getDrawable()).getBitmap();
+        imgPhoto.setImageBitmap( changeBitmapColor(bitmap,Color.YELLOW));
+
     }
 
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
@@ -396,10 +449,13 @@ public class MarketActivity extends  Activity {
             @Override
             public void onClick(View v) {
 
+
                 int itemPosition=getLayoutPosition();
                 Log.e("#######",""+ itemPosition);
+
                 Bundle bundle = new Bundle();
                 bundle.putInt("productRootItem", itemPosition );
+
                 initFragmentSubList(bundle);
 
             }
@@ -407,22 +463,26 @@ public class MarketActivity extends  Activity {
     }
 
 
-    private void initTicketPhotoFragment( Bundle bundle){
-        //  floatingPayButton.setVisibility(View.GONE);
-        fragmentTransaction = fragmentManager.beginTransaction();
-        payFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.container, payFragment, "PAY");
-        fragmentTransaction.commit();
+    private void initTicketPhotoFragment(){
+        if(totalProducto()>0) {
+            fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.add(R.id.container, payFragment, "PAY");
+            fragmentTransaction.commit();
+        }else{
+            prettyDialog.setTitle("")
+                    .setMessage("No hay productos en la lista")
+
+                    .show();
+        }
 
     }
-    private void initMapFragment( Bundle bundle){
+    private void initMapFragment(){
         //  floatingPayButton.setVisibility(View.GONE);
         if(order.ticket==null){
 
             showError("Captura tu ticket de pago");
         }else {
             fragmentTransaction = fragmentManager.beginTransaction();
-            mapFragment.setArguments(bundle);
             fragmentTransaction.add(R.id.container, mapFragment, "MAP");
             fragmentTransaction.commit();
         }
@@ -433,7 +493,7 @@ public class MarketActivity extends  Activity {
         //floatingPayButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
         detailFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.container, detailFragment, "Add detail");
+        fragmentTransaction.add(R.id.container, detailFragment, "Detail");
         fragmentTransaction.commit();
 
     }
@@ -441,26 +501,27 @@ public class MarketActivity extends  Activity {
         // floatingPayButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
         detailFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.container, digitalCode, "Add detail");
+        fragmentTransaction.add(R.id.container, digitalCode, "Code");
         fragmentTransaction.commit();
 
     }
     private void initFragmentSubList( Bundle bundle){
         //  floatingPayButton.setVisibility(View.GONE);
         fragmentTransaction = fragmentManager.beginTransaction();
+        subListFragment=new SubListFragment();
         subListFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.container, subListFragment, "Add detail");
+        fragmentTransaction.add(R.id.container, subListFragment, "Sublist");
         fragmentTransaction.commit();
 
     }
     public void startDetailFragment(Product product){
-        Bundle bundle = new Bundle();
+       Bundle  bundle = new Bundle();
         bundle.putSerializable("product", product );
         this.initFragmentDetail(bundle);
     }
     public void startMapFragment(){
-        Bundle bundle = new Bundle();
-        this.initMapFragment(bundle);
+
+        this.initMapFragment();
     }
     public void  closeCodeFragment(){
 
@@ -472,7 +533,8 @@ public class MarketActivity extends  Activity {
     public void  closeMapFragment(){
 
 
-
+        Bitmap bitmap = ((BitmapDrawable)imgMap.getDrawable()).getBitmap();
+        imgMap.setImageBitmap( changeBitmapColor(bitmap,Color.YELLOW));
         getFragmentManager().beginTransaction().remove(mapFragment).commit();
 
     }
@@ -496,43 +558,46 @@ public class MarketActivity extends  Activity {
 
     public void checkPreviusOrder(){
 
-
-        DatabaseReference reference = database.getReference("registro");
-        Query query = reference.child("pedidos").child(userGuid);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    Order order_local = dataSnapshot.getValue(Order.class);
-                    if(order_local.pay){
-                        if (productList.size() > 0) {
-                            if(order.ticket==null){
-                                showError("Captura tu ticket de pago");
-                                }else {
-                                    if(order.latitude==0 && order.longitude==0){
-
-                                        showError("Define tu lugar de entrega");
-                                    }else {
-                                        new RegisterOrderTask().execute();
-                                    }
+        if (productList.size() > 0) {
+            if(order.ticket==null){
+                checkDialog.dismiss();
+                showError("Captura tu ticket de pago");
+            }else {
+                if(order.latitude==0 && order.longitude==0){
+                    checkDialog.dismiss();
+                    showError("Define tu lugar de entrega");
+                }else {
+                    DatabaseReference reference = database.getReference("registro");
+                    Query query = reference.child("pedidos").child(userGuid);
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.exists()) {
+                                Order order_local = dataSnapshot.getValue(Order.class);
+                                if(order_local.pay){
+                                    checkDialog.dismiss();
+                                    new RegisterOrderTask().execute();
+                                }else{
+                                    checkDialog.dismiss();
+                                    showError("Tienes un pedido pendiente");
                                 }
-                        } else {
-                            showError("Lista de Productos vacia");
+                            }else{
+                                new RegisterOrderTask().execute();
+                            }
                         }
 
-                    }else{
-                        showError("Tienes un pedido pendiente");
-                    }
-                }else{
-                    new RegisterOrderTask().execute();
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            databaseError.getMessage().toString();
+                        }
+                    });
+
                 }
             }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                databaseError.getMessage().toString();
-            }
-        });
+        } else {
+            checkDialog.dismiss();
+            showError("Lista de Productos vacia");
+        }
 
     }
     public void registerOrder(){
@@ -559,7 +624,7 @@ public class MarketActivity extends  Activity {
                     prefs.saveData("CURRENT_COUNT","");
                     order=null;
                     order=new Order();
-
+                    prefs.saveDataObjet("CURRENT_CART",order);
 
                 }
             }
@@ -572,7 +637,7 @@ public class MarketActivity extends  Activity {
         @Override
         protected void onPreExecute() {
             dialog = new ProgressDialog(context, R.style.MyDialogTheme);
-            dialog.setMessage("Actualizando articulos.");
+            dialog.setMessage("Buscando actualizaciones.");
             dialog.show();
         }
         @Override
@@ -644,14 +709,79 @@ public class MarketActivity extends  Activity {
             dialog.dismiss();
             order=new Order();
             productList=new ArrayList<>();
-            toastFinish("Transaccion Completada");
-
+            prettyDialog.setTitle(":)")
+                    .setMessage("Pedido realizado")
+                    .show();
+            Bitmap bitmap = ((BitmapDrawable)imgUpload.getDrawable()).getBitmap();
+            imgUpload.setImageBitmap( changeBitmapColor(bitmap,Color.YELLOW));
+            updateUICurrenteCart(order);
         }
     }
-    public void showError(String message){
-         prettyDialog.setTitle("Ocurrio un error")
-                .setMessage(message)
 
+    private class RegisterCheckOrderTask extends AsyncTask<Void, Void, Integer> {
+        private ProgressDialog dialog;
+        private   int result;
+        @Override
+        protected void onPreExecute() {
+            dialog = new ProgressDialog(context, R.style.MyDialogTheme);
+            dialog.setMessage("Guardando pedido.");
+            dialog.show();
+        }
+        @Override
+        protected Integer doInBackground(Void... params) {
+                result=0;
+            if (productList.size() > 0) {
+                if(order.ticket==null){
+                    return 5;
+                }else {
+                    if(order.latitude==0 && order.longitude==0){
+
+                        return 4;
+                    }else {
+                        DatabaseReference reference = database.getReference("registro");
+                        Query query = reference.child("pedidos").child(userGuid);
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if (dataSnapshot.exists()) {
+                                    Order order_local = dataSnapshot.getValue(Order.class);
+                                    if(order_local.pay){
+
+                                        result= 0;
+                                    }else{
+                                        result= 3;
+                                    }
+                                }else{
+                                    result=0;
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                                databaseError.getMessage().toString();
+                                result=0;
+                            }
+                        });
+
+                    }
+                }
+            } else {
+               return 2;
+            }
+
+            return  result;
+        }
+
+        @Override
+        protected void onPostExecute(Integer param) {
+
+            Log.e("XXXXXXXXXXXX",": "+param);
+        }
+    }
+
+    public void showError(String message){
+        prettyDialogError.setTitle("")
+                .setMessage(message)
                 .show();
 
     }
@@ -800,5 +930,84 @@ public class MarketActivity extends  Activity {
 
     public void update(){
         new RegloadTask().execute();
+    }
+
+    public static Bitmap changeBitmapColor(Bitmap sourceBitmap, int color)
+    {
+        Bitmap resultBitmap = sourceBitmap.copy(sourceBitmap.getConfig(),true);
+        Paint paint = new Paint();
+        ColorFilter filter = new LightingColorFilter(color, 1);
+        paint.setColorFilter(filter);
+        Canvas canvas = new Canvas(resultBitmap);
+        canvas.drawBitmap(resultBitmap, 0, 0, paint);
+        return resultBitmap;
+    }
+    public static Bitmap returnBitmapColor(Bitmap sourceBitmap, int color)
+    {
+        Bitmap resultBitmap = sourceBitmap.copy(sourceBitmap.getConfig(),true);
+        Paint paint = new Paint();
+        ColorFilter filter = new LightingColorFilter(color, -1);
+        paint.setColorFilter(filter);
+        Canvas canvas = new Canvas(resultBitmap);
+        canvas.drawBitmap(resultBitmap, 0, 0, paint);
+        return resultBitmap;
+    }
+
+    private  void saveCurrentCart(){
+        now = calendar.getTime();
+        order.userGuid=userGuid;
+        order.dateOrder=now.toString();
+        order.pay=false;
+        order.feedback=false;
+        order.total=toPayProducto();
+        order.productList=productList;
+        prefs.saveDataObjet("CURRENT_CART",order);
+    }
+
+    public void updateUICurrenteCart(Order order){
+        final Bitmap ticket = ((BitmapDrawable)imgPhoto.getDrawable()).getBitmap();
+        final Bitmap map = ((BitmapDrawable)imgMap.getDrawable()).getBitmap();
+        final Bitmap upload = ((BitmapDrawable)imgUpload.getDrawable()).getBitmap();
+        if(order.id>0){
+            if(order.ticket!=null){
+
+                imgPhoto.setImageBitmap( changeBitmapColor(ticket,Color.YELLOW));
+            }else{
+
+                imgPhoto.setImageBitmap( changeBitmapColor(ticket,Color.WHITE));
+            }
+
+            if(order.total!=0){
+                txtCount.setVisibility(View.VISIBLE);
+                txtCount.setText(""+totalProducto());
+            }
+            if(order.latitude!=0){
+                 imgMap.setImageBitmap( changeBitmapColor(map,Color.YELLOW));
+            }else{
+                imgMap.setImageBitmap( changeBitmapColor(map,Color.WHITE));
+            }
+
+        }else{
+            this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    txtCount.setVisibility(View.INVISIBLE);
+                    imgPhoto.setImageBitmap(returnBitmapColor(ticket,Color.WHITE));
+                    imgMap.setImageBitmap( returnBitmapColor(map,Color.WHITE));
+                    imgUpload.setImageBitmap( returnBitmapColor(upload,Color.WHITE));
+                }
+            });
+
+        }
+
+    }
+    public void updateHeader(final String title){
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtHeader.setText(title);
+
+            }
+        });
     }
 }

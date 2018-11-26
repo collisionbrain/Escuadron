@@ -120,7 +120,10 @@ public class ListUsersActivity extends AppCompatActivity {
         tapBarMenu.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 tapBarMenu.toggle();
-                textCounter.setVisibility(View.VISIBLE);
+                if(pendings>0){
+                    textCounter.setVisibility(View.VISIBLE);
+                }
+
             }
         });
         imageViewAdd= findViewById(R.id.imgAdd);
@@ -298,6 +301,7 @@ public class ListUsersActivity extends AppCompatActivity {
           pedRef = ref.child("pedidos");
 
         Query query = pedRef.orderByChild("pay").equalTo(false);
+        db.deleteMemberOrders();
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot snapshot) {
@@ -313,11 +317,11 @@ public class ListUsersActivity extends AppCompatActivity {
                                 Log.e("################",""+member.name);
                                 Log.e("################",""+order.dateOrder);
                                 Log.e("################",""+order.productList);
-
+                                Log.e("################",""+member.b64FrontId);
                                 Delivery delivery=new Delivery();
                                 delivery.user_key=order.userGuid;
                                 delivery.user_name=member.name;
-                                //delivery.user_idb64=member.b64FrontId;
+                                delivery.user_idb64=member.b64FrontId;
                                 List<CartOrder> orderCart= order.productList;
                                 String stProduct="";
                                 if(orderCart!=null) {
@@ -346,6 +350,7 @@ public class ListUsersActivity extends AppCompatActivity {
                     pendings++;
                 }
                 if(pendings>0) {
+                    imageViewDeli.setVisibility(View.GONE);
                     textCounter.setText("" + pendings);
                 }
 

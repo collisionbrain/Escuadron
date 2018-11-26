@@ -1,8 +1,9 @@
 package com.libre.escuadroncliente.ui.pojos;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Order {
+public class Order implements Serializable{
     public int id;
     public String userGuid;
     public String  dateOrder;

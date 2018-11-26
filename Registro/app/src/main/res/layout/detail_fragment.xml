@@ -41,7 +41,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif"
-
                     android:text="Frasco de 20 ml"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
