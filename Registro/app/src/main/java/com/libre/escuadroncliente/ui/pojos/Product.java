@@ -16,5 +16,6 @@ public class Product implements Serializable{
     public String price;
     public String ingredients;
     public String image;
+    public int calification;
 
 }
