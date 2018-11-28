@@ -114,7 +114,7 @@ public class MarketActivity extends  Activity {
     private Fragment subListFragment;
     private Fragment payFragment=new PayFragment();
     private Fragment mapFragment=new MapFragment();
-    private  PrettyDialog prettyDialog=null,prettyDialogError=null;
+    private  PrettyDialog prettyDialog=null,prettyDialogError=null,prettyDialogPending=null;
 
 
     public List<CartOrder> productList;
@@ -159,6 +159,7 @@ public class MarketActivity extends  Activity {
         context=this;
         prettyDialog= new PrettyDialog(context);
         prettyDialogError= new PrettyDialog(context);
+        prettyDialogPending= new PrettyDialog(context);
         prettyDialog.setIcon(
                 R.drawable.pdlg_icon_info,     // icon resource
                 R.color.pdlg_color_red,      // icon tint
@@ -201,6 +202,41 @@ public class MarketActivity extends  Activity {
                             }
                         }
                 );
+        prettyDialogPending.setIcon(
+                R.drawable.pdlg_icon_info,     // icon resource
+                R.color.pdlg_color_red,      // icon tint
+                new PrettyDialogCallback() {   // icon OnClick listener
+                    @Override
+                    public void onClick() {
+                        // Do what you gotta do
+                    }
+                })
+                .addButton(
+                        "Continuar pedido actual",					// button text
+                        R.color.pdlg_color_white,		// button text color
+                        R.color.pdlg_color_green,		// button background color
+                        new PrettyDialogCallback() {		// button OnClick listener
+                            @Override
+                            public void onClick() {
+
+                                prettyDialogPending.dismiss();
+                            }
+                        }
+                ).addButton(
+                "Cancelar pedido actual",					// button text
+                R.color.pdlg_color_white,		// button text color
+                R.color.pdlg_color_red,		// button background color
+                new PrettyDialogCallback() {		// button OnClick listener
+                    @Override
+                    public void onClick() {
+
+                        order=new Order();
+                        order.id=0;
+                        updateUICurrenteCart(order);
+                        prettyDialogPending.dismiss();
+                    }
+                }
+        );
         prefs=new PreferencesStorage(context);
         userGuid=prefs.loadData("REGISTER_USER_KEY");
         String status=prefs.loadData("REGISTER_USER_ACTIVE");
@@ -331,6 +367,12 @@ public class MarketActivity extends  Activity {
         isActivityOpen=false;
         saveCurrentCart();
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveCurrentCart();
+    }
     @Override
     public void onResume() {
         super.onResume();
@@ -347,7 +389,7 @@ public class MarketActivity extends  Activity {
         }
     }
 
-    @Override
+        @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap;
@@ -579,7 +621,7 @@ public class MarketActivity extends  Activity {
                                     new RegisterOrderTask().execute();
                                 }else{
                                     checkDialog.dismiss();
-                                    showError("Tienes un pedido pendiente");
+                                    showErrorPending("Tienes un pedido pendiente");
                                 }
                             }else{
                                 new RegisterOrderTask().execute();
@@ -781,6 +823,12 @@ public class MarketActivity extends  Activity {
 
     public void showError(String message){
         prettyDialogError.setTitle("")
+                .setMessage(message)
+                .show();
+
+    }
+    public void showErrorPending(String message){
+        prettyDialogPending.setTitle("")
                 .setMessage(message)
                 .show();
 
