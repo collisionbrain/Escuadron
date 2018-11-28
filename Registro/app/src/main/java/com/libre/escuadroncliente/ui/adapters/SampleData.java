@@ -30,6 +30,7 @@ public class SampleData {
                     product.amount= jsonObject.getString("cantidad");
                     product.price= jsonObject.getString("precio");
                     product.image=jsonObject.getString("image");
+                    product.calification=jsonObject.getInt("calificacion");
                     product.ingredients= jsonObject.getString("ingredientes");
                     data.add(product);
                 }

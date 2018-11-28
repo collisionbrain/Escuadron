@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,6 +22,8 @@ import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.MarketActivity;
 import com.libre.escuadroncliente.ui.pojos.Product;
 import com.libre.escuadroncliente.ui.util.Data;
+
+import okhttp3.internal.Util;
 
 /***
  * ADAPTER
@@ -33,12 +36,11 @@ public class SampleAdapter extends ArrayAdapter<Product> {
     static class ViewHolder {
         TextView txtLineOne;
         TextView txtLineTwo,txtLineThree;
-        Button btnPlus;
+        ImageView imgPhoto;
+        RatingBar ratingBar;
     }
 
     private final LayoutInflater mLayoutInflater;
-    private final Random mRandom;
-    private final ArrayList<Integer> mBackgroundColors;
     private Context context;
 
     private static final SparseArray<Double> sPositionHeightRatios = new SparseArray<Double>();
@@ -46,14 +48,7 @@ public class SampleAdapter extends ArrayAdapter<Product> {
     public SampleAdapter(final Context context, final int textViewResourceId) {
         super(context, textViewResourceId);
         mLayoutInflater = LayoutInflater.from(context);
-        mRandom = new Random();
         this.context=context;
-        mBackgroundColors = new ArrayList<Integer>();
-        mBackgroundColors.add(R.color.green_toolbar);
-        mBackgroundColors.add(R.color.green_toolbar);
-        mBackgroundColors.add(R.color.green_toolbar);
-        mBackgroundColors.add(R.color.green_toolbar);
-        mBackgroundColors.add(R.color.green_toolbar);
     }
 
     @Override
@@ -69,10 +64,8 @@ public class SampleAdapter extends ArrayAdapter<Product> {
             vh.txtLineOne =  convertView.findViewById(R.id.txtName);
             vh.txtLineTwo =  convertView.findViewById(R.id.txtPercentSative);
             vh.txtLineThree =  convertView.findViewById(R.id.txtPercentIndic);
-
-            //vh.btnPlus = convertView.findViewById(R.id.btn_plus);
-
-
+            vh.imgPhoto=  convertView.findViewById(R.id.imgItem);
+            vh.ratingBar=  convertView.findViewById(R.id.ratingProduct);
             convertView.setTag(vh);
 
         }
@@ -80,17 +73,14 @@ public class SampleAdapter extends ArrayAdapter<Product> {
             vh = (ViewHolder) convertView.getTag();
         }
 
-        double positionHeight = getPositionRatio(position);
-        int backgroundIndex = position >= mBackgroundColors.size() ?
-                position % mBackgroundColors.size() : position;
-
-        //convertView.setBackgroundResource(mBackgroundColors.get(backgroundIndex));
-       // vh.txtLineOne.setHeightRatio(positionHeight);
         product=getItem(position);
-
         vh.txtLineOne.setText(product.name);
         vh.txtLineTwo.setText(product.flavor);
         vh.txtLineThree.setText(product.amount);
+        if(product.image.length()>0) {
+            vh.imgPhoto.setImageBitmap(Data.base64ToBitmap(product.image));
+        }
+        vh.ratingBar.setRating(product.calification);
         vh.txtLineOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
@@ -103,21 +93,5 @@ public class SampleAdapter extends ArrayAdapter<Product> {
         return convertView;
     }
 
-    private double getPositionRatio(final int position) {
-        double ratio = sPositionHeightRatios.get(position, 0.0);
-        // if not yet done generate and stash the columns height
-        // in our real world scenario this will be determined by
-        // some match based on the known height and width of the image
-        // and maybe a helpful way to get the column height!
-        if (ratio == 0) {
-            ratio = getRandomHeightRatio();
-            sPositionHeightRatios.append(position, ratio);
-            Log.d(TAG, "getPositionRatio:" + position + " ratio:" + ratio);
-        }
-        return ratio;
-    }
 
-    private double getRandomHeightRatio() {
-        return (mRandom.nextDouble() / 2.0) + 1.0; // height will be 1.0 - 1.5 the width
-    }
 }
