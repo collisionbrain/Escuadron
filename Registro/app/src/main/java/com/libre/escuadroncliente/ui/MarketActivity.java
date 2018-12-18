@@ -1057,7 +1057,7 @@ public class MarketActivity extends  Activity {
             });
 
         }
-
+        stepsViews(order);
     }
     public void stepsViews(final Order order){
         this.runOnUiThread(new Runnable() {

@@ -69,11 +69,10 @@
             android:layout_weight="20"
             android:gravity="center">
 
-
             <ImageView
                 android:id="@+id/imgStep1"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:background="@drawable/ic_arow_down"
                 android:visibility="invisible"
 
@@ -86,8 +85,8 @@
             android:gravity="center">
             <ImageView
                 android:id="@+id/imgStep2"
-                android:layout_width="25dp"
-                android:layout_height="25dp"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
                 android:background="@drawable/ic_arow_down"
                 android:visibility="invisible"
                 />

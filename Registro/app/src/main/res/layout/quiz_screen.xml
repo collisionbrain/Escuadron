@@ -18,23 +18,31 @@
             android:id="@+id/q1"
             android:paddingLeft="30sp"
             android:textAllCaps="true"
-            android:text="¿Cuanto ha disminuido tu dolencia desde el inicio del tratamiento?"
+            android:text="¿¿Te sientes mejor desde que inicio tu tratamiento??"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/gray"/>
-
-        <RatingBar
-            android:id="@+id/r1"
-            style="?android:attr/ratingBarStyleIndicator"
+        <LinearLayout
             android:layout_below="@+id/q1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:rating="5"
-            android:stepSize="1"
-            android:progressTint="@color/green_text"
-            android:layout_centerInParent="true"
-            android:paddingTop="10dp"/>
+            android:paddingLeft="30sp">
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Si"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No"/>
+            </RadioGroup>
+        </LinearLayout>
 
     </RelativeLayout>
     <RelativeLayout
@@ -48,23 +56,37 @@
             android:id="@+id/q2"
             android:paddingLeft="30sp"
             android:textAllCaps="true"
-            android:text="¿Cuanto ha disminuido tu dolencia desde el inicio del tratamiento?"
+            android:text="¿Cuanto ha disminuido tu malestar?"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/gray"/>
 
-        <RatingBar
-            android:id="@+id/r2"
-            style="?android:attr/ratingBarStyleIndicator"
+        <LinearLayout
             android:layout_below="@+id/q2"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:rating="5"
-            android:stepSize="1"
-            android:progressTint="@color/green_text"
-            android:layout_centerInParent="true"
-            android:paddingTop="10dp"/>
+            android:paddingLeft="30sp">
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mucho"/>
+
+                <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Regular"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Poco"/>
+            </RadioGroup>
+        </LinearLayout>
+
 
     </RelativeLayout>
     <RelativeLayout
@@ -78,24 +100,32 @@
             android:id="@+id/q3"
             android:paddingLeft="30sp"
             android:textAllCaps="true"
-            android:text="¿Cuanto ha disminuido tu dolencia desde el inicio del tratamiento?"
+            android:text="¿Haz experimentado mareos?"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/gray"/>
 
-        <RatingBar
-            android:id="@+id/r3"
-            style="?android:attr/ratingBarStyleIndicator"
+        <LinearLayout
             android:layout_below="@+id/q3"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:rating="5"
-            android:stepSize="1"
-            android:progressTint="@color/green_text"
-            android:layout_centerInParent="true"
-            android:paddingTop="10dp"/>
+            android:paddingLeft="30sp">
 
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Si"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No"/>
+            </RadioGroup>
+        </LinearLayout>
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -108,23 +138,32 @@
             android:id="@+id/q4"
             android:paddingLeft="30sp"
             android:textAllCaps="true"
-            android:text="¿Cuanto ha disminuido tu dolencia desde el inicio del tratamiento?"
+            android:text="¿Ha mejorado tu apetito?"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/gray"/>
 
-        <RatingBar
-            android:id="@+id/r4"
-            style="?android:attr/ratingBarStyleIndicator"
+        <LinearLayout
             android:layout_below="@+id/q4"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:numStars="5"
-            android:rating="5"
-            android:stepSize="1"
-            android:progressTint="@color/green_text"
-            android:layout_centerInParent="true"
-            android:paddingTop="10dp"/>
+            android:paddingLeft="30sp">
+
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Si"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="No"/>
+            </RadioGroup>
+        </LinearLayout>
 
     </RelativeLayout>
 
