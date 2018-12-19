@@ -1,5 +1,6 @@
 package com.libre.escuadroncliente.ui;
 import android.Manifest;
+import android.animation.Animator;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Fragment;
@@ -75,6 +76,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.BounceInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -143,7 +147,7 @@ public class MarketActivity extends  Activity {
 
     private TextView txtHeader;
     private ProgressDialog checkDialog;
-    private ImageView icon;
+    private ImageView icon,imgStep1,imgStep2,imgStep3;
     public static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 321;
 
     @Override
@@ -261,6 +265,9 @@ public class MarketActivity extends  Activity {
         imgUpload= findViewById(R.id.imgUpload);
         imgCode= findViewById(R.id.imgCode);
         imgMap= findViewById(R.id.imgMap);
+        imgStep1= findViewById(R.id.imgStep1);
+        imgStep2= findViewById(R.id.imgStep2);
+        imgStep3= findViewById(R.id.imgStep3);
         icon=findViewById(R.id.cart);
         txtHeader=findViewById(R.id.bar_title);
         subListFragment=new SubListFragment();
@@ -1023,6 +1030,9 @@ public class MarketActivity extends  Activity {
         final Bitmap ticket = ((BitmapDrawable)imgPhoto.getDrawable()).getBitmap();
         final Bitmap map = ((BitmapDrawable)imgMap.getDrawable()).getBitmap();
         final Bitmap upload = ((BitmapDrawable)imgUpload.getDrawable()).getBitmap();
+
+
+
         if(order.id>0){
             if(order.ticket!=null){
 
@@ -1054,7 +1064,58 @@ public class MarketActivity extends  Activity {
             });
 
         }
+        stepsViews(order);
+    }
+    public void stepsViews(final Order order){
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 
+                if(order.productList.size()>0){
+
+                    if(order.ticket==null){
+                        imgStep1.setVisibility(View.VISIBLE);
+                        imgStep1.animate()
+                                .translationX(100)
+                                .translationY(imgStep1.getHeight())
+                                .setInterpolator(new AccelerateDecelerateInterpolator())
+                                .setDuration(500)
+                                .setListener(new Animator.AnimatorListener() {
+                                    @Override
+                                    public void onAnimationStart(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationEnd(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationCancel(Animator animation) {
+
+                                    }
+
+                                    @Override
+                                    public void onAnimationRepeat(Animator animation) {
+
+                                    }
+                                });
+                    }else{
+                        imgStep1.setVisibility(View.INVISIBLE);
+                        if(order.latitude==0 && order.longitude==0){
+                            imgStep2.setVisibility(View.VISIBLE);
+                        }else{
+                            imgStep2.setVisibility(View.INVISIBLE);
+                        }
+                    }
+
+                }
+
+
+
+            }
+        });
     }
     public void updateHeader(final String title){
         this.runOnUiThread(new Runnable() {
