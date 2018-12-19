@@ -113,13 +113,6 @@ public class DBHelper   extends SQLiteOpenHelper {
         vMember.put("condition", member.condition);
         vMember.put("extra", member.extra);
         vMember.put("signature", member.signature);
-        vMember.put("street", member.address.street);
-        vMember.put("numExt", member.address.numExt);
-        vMember.put("numInt", member.address.numInt);
-        vMember.put("postal", member.address.postal);
-        vMember.put("col", member.address.col);
-        vMember.put("mun", member.address.mun);
-        vMember.put("est", member.address.est);
         vMember.put("idfront", member.b64FrontId);
         vMember.put("idback", member.b64BackId);
 

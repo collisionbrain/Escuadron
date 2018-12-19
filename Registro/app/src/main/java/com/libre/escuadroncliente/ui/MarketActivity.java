@@ -263,6 +263,7 @@ public class MarketActivity extends  Activity {
         imgMap= findViewById(R.id.imgMap);
         icon=findViewById(R.id.cart);
         txtHeader=findViewById(R.id.bar_title);
+        subListFragment=new SubListFragment();
         if(isActive){
             runOnUiThread(new Runnable() {
                 @Override
@@ -345,17 +346,19 @@ public class MarketActivity extends  Activity {
                 getFragmentManager().beginTransaction().remove(payFragment).commit();
 
             }
-            if (subListFragment.isVisible() && !detailFragment.isVisible()) {
-                updateHeader("");
-                getFragmentManager().beginTransaction().remove(subListFragment).commit();
+             if (subListFragment.isVisible() && !detailFragment.isVisible()) {
+                    updateHeader("");
+                    getFragmentManager().beginTransaction().remove(subListFragment).commit();
 
-            }
-            if (!detailFragment.isVisible() &&
-                    !subListFragment.isVisible() &&
-                    !payFragment.isVisible() &&
-                    !mapFragment.isVisible()) {
-                finish();
-            }
+                }
+
+                if (!detailFragment.isVisible() &&
+                        !subListFragment.isVisible() &&
+                        !payFragment.isVisible() &&
+                        !mapFragment.isVisible()) {
+                    finish();
+                }
+
         }else{
             finish();
         }
@@ -549,11 +552,15 @@ public class MarketActivity extends  Activity {
     }
     private void initFragmentSubList( Bundle bundle){
         //  floatingPayButton.setVisibility(View.GONE);
-        fragmentTransaction = fragmentManager.beginTransaction();
-        subListFragment=new SubListFragment();
-        subListFragment.setArguments(bundle);
-        fragmentTransaction.add(R.id.container, subListFragment, "Sublist");
-        fragmentTransaction.commit();
+        if(order.ticket!=null) {
+
+            showErrorPending("Tienes un pedido pendiente");
+        }else{
+            fragmentTransaction = fragmentManager.beginTransaction();
+            subListFragment.setArguments(bundle);
+            fragmentTransaction.add(R.id.container, subListFragment, "Sublist");
+            fragmentTransaction.commit();
+        }
 
     }
     public void startDetailFragment(Product product){

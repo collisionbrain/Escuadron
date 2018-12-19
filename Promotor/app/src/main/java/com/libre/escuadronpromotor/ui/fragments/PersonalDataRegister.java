@@ -34,9 +34,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
         edtName=this.view.findViewById(R.id.edtNombre);
         edtMail=this.view.findViewById(R.id.edtCorreo);
         edtCelphone=this.view.findViewById(R.id.edtCelular);
-        checkWhats=this.view.findViewById(R.id.checkWats);
-        txtAviso=this.view.findViewById(R.id.txtAviso);
-        txtAviso.setOnClickListener(this);
+
         btnSiguiente.setOnClickListener(this);
         btnSiguiente.setOnResultEndListener(finishListener);
         return  this.view;
@@ -58,16 +56,14 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
                         ((RegisterActivity) context).newMember.name=edtName.getText().toString();
                         ((RegisterActivity) context).newMember.mail=edtMail.getText().toString();
                         ((RegisterActivity) context).newMember.phone=edtCelphone.getText().toString();
-                        ((RegisterActivity) context).newMember.whats=checkWhats.isChecked();
+                        ((RegisterActivity) context).newMember.whats=true;
+                        ((RegisterActivity) context).newMember.privacy=true;
 
                         btnSiguiente.doResult(true);
 
 
                     }
                     break;
-            case R.id.txtAviso:
-                ((RegisterActivity) context).showPrivacy();
-                break;
 
         }
     }
