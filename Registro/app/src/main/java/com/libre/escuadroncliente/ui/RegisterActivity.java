@@ -100,6 +100,7 @@ public class RegisterActivity extends FragmentActivity {
     private DigitalCodeRegister digitalCodeRegister;
     private CronicSuffering cronicSuffering;
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 456;
     private ContentValues values;
 
 
@@ -243,6 +244,16 @@ public class RegisterActivity extends FragmentActivity {
                             Toast.LENGTH_SHORT).show();
                 }
                 break;
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // do your stuff
+                } else {
+                    Toast.makeText(RegisterActivity.this, "GET_ACCOUNTS Denied",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+
             default:
                 super.onRequestPermissionsResult(requestCode, permissions,
                         grantResults);
@@ -476,6 +487,34 @@ public class RegisterActivity extends FragmentActivity {
                 break;
         }
 
+    }
+    public boolean checkPermissionWRITE_EXTERNAL_STORAGE(
+            final Context context) {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        (RegisterActivity) context,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+                    showDialog("External storage", context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+                } else {
+                    ActivityCompat
+                            .requestPermissions(
+                                    (Activity) context,
+                                    new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                }
+                return false;
+            } else {
+                return true;
+            }
+
+        } else {
+            return true;
+        }
     }
     public boolean checkPermissionREAD_EXTERNAL_STORAGE(
             final Context context) {

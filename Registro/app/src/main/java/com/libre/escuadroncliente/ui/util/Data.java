@@ -182,5 +182,16 @@ public class Data {
         }
     }
 
+    public static void saveJsonToDB( byte[] data,String type ){
 
+        try {
+            String bJString=new String(data, "UTF-8");
+            JSONObject jsonObj = new JSONObject(bJString);
+            JSONArray items = jsonObj.getJSONArray("items");
+
+
+        } catch (Exception e) {
+            // handle exception
+        }
+    }
 }

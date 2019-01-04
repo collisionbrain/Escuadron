@@ -52,10 +52,6 @@ public class QuizActivity extends Activity implements  View.OnClickListener  {
         question3=findViewById(R.id.q1);
         question4=findViewById(R.id.q1);
 
-        response1=findViewById(R.id.r1);
-        response2=findViewById(R.id.r2);
-        response3=findViewById(R.id.r3);
-        response4=findViewById(R.id.r4);
 
 
         btnEnviarQuiz= findViewById(R.id.btnSiguienteQuiz);
