@@ -175,8 +175,12 @@ public class RegisterActivity extends FragmentActivity {
             }
 
         });
-        if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
-            // do your stuff..
+
+        if (checkPermissionWRITE_EXTERNAL_STORAGE(this)) {
+            if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
+                // do your stuff..
+            }
+
         }
 
 
