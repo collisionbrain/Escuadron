@@ -42,9 +42,6 @@ public class SampleAdapter extends ArrayAdapter<Product> {
 
     private final LayoutInflater mLayoutInflater;
     private Context context;
-
-    private static final SparseArray<Double> sPositionHeightRatios = new SparseArray<Double>();
-
     public SampleAdapter(final Context context, final int textViewResourceId) {
         super(context, textViewResourceId);
         mLayoutInflater = LayoutInflater.from(context);
@@ -84,7 +81,6 @@ public class SampleAdapter extends ArrayAdapter<Product> {
         vh.txtLineOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-
 
                 ((MarketActivity)context).startDetailFragment(product);
             }

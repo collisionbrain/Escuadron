@@ -257,7 +257,6 @@ public class LoginActivity  extends Activity implements  View.OnClickListener  {
     public void showError(String message){
         prettyDialog.setTitle("Ocurrio un error")
                 .setMessage(message)
-
                 .show();
 
     }
