@@ -51,11 +51,6 @@
             android:theme="@style/Theme.AppCompat">
 
         </activity>
-        <activity android:name="com.libre.escuadroncliente.ui.QuizActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat">
-
-        </activity>
         <activity
             android:name="com.libre.escuadroncliente.ui.Splash"
             android:screenOrientation="portrait">
@@ -74,6 +69,14 @@
             android:excludeFromRecents="true"
             android:theme="@style/Theme.AppCompat">
 
+        </activity>
+        <activity
+            android:name="com.libre.escuadroncliente.ui.QuizActivity"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="QuizActivity" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity android:name="com.libre.escuadroncliente.ui.RegisterActivity"
             android:screenOrientation="portrait"
