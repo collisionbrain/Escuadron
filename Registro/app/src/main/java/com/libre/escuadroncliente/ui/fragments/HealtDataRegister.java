@@ -55,16 +55,21 @@ public class HealtDataRegister  extends Fragment implements  View.OnClickListene
         private Calendar cal = Calendar.getInstance();
         @Override
         public void afterTextChanged(Editable arg0) {
-            String [] date=edtFechaNacimiento.getText().toString().split("/");
-            int y=Integer.valueOf(date[2]);
-            if(y <= 2001)  {
-                edtFechaNacimiento.setBackgroundResource(R.drawable.editext_line);
+
+            String inDate=edtFechaNacimiento.getText().toString();
+            if(inDate.length()>=6){
+                String [] date=edtFechaNacimiento.getText().toString().split("/");
+                int y=Integer.valueOf(date[2]);
+                if(y <= 2001)  {
+                    edtFechaNacimiento.setBackgroundResource(R.drawable.editext_line);
+                }
+                else
+                {
+                    setErrorMessageForm("Necesitas ser Mayor de Edad");
+                    edtFechaNacimiento.setBackgroundResource(R.drawable.editext_line_error);
+                }
             }
-            else
-            {
-                setErrorMessageForm("Necesitas ser Mayor de Edad");
-                edtFechaNacimiento.setBackgroundResource(R.drawable.editext_line_error);
-            }
+
 
         }
 

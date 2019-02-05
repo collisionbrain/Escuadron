@@ -157,6 +157,12 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
             registerPersonalSuccess=false;
             setErrorMessageForm("Ingresa un Telefono de contacto");
             return false;
+        } else if (!((RegisterActivity) context).newMember.privacy) {
+            edtCelphone .requestFocus();
+            btnSiguiente.reset();
+            registerPersonalSuccess=false;
+            setErrorMessageForm("Debes Leer nuestro Aviso de Privacidad");
+            return false;
         } else {
             //save to object
             registerPersonalSuccess=true;
