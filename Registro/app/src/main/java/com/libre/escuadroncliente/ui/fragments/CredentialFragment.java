@@ -23,8 +23,6 @@ import java.util.List;
 
 public class CredentialFragment extends Fragment implements  View.OnClickListener {
     private View view;
-    List<String> listaPadecimientos;
-    private String condition;
     private Context context;
     private SubmitButton btnSiguienteCamera;
     private ImageView imageViewFront,imageViewBack,imgRecipe;

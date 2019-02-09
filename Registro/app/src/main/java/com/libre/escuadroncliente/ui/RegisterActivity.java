@@ -71,6 +71,8 @@ import java.util.List;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
+import libs.mjn.prettydialog.PrettyDialog;
+import libs.mjn.prettydialog.PrettyDialogCallback;
 
 import static android.content.ContentValues.TAG;
 import static com.libre.escuadroncliente.ui.util.Constants.JSON_FILE;
@@ -101,6 +103,8 @@ public class RegisterActivity extends FragmentActivity {
     private CronicSuffering cronicSuffering;
     public static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 123;
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 456;
+    public static final int MY_PERMISSIONS_REQUEST_CAMERA = 789;
+    private PrettyDialog prettyDialog=null,prettyDialogError=null;
     private ContentValues values;
 
 
@@ -115,7 +119,7 @@ public class RegisterActivity extends FragmentActivity {
         context = this;
         resources=getResources();
         preferencesStorage=new PreferencesStorage(context);
-       
+        prettyDialogError= new PrettyDialog(context);
         vwPaginas=findViewById(R.id.id_viewpager);
         txtTitulo=findViewById(R.id.txtTitulo);
         adPaginador=new PageAdapter(getApplicationContext(),getSupportFragmentManager());
@@ -139,6 +143,27 @@ public class RegisterActivity extends FragmentActivity {
         smallerDimension = width < height ? width : height;
         smallerDimension = smallerDimension * 3 / 4;
         mAuth = FirebaseAuth.getInstance();
+        prettyDialogError.setIcon(
+                R.drawable.pdlg_icon_info,     // icon resource
+                R.color.pdlg_color_red,      // icon tint
+                new PrettyDialogCallback() {   // icon OnClick listener
+                    @Override
+                    public void onClick() {
+                        // Do what you gotta do
+                    }
+                })
+                .addButton(
+                        "OK",					// button text
+                        R.color.pdlg_color_white,		// button text color
+                        R.color.pdlg_color_red,		// button background color
+                        new PrettyDialogCallback() {		// button OnClick listener
+                            @Override
+                            public void onClick() {
+
+                                prettyDialogError.dismiss();
+                            }
+                        }
+                );
         vwPaginas.setOnPageChangeListener(new ViewPager.OnPageChangeListener(){
 
             @Override
@@ -175,13 +200,6 @@ public class RegisterActivity extends FragmentActivity {
             }
 
         });
-
-        if (checkPermissionWRITE_EXTERNAL_STORAGE(this)) {
-            if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
-                // do your stuff..
-            }
-
-        }
 
 
     }
@@ -257,7 +275,14 @@ public class RegisterActivity extends FragmentActivity {
                 }
                 break;
 
-
+            case MY_PERMISSIONS_REQUEST_CAMERA:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // do your stuff
+                } else {
+                    Toast.makeText(RegisterActivity.this, "GET_ACCOUNTS Denied",
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions,
                         grantResults);
@@ -293,6 +318,15 @@ public class RegisterActivity extends FragmentActivity {
     @Override
     public void onResume() {
         super.onResume();
+        if (checkPermissionCAMERA(this)) {
+            if (checkPermissionWRITE_EXTERNAL_STORAGE(this)) {
+                if (checkPermissionREAD_EXTERNAL_STORAGE(this)) {
+
+                }
+
+            }
+        }
+
 
     }
 
@@ -438,9 +472,9 @@ public class RegisterActivity extends FragmentActivity {
     }
 
     public void showError(String message){
-        ViewDialog alert = new ViewDialog();
-        alert.showDialog(RegisterActivity.this, message);
-
+        prettyDialogError.setTitle("")
+                .setMessage(message)
+                .show();
     }
     public void showPrivacy(){
         ViewDialog alert = new ViewDialog();
@@ -458,7 +492,7 @@ public class RegisterActivity extends FragmentActivity {
         switch (type){
             case 0:
                 values = new ContentValues();
-                values.put(MediaStore.Images.Media.TITLE, "Identificacion Oficial");
+                values.put(MediaStore.Images.Media.TITLE, "Identificación Oficial");
                 values.put(MediaStore.Images.Media.DESCRIPTION, "None");
                 imageUri = getContentResolver().insert(
                         MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
@@ -538,6 +572,34 @@ public class RegisterActivity extends FragmentActivity {
                                     (Activity) context,
                                     new String[] { Manifest.permission.READ_EXTERNAL_STORAGE },
                                     MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+                }
+                return false;
+            } else {
+                return true;
+            }
+
+        } else {
+            return true;
+        }
+    }
+    public boolean checkPermissionCAMERA(
+            final Context context) {
+        int currentAPIVersion = Build.VERSION.SDK_INT;
+        if (currentAPIVersion >= android.os.Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(context,
+                    Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(
+                        (RegisterActivity) context,
+                        Manifest.permission.CAMERA)) {
+
+                    showDialog("External storage", context, Manifest.permission.CAMERA);
+
+                } else {
+                    ActivityCompat
+                            .requestPermissions(
+                                    (Activity) context,
+                                    new String[] { Manifest.permission.CAMERA },
+                                    MY_PERMISSIONS_REQUEST_CAMERA);
                 }
                 return false;
             } else {

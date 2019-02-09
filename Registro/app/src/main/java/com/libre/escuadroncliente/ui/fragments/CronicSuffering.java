@@ -25,7 +25,7 @@ import java.util.List;
 public class CronicSuffering extends Fragment implements  View.OnClickListener {
     private View view;
     List<String> listaPadecimientos;
-    private String condition,ludic;
+    private String condition;
     private Context context;
     private SubmitButton btnSiguienteCronic;
     private Resources resources;
@@ -42,7 +42,7 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
         resources = getResources();
         spinner = this.view.findViewById(R.id.spinner);
         spinnerLudic= this.view.findViewById(R.id.spinnerLudic);
-        spinner.setItems("Padecimiento Cronico","Cancer","Parkinson","Diabetes", "Asma", "Neuropatias", "Artritis","Otro");
+        spinner.setItems("Padecimiento Crónico","Epilepsia","Cáncer","Parkinson","Diabetes", "Asma", "Neuropatias", "Artritis Reumatoide","Otro");
         spinnerLudic.setItems("Tratamiento Homeopatico","Estres", "Ansiedad", "Depresion","Otro");
         spinnerLudic.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
@@ -51,7 +51,7 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
                 if(item.equals("Otro")){
                     edtOtro.setVisibility(View.VISIBLE);
                 }else{
-                    ludic=item;
+                    condition=item;
                 }
             }
         });
@@ -76,15 +76,28 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
         switch (v.getId()) {
 
             case R.id.btnSiguienteCronic:
-                ((RegisterActivity) context).newMember.condition=condition;
+                if(condition.equals("Padecimiento Cronico")){
+                    setErrorMessage("Elige tu Padecimiento");
 
-                ((RegisterActivity) context).newMember.extra=edtOtro.getText().toString();
-                btnSiguienteCronic.setOnResultEndListener(finishListenerCronic);
-                btnSiguienteCronic.doResult(true);
-        }
+                }else if (condition.equals("Tratamiento Homeopatico")) {
+
+                    setErrorMessage("Elige tu Tratamiento Homeopatico");
+
+                }else{
 
 
-    } ;
+                    ((RegisterActivity) context).newMember.condition=condition;
+
+                    ((RegisterActivity) context).newMember.extra=edtOtro.getText().toString();
+                    btnSiguienteCronic.setOnResultEndListener(finishListenerCronic);
+                    btnSiguienteCronic.doResult(true);
+                }
+                }
+
+
+
+    };
+
     SubmitButton.OnResultEndListener finishListenerCronic = new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
@@ -108,12 +121,12 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
 
         ;
 
-        public void setErrorMessage(String message) {
-            ((RegisterActivity) context).messageError.setText(message);
-            ((RegisterActivity) context).dialogError.show();
-        }
-    };
 
+    };
+    public void setErrorMessage(String message) {
+        ((RegisterActivity) context).messageError.setText(message);
+        ((RegisterActivity) context).dialogError.show();
+    }
     public void setAllView(){
 
         getActivity().runOnUiThread(new Runnable() {

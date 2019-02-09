@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
+
 import com.libre.escuadroncliente.R;
 import com.libre.escuadroncliente.ui.RegisterActivity;
 import com.libre.escuadroncliente.ui.MarketActivity;
@@ -20,6 +22,7 @@ public class DigitalCodeRegister extends Fragment implements  View.OnClickListen
     private  SubmitButton btnTerminar,btnRegistrar;
     private ImageView  imgCode;
     private Bitmap code;
+    private TextView txtCode;
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstance) {
         super.onSaveInstanceState(savedInstance);
         setRetainInstance(true);
@@ -28,6 +31,7 @@ public class DigitalCodeRegister extends Fragment implements  View.OnClickListen
         btnTerminar=this.view.findViewById(R.id.btnTerminar);
         btnRegistrar=this.view.findViewById(R.id.btnRegistrar);
         imgCode=this.view.findViewById(R.id.imgCode);
+        txtCode=this.view.findViewById(R.id.txtCode);
         btnTerminar.setOnClickListener(this);
         btnRegistrar.setOnClickListener(this);
         //((MainActivity) context).saveToServer();
@@ -68,6 +72,7 @@ public class DigitalCodeRegister extends Fragment implements  View.OnClickListen
         public void onResultEnd() {
 
             imgCode.setImageBitmap(code);
+            txtCode.setVisibility(View.VISIBLE);
             btnRegistrar.setVisibility(View.GONE);
             btnTerminar.setVisibility(View.VISIBLE);
             btnTerminar.setOnResultEndListener(finishListener);

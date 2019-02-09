@@ -34,50 +34,23 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-         Intent intent = new Intent("notifications");
-         intent.putExtra("update", remoteMessage.getNotification().getBody());
-         String click_action = remoteMessage.getNotification().getClickAction();
-         sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getTitle(),  click_action);
+        String tittle=remoteMessage.getNotification().getTitle();
+        String body=remoteMessage.getNotification().getBody();
+        String click_action=remoteMessage.getNotification().getClickAction();
+        Intent intent=new Intent(click_action);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_ONE_SHOT);
+        NotificationCompat.Builder notificationBuilder=new NotificationCompat.Builder(this);
+        notificationBuilder.setContentTitle(tittle);
+        notificationBuilder.setContentText(body);
+        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        notificationBuilder.setAutoCancel(false);
+        notificationBuilder.setContentIntent(pendingIntent);
+        NotificationManager notificationManager=(NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0,notificationBuilder.build());
 
-        if (MarketActivity.isActivityOpen) {
-            broadcaster.sendBroadcast(intent);
-        } else {
-            Intent resultIntent = new Intent(this, Splash.class);
-            resultIntent.putExtra("UPDATE", true);
-            resultIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-            stackBuilder.addNextIntentWithParentStack(resultIntent);
-            PendingIntent resultPendingIntent =
-                    stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "");
-            builder.setContentIntent(resultPendingIntent);
-            NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-            notificationManager.notify(0, builder.build());
-        }
 
 
     }
-    private void sendNotification(String messageBody, String messageTitle,  String click_action) {
-        Intent intent = new Intent("com.libre.escuadroncliente.ui.Update");
-        intent.putExtra("UPDATE", true);
 
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, intent,
-                PendingIntent.FLAG_ONE_SHOT);
-
-        Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this);
-        notificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle(messageTitle)
-                .setContentText(messageBody)
-                .setAutoCancel(true)
-                .setSound(defaultSoundUri)
-
-                .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager = (NotificationManager)
-                getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, notificationBuilder.build());
-    }
     }

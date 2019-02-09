@@ -17,7 +17,7 @@ import com.libre.escuadroncliente.ui.RegisterActivity;
 import com.libre.escuadroncliente.ui.util.Network;
 import com.unstoppable.submitbuttonview.SubmitButton;
 
-public class PersonalDataRegister  extends Fragment implements  View.OnClickListener  {
+public class PersonalDataRegister  extends Fragment implements  View.OnClickListener ,EditText.OnFocusChangeListener {
     private View view;
     private SubmitButton btnSiguiente;
     private EditText edtName, edtMail,edtCelphone;
@@ -33,8 +33,11 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
         this.view = inflater.inflate(R.layout.personal_data_fragment,container,false);
         btnSiguiente=this.view.findViewById(R.id.btnSiguiente);
         edtName=this.view.findViewById(R.id.edtNombre);
+        edtName.setOnFocusChangeListener(this);
         edtMail=this.view.findViewById(R.id.edtCorreo);
+        edtMail.setOnFocusChangeListener(this);
         edtCelphone=this.view.findViewById(R.id.edtCelular);
+        edtCelphone.setOnFocusChangeListener(this);
         checkWhats=this.view.findViewById(R.id.checkWats);
         txtAviso=this.view.findViewById(R.id.txtAviso);
         txtCuenta=this.view.findViewById(R.id.txtCuenta);
@@ -59,6 +62,7 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
                     if(validateForm()) {
 
                         ((RegisterActivity) context).newMember.name=edtName.getText().toString();
+
                         ((RegisterActivity) context).newMember.mail=edtMail.getText().toString();
                         ((RegisterActivity) context).newMember.phone=edtCelphone.getText().toString();
                         ((RegisterActivity) context).newMember.whats=checkWhats.isChecked();
@@ -91,23 +95,23 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
     };
 
     private boolean validateForm() {
-        if (TextUtils.isEmpty(edtMail.getText().toString())) {
+        if (TextUtils.isEmpty(edtName.getText().toString())) {
+            edtName.requestFocus();
+            btnSiguiente.reset();
+            registerPersonalSuccess=false;
+            setErrorMessageForm("Ingresa tu Nombre completo");
+            return false;
+        } else if (TextUtils.isEmpty(edtMail.getText().toString())) {
             edtMail.requestFocus();
             btnSiguiente.reset();
             registerPersonalSuccess=false;
             setErrorMessageForm("Ingresa un Correo electronico");
             return false;
-        } else if (TextUtils.isEmpty(edtName.getText().toString())) {
-            edtName.requestFocus();
-            btnSiguiente.reset();
-            registerPersonalSuccess=false;
-            setErrorMessageForm("Ingresa un Nombre completo");
-            return false;
-        } else if (TextUtils.isEmpty(edtCelphone.getText().toString())) {
+        } else  if (TextUtils.isEmpty(edtCelphone.getText().toString())) {
             edtCelphone .requestFocus();
             btnSiguiente.reset();
             registerPersonalSuccess=false;
-            setErrorMessageForm("Ingresa un Telefono de contacto");
+            setErrorMessageForm("Ingresa un Teléfono de contacto");
             return false;
         } else {
             //save to object
@@ -117,5 +121,19 @@ public class PersonalDataRegister  extends Fragment implements  View.OnClickList
     }
     public void setErrorMessageForm(String message){
         ((RegisterActivity) context).showError(message);
+    }
+
+    @Override
+    public void onFocusChange(View v, boolean hasFocus) {
+        switch (v.getId()){
+
+            case R.id.edtNombre:
+                break;
+            case R.id.edtCorreo:
+                break;
+            case R.id.edtCelular:
+                break;
+        }
+
     }
 }
