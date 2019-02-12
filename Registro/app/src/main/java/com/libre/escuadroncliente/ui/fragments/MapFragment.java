@@ -176,9 +176,12 @@ public class MapFragment extends Fragment implements LocationListener {
     }
     @Override
     public void onLocationChanged(Location location) {
-        if( !this.location.equals(location)){
-            this.location=location;
+        if(this.location!=null){
+            if( !this.location.equals(location)){
+                this.location=location;
+            }
         }
+
 
     }
 

@@ -1,105 +1,149 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
-
-    <FrameLayout
-        android:id="@+id/container"
+    android:background="@color/white"
+    android:weightSum="100">
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        <com.michaldrabik.tapbarmenulib.TapBarMenu
-            android:id="@+id/tapBarMenu"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_gravity="bottom"
-            android:layout_marginBottom="24dp"
-            app:tbm_backgroundColor="@color/green_toolbar" >
-
-        <ImageView
-            android:id="@+id/imgUpload"
+        android:layout_height="0dp"
+        android:layout_weight="15"
+        android:orientation="horizontal"
+        android:weightSum="100"
+        android:background="@color/green_toolbar">
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/upload"
-            />
-            <RelativeLayout
-                android:id="@+id/relative_layout1"
-                android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center">
-
-                <RelativeLayout
-                    android:id="@+id/badge_layout1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <RelativeLayout
-                        android:id="@+id/relative_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-                        <ImageView
-                            android:id="@+id/imgDelivery"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/entrega"
-                            />
-                        <TextView
-                            android:id="@+id/txtCountPendings"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/item_count"
-                            android:text="16"
-                            android:textColor="#FFF"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
-                            android:visibility="visible"
-                            android:paddingBottom="10dp"/>
-                    </RelativeLayout>
-
-
-                </RelativeLayout>
-            </RelativeLayout>
-
-
-        <Space
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            />
-        <Space
-            android:layout_width="56dp"
-            android:layout_height="match_parent"
-            />
-        <ImageView
-            android:id="@+id/imgAdd"
+                android:textSize="19sp"
+                android:text="Registros"
+                android:textColor="@color/colorPrimaryDark"/>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/add"
-            />
-        <ImageView
-            android:id="@+id/imgScan"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="19sp"
+                android:text="Pedidos"
+                android:textColor="@color/colorPrimaryDark"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="73"
+        android:orientation="horizontal"
+        android:weightSum="100">
+        <RelativeLayout
             android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:gravity="center">
+
+        <TextView
+            android:id="@+id/newRegisters"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@drawable/scan"
-            />
-    </com.michaldrabik.tapbarmenulib.TapBarMenu>
+            android:textSize="80sp"
+            android:textColor="@color/colorPrimaryDark"
+            android:text="0" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="50"
+            android:gravity="center">
+            <TextView
+                android:id="@+id/counterPendings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="80sp"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="0"/>
+        </RelativeLayout>
 
 
-    </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lyControll"
+        android:layout_below="@+id/lySteps"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="12"
+        android:layout_gravity="bottom"
+        android:background="@color/green_toolbar"
+        android:weightSum="100"
+        android:clickable="true">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/imgUpload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/upload"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:gravity="center">
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:clickable="true">
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/imgAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/add"
+                />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="20"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/imgScan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@drawable/scan"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
 
 </LinearLayout>

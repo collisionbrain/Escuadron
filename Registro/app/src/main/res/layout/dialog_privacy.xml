@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp"
-    android:layout_gravity="center"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:weightSum="100"
-    android:orientation="vertical">
-    <TextView
-        android:id="@+id/txtMensaje"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="10"
-        android:textSize="18sp"
-        android:gravity="center"
-        android:text="Aviso de Privacidad Simplificado del Registro de usuarios"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="75"
-        android:text="El Colectivo 'Escuadron Canabico', es el responsable del tratamiento de los datos personales que nos proporcione.
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
 
-Sus datos personales serán utilizados para mantener el control de el registro y ventas de quienes se registran al protocolo de investigacion y este tratamiento forma parte de las medidas de seguridad adoptadas, por lo que, se comunica que no se efectuarán tratamientos adicionales.
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:padding="12dp" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+
+            android:text="El Colectivo 'Escuadron Canabico', es el responsable del tratamiento de los datos personales que nos proporcione.
+
+Sus datos personales serán utilizados para mantener el control de el registro y ventas de quienes se registran al protocolo de investigación y este tratamiento forma parte de las medidas de seguridad adoptadas, por lo que, se comunica que no se efectuarán tratamientos adicionales.
 
 Se informa que no realizarán transferencias que requieran su consentimiento, salvo aquellas que sean necesarias para atender requerimientos de información de una autoridad competente, debidamente fundados y motivados.
 
-Usted podrá solicitar el aviso de privacidad integral en el sitio virtual del colectivo
-
-Este documento esta sujeto a cambios sin previo aviso.
+Usted podrá solicitar el aviso de privacidad integral en el sitio virtual del colectivo Este documento esta sujeto a cambios sin previo aviso.
 "/>
 
+    </RelativeLayout>
 
-</LinearLayout>
+</ScrollView>

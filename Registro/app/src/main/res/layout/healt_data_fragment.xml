@@ -124,7 +124,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="90"
                 android:textColor="@color/green_text"
-                android:text="¿Tienes padecimiento cronico?"/>
+                android:text="¿Sufro un Padecimiento Crónico?"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -145,7 +145,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="90"
                 android:textColor="@color/green_text"
-                android:text="¿Tratamiento Homeopatico?"/>
+                android:text="¿Estoy bajo Tratamiento Homeopatico?"/>
         </LinearLayout>
     </LinearLayout>
     <LinearLayout

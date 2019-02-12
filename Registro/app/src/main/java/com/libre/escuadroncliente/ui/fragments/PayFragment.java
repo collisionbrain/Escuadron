@@ -95,8 +95,14 @@ public class PayFragment extends Fragment implements  View.OnClickListener {
                 ((MarketActivity)context).takePhotoTicket();
                 break;
             case R.id.btnSiguienteTicket:
-                btnSiguienteTicket.setOnResultEndListener(finishListenerTicket);
-                btnSiguienteTicket.doResult(true);
+                if(((MarketActivity)context).order.ticket!=null){
+                    btnSiguienteTicket.setOnResultEndListener(finishListenerTicket);
+                    btnSiguienteTicket.doResult(true);
+                }else{
+                    ((MarketActivity)context).showError("Captura tu ticket de pago");
+                    btnSiguienteTicket.reset();
+                }
+
                 break;
         }
 

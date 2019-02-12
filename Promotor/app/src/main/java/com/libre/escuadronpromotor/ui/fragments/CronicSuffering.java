@@ -39,8 +39,7 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
         edtOtro=this.view.findViewById(R.id.edtOtro);
         resources = getResources();
         MaterialSpinner spinner = (MaterialSpinner) this.view.findViewById(R.id.spinner);
-
-        spinner.setItems("Seleciona tu padecimiento","Diabetes", "Asma", "Estres", "Neuropatias", "Artritis","Otro");
+        spinner.setItems("Seleciona tu padecimiento","Cance","Diabetes", "Asma", "Estres", "Neuropatias", "Artritis","Otro");
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
@@ -73,7 +72,7 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
     SubmitButton.OnResultEndListener finishListenerCronic = new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
-            ((RegisterActivity) context).paginaSiguiente(4);
+            ((RegisterActivity) context).paginaSiguiente(3);
 
             btnSiguienteCronic.reset();
         }
@@ -90,9 +89,6 @@ public class CronicSuffering extends Fragment implements  View.OnClickListener {
             Log.e("##########", "" + seleted);
 
         }
-
-        ;
-
         public void setErrorMessage(String message) {
             ((RegisterActivity) context).messageError.setText(message);
             ((RegisterActivity) context).dialogError.show();

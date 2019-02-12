@@ -20,6 +20,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.libre.escuadronpromotor.R;
 import com.libre.escuadronpromotor.ui.ListUsersActivity;
+import com.libre.escuadronpromotor.ui.ScannerActivity;
 import com.libre.escuadronpromotor.ui.adapters.SignaturePanelAdapter;
 import com.libre.escuadronpromotor.ui.pojos.CartOrder;
 import com.libre.escuadronpromotor.ui.pojos.Delivery;
@@ -124,11 +125,11 @@ public class OrderFragment extends Activity implements  View.OnClickListener  {
 
                     } else {
 
-                        ((ListUsersActivity)activity).onBackPressed();
-
+                        finish();
                     }
                 }
             });
+
 
 
         }

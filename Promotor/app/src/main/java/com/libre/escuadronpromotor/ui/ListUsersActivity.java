@@ -75,13 +75,14 @@ public class ListUsersActivity extends AppCompatActivity {
     private OrderFragment orderFragment = new OrderFragment();
     private TapBarMenu tapBarMenu;
     private ImageView imageViewAdd,imageViewUp,imageViewScan,imageViewDeli;
-    private TextView textCounter;
+    private TextView textCounter,newRegisters;
     private int pendings=0;
     private DBHelper db;
     private FragmentManager fragmentManager;
     private DatabaseReference ref;
     private DatabaseReference pedRef ;
     private DatabaseReference cliRef;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,9 +101,8 @@ public class ListUsersActivity extends AppCompatActivity {
         cliRef = ref.child("clientes");
 
         productList=new ArrayList<>();
-        recyclerView =findViewById(R.id.recycler_view);
-        tapBarMenu=findViewById(R.id.tapBarMenu);
-        textCounter=findViewById(R.id.txtCountPendings);
+        textCounter=findViewById(R.id.counterPendings);
+        newRegisters=findViewById(R.id.newRegisters);
         dialogError = new Dialog(context);
         dialogUpload= new Dialog(context);
         dialogError.setContentView(R.layout.dialog_error);
@@ -117,31 +117,14 @@ public class ListUsersActivity extends AppCompatActivity {
         }
 
         ft.addToBackStack(null);
-        tapBarMenu.setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                tapBarMenu.toggle();
-                if(pendings>0){
-                    textCounter.setVisibility(View.VISIBLE);
-                }
-
-            }
-        });
         imageViewAdd= findViewById(R.id.imgAdd);
         imageViewUp= findViewById(R.id.imgUpload);
         imageViewScan= findViewById(R.id.imgScan);
-        imageViewDeli= findViewById(R.id.imgDelivery);
         imageViewAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent=new Intent(ListUsersActivity.this,RegisterActivity.class);
                 startActivityForResult(intent,500);
-            }
-        });
-        imageViewDeli.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(ListUsersActivity.this,ListDeliveryActivity.class);
-                startActivityForResult(intent,400);
             }
         });
         imageViewUp.setOnClickListener(new View.OnClickListener() {
@@ -158,13 +141,11 @@ public class ListUsersActivity extends AppCompatActivity {
 
             }
         });
-        newMembers= db.getAllMembers();
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
-        newClientAdapter = new NewClientAdapter(this, newMembers);
-        recyclerView.setAdapter(newClientAdapter);
+
+
         counterPendings();
+        newRegisters();
     }
 
 
@@ -192,8 +173,7 @@ public class ListUsersActivity extends AppCompatActivity {
         if (requestCode == 500) {
             if (resultCode == RESULT_OK) {
                 newMembers= db.getAllMembers();
-                newClientAdapter = new NewClientAdapter(this, newMembers);
-                recyclerView.setAdapter(newClientAdapter);
+                newRegisters();
             }
         }
         if (requestCode == 600) {
@@ -202,6 +182,8 @@ public class ListUsersActivity extends AppCompatActivity {
                 Intent intent=new Intent(this,OrderFragment.class);
                 intent.putExtra("id",id_user);
                 startActivity(intent);
+            }else{
+                counterPendings();
             }
         }
     }
@@ -250,8 +232,7 @@ public class ListUsersActivity extends AppCompatActivity {
 
                     db.deleteMemberRegister(emailToDelete);
                     newMembers= db.getAllMembers();
-                    newClientAdapter = new NewClientAdapter(context, newMembers);
-                    recyclerView.setAdapter(newClientAdapter);
+                   newRegisters();
                 }
             }
         });
@@ -261,18 +242,18 @@ public class ListUsersActivity extends AppCompatActivity {
         private ProgressDialog dialog;
         @Override
         protected void onPreExecute() {
-            dialog = new ProgressDialog(context, R.style.MyDialogTheme);
-            dialog.setMessage("Guardando pedido.");
+            dialog = new ProgressDialog(context);
+            dialog.setMessage("Guardando registros.");
             dialog.show();
         }
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                Thread.sleep(5000);
+
                  newMembers= db.getAllMembers();
                 for (Member mem:newMembers) {
                     registerUser(mem);
-
+                    Thread.sleep(5000);
                 }
 
             }catch (InterruptedException ex){
@@ -286,6 +267,7 @@ public class ListUsersActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void param) {
 
+            counterPendings();
             dialog.dismiss();
         }
     }
@@ -296,6 +278,15 @@ public class ListUsersActivity extends AppCompatActivity {
         startActivityForResult(intent, 600);
     }
 
+    public void newRegisters(){
+        newMembers= db.getAllMembers();
+        int size=newMembers.size();
+        if(size>0) {
+            newRegisters.setText(""+size);
+        }else{
+            newRegisters.setText("0");
+        }
+    }
     public void  counterPendings(){
           ref = database.getReference("registro");
           pedRef = ref.child("pedidos");
@@ -350,7 +341,7 @@ public class ListUsersActivity extends AppCompatActivity {
                     pendings++;
                 }
                 if(pendings>0) {
-                    imageViewDeli.setVisibility(View.GONE);
+
                     textCounter.setText("" + pendings);
                 }
 

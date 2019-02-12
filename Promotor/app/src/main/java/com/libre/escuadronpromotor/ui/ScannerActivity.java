@@ -43,6 +43,12 @@ public class  ScannerActivity extends Activity implements ZXingScannerView.Resul
     }
 
     @Override
+    public void onBackPressed(){
+
+        finish();
+
+    }
+    @Override
     public void onResume() {
         super.onResume();
         mScannerView.setResultHandler(this);

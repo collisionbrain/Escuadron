@@ -33,6 +33,7 @@ public class SignatureRegister extends Fragment implements  View.OnClickListener
         btnSiguienteSignature.setOnClickListener(this);
         btnSiguienteSignature.setOnResultEndListener(finishListenerSignature);
         RelativeLayout rlPanel = this.view.findViewById(R.id.rlPanel);
+
         firmaPanel = new SignaturePanelAdapter(context,txtFirma);
         rlPanel.addView(firmaPanel);
         return  this.view;
@@ -46,8 +47,8 @@ public class SignatureRegister extends Fragment implements  View.OnClickListener
     SubmitButton.OnResultEndListener finishListenerSignature=new SubmitButton.OnResultEndListener() {
         @Override
         public void onResultEnd() {
+            btnSiguienteSignature.reset();
             Bitmap bmpSignature =firmaPanel.getBitmap();
-
             ((RegisterActivity) context).newMember.signature=Data.bitmapToBase64(bmpSignature);
             ((RegisterActivity) context).paginaSiguiente(5);
 
