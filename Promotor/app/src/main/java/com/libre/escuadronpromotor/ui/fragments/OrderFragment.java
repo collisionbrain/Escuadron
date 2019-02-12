@@ -42,7 +42,6 @@ public class OrderFragment extends Activity implements  View.OnClickListener  {
     private Context context,activity;
     private TextView txtMember,txtFecha,txtEstatus,txtDetalle,txtProductos;
     private SubmitButton btnConfirmOrder;
-    private SignaturePanelAdapter firmaPanel;
     private  Order order_local;
     private  Member member;
     private  String client_key;
