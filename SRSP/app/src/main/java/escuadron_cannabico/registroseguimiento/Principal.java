@@ -1,4 +1,4 @@
 package escuadron_cannabico.registroseguimiento;
 
-public class Utils {
+public class Principal {
 }

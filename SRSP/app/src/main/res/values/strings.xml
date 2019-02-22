@@ -1,3 +1,29 @@
 <resources>
     <string name="app_name">RegistroSeguimiento</string>
+    <string name="strNombre">Nombre Completo </string>
+    <string name="strApellidos">Apellidos</string>
+    <string name="strCorreo">Correo Electrónico</string>
+    <string name="strCelular">Número Celular</string>
+    <string name="strFechaNacimiento">Fecha de Nacimiento</string>
+    <string name="strPeso">Peso</string>
+    <string name="strEstatura">Estatura</string>
+    <string name="strPassword">Contraseña</string>
+    <string name="stPersonal">Información de Contacto</string>
+    <string name="stBiomedica">Información Médica</string>
+    <string name="stPadecimiento">Información Médica</string>
+    <string name="stFirma"></string>
+    <string name="stTerminar">Listo!</string>
+    <string name="strFirma">Tu Firma aquí</string>
+    <string name="strCode">Código de indetificación</string>
+    <string name="errEspecialidad">Elige tu padecimiento</string>
+    <string name="strPadecimiento">¿Sufre algun padecimiento cronico?</string>
+    <string name="strDescribe">Describe tu padecimiento</string>
+    <string name="strCpostal">Código Postal</string>
+    <string name="strMunicipio">Alcaldía  ó Municipio</string>
+    <string name="strEstado">Estado</string>
+    <string name="strIdentidad">Documentos</string>
+    <string name="siguiente">Siguiente</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="action_settings">Código de indetificación</string>
+
 </resources>
